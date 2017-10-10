@@ -17,15 +17,8 @@ public class ServerSocketAdapter {
         socket = serverSocket.accept();
     }
 
-    public OutputStream getRequest() throws IOException {
-        InputStreamDecorator inputStreamDecorator = new InputStreamDecorator(socket.getInputStream());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        inputStreamDecorator.transferTo(outputStream);
-        return outputStream;
-    }
-
-    public void sendResponse(WriteAdapter writeAdapter) throws IOException {
-        writeAdapter.writeTo(socket.getOutputStream());
+    public InputStream getInputStream() throws IOException {
+        return socket.getInputStream();
     }
 
     public OutputStream getOutputStream() throws IOException {
@@ -34,9 +27,5 @@ public class ServerSocketAdapter {
 
     public void close() throws IOException {
         serverSocket.close();
-    }
-
-    public InputStream getInputStream() throws IOException {
-        return socket.getInputStream();
     }
 }

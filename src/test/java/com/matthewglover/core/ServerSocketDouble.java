@@ -30,10 +30,6 @@ public class ServerSocketDouble extends ServerSocket {
         return ioException != null;
     }
 
-    public String getDataWrittenToOutput() {
-        return null;
-    }
-
     public void setInputStream(String inputStream) {
         socketDouble.setInputStream(inputStream);
     }

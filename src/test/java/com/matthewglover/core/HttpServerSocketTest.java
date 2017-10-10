@@ -1,7 +1,6 @@
 package com.matthewglover.core;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -50,7 +49,6 @@ public class HttpServerSocketTest {
     }
 
     @Test
-    @Ignore
     public void handlesSocketRequests() throws IOException {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);

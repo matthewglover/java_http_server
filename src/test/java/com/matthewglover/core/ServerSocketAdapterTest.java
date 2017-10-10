@@ -2,14 +2,17 @@ package com.matthewglover.core;
 
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static junit.framework.TestCase.assertEquals;
 
 public class ServerSocketAdapterTest {
 
     @Test
-    public void getsRequestFromSocket() throws IOException {
+    public void getsInputFromSocket() throws IOException {
         String testInput = "Test input message\n" +
                 "multi-line message\n";
 
@@ -23,12 +26,18 @@ public class ServerSocketAdapterTest {
         ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
         serverSocketAdapter.accept();
 
-        assertEquals(testInput, serverSocketAdapter.getRequest().toString());
+        BufferedReader br = new BufferedReader(new InputStreamReader(serverSocketAdapter.getInputStream()));
+        String line;
+        String request = "";
+        while ((line = br.readLine()) != null) {
+            request += line + "\n";
+        }
+        assertEquals(testInput, request);
     }
 
 
     @Test
-    public void sendsResponseToSocket() throws IOException {
+    public void sendsOutputToSocket() throws IOException {
         String testOutput = "Test output message\n" +
                 "multi-line message\n";
 
@@ -42,9 +51,8 @@ public class ServerSocketAdapterTest {
         ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
         serverSocketAdapter.accept();
 
-        TextWriterAdapter textWriterAdapter = new TextWriterAdapter();
-        textWriterAdapter.setInput(testOutput);
-        serverSocketAdapter.sendResponse(textWriterAdapter);
+        DataOutputStream outputStream = new DataOutputStream(serverSocketAdapter.getOutputStream());
+        outputStream.writeBytes(testOutput);
 
         assertEquals(testOutput, serverSocket.getOutput());
     }
