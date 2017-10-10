@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.http;
 
 import java.util.HashMap;
 import java.util.Map;

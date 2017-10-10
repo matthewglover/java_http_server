@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.util;
 
 import java.util.logging.Handler;
 import java.util.logging.Logger;

@@ -1,5 +1,11 @@
-package com.matthewglover.core;
+package com.matthewglover.socket;
 
+import com.matthewglover.http.HttpRequest;
+import com.matthewglover.http.HttpRequestType;
+import com.matthewglover.http.HttpResponse;
+import com.matthewglover.http.HttpResponseType;
+import com.matthewglover.util.LoggerDouble;
+import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
 import org.junit.Test;
 

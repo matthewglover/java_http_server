@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.http;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;

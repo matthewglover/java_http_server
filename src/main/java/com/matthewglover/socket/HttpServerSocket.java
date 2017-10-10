@@ -1,4 +1,8 @@
-package com.matthewglover.core;
+package com.matthewglover.socket;
+
+import com.matthewglover.http.HttpResponse;
+import com.matthewglover.http.HttpResponseType;
+import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
 import java.util.logging.Logger;

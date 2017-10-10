@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,6 +1,9 @@
 package com.matthewglover;
 
-import com.matthewglover.core.*;
+import com.matthewglover.socket.*;
+import com.matthewglover.util.ArgumentParserDouble;
+import com.matthewglover.util.LoggerDouble;
+import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Test;
 
 import java.io.IOException;

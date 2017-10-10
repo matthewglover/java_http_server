@@ -1,9 +1,9 @@
 package com.matthewglover;
 
-import com.matthewglover.core.ArgumentParser;
-import com.matthewglover.core.HttpServerSocket;
-import com.matthewglover.core.LoggerFactory;
-import com.matthewglover.core.ServerSocketFactory;
+import com.matthewglover.util.ArgumentParser;
+import com.matthewglover.socket.HttpServerSocket;
+import com.matthewglover.util.LoggerFactory;
+import com.matthewglover.socket.ServerSocketFactory;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

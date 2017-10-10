@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.util;
 
 import java.util.ArrayList;
 import java.util.List;

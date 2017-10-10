@@ -1,4 +1,4 @@
-package com.matthewglover.core;
+package com.matthewglover.http;
 
 import org.junit.Test;
 
