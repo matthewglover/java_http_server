@@ -1,0 +1,11 @@
+!3 Test Parameters
+!define TEST_SYSTEM {slim}
+
+!pomFile pom.xml
+!path target/Fixtures-1.0.jar
+
+!3 User-Defined Variables
+!define SERVER_START_COMMAND {java -jar /Users/matthewglover/8th_light/java/HttpServer/build/libs/HttpServer-1.0-SNAPSHOT.jar}
+!define PUBLIC_DIR {/Users/matthewglover/8th_light/java/HttpServer/cob_spec/public/}
+
+!contents -R2 -g -p -f -h
