@@ -8,26 +8,26 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
+    private ServerSocketAdapter serverSocketAdapter;
 
     public HttpServerSocket(int port, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
         this.port = port;
         this.serverSocketFactory = serverSocketFactory;
-        this.logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
+        logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
     public void run() {
         try {
-            ServerSocketAdapter serverSocketAdapter =
-                    new ServerSocketAdapter(serverSocketFactory, port);
+            serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
             serverSocketAdapter.accept();
-            getRequest(serverSocketAdapter);
-            sendResponse(serverSocketAdapter);
+            getRequest();
+            sendResponse();
         } catch (IOException ioException) {
             logger.warning(ioException.getMessage());
         }
     }
 
-    private void getRequest(ServerSocketAdapter serverSocketAdapter) throws IOException {
+    private void getRequest() throws IOException {
         InputStream inputStream = serverSocketAdapter.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -39,7 +39,7 @@ public class HttpServerSocket {
     }
 
 
-    private void sendResponse(ServerSocketAdapter serverSocketAdapter) throws IOException {
+    private void sendResponse() throws IOException {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setResponseType(HttpResponseType.OK);
         httpResponse.setContent("<html><head></head><body></body></html>");
