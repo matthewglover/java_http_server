@@ -3,14 +3,27 @@ package com.matthewglover.http_response;
 import java.io.UnsupportedEncodingException;
 
 public class HttpResponseFactory {
-    public static HttpResponse get(HttpResponseType httpResponseType) throws UnsupportedEncodingException {
-        switch (httpResponseType) {
+    public static HttpResponse get(HttpResponseTemplate responseTemplate) throws UnsupportedEncodingException {
+        switch (responseTemplate) {
+            case OPTIONS_ALLOW_SELECTED: return buildOptionsAllowSelectedResponse();
+            case OPTIONS_ALLOW_ALL: return buildOptoinsAllowAllResponse();
             case BAD_REQUEST: return buildBadRequestResponse();
             case NOT_FOUND: return buildNotFoundResponse();
-            case INTERNAL_SERVER_ERROR: return null;
-            case OK:
+            case SIMPLE_GET:
             default: return buildOkResponse();
         }
+    }
+
+    private static HttpResponse buildOptionsAllowSelectedResponse() throws UnsupportedEncodingException {
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        httpResponse.setHeader("Allow", "GET,OPTIONS");
+        return httpResponse;
+    }
+
+    private static HttpResponse buildOptoinsAllowAllResponse() throws UnsupportedEncodingException {
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        httpResponse.setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
+        return httpResponse;
     }
 
     private static HttpResponse buildNotFoundResponse() throws UnsupportedEncodingException {

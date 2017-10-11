@@ -45,6 +45,10 @@ public class HttpResponse {
         headers.put(key, value);
     }
 
+    public String getHeader(String key) {
+        return headers.get(key);
+    }
+
     public void setContentLengthHeader() throws UnsupportedEncodingException {
         setHeader("Content-Length", getContentLength() + "");
     }

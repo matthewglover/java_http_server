@@ -2,7 +2,7 @@ package com.matthewglover.http_request;
 
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
-import com.matthewglover.http_response.HttpResponseType;
+import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
@@ -51,7 +51,7 @@ public class HttpRequest {
     }
 
     public HttpResponse buildResponse() throws UnsupportedEncodingException {
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseType.OK);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
         httpResponse.setContent("<html><head></head><body></body></html>");
         httpResponse.setContentLengthHeader();
         return httpResponse;

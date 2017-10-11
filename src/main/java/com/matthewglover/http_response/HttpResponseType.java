@@ -15,13 +15,6 @@ public enum HttpResponseType {
         }
     },
 
-    INTERNAL_SERVER_ERROR {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 500 Internal Server Error";
-        }
-    },
-
     NOT_FOUND {
         @Override
         public String toHeader() {

@@ -14,7 +14,7 @@ public class HttpResponseTest {
     public void buildsResponseForGivenResponseType() throws UnsupportedEncodingException {
         String content = "<html><head></head><body></body></html>";
 
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseType.OK);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
         httpResponse.setHeader("Response-Type", "text/html");
         httpResponse.setContent(content);
         httpResponse.setContentLengthHeader();
@@ -29,7 +29,7 @@ public class HttpResponseTest {
 
     @Test
     public void responseOnlyRequiresResponseType() throws UnsupportedEncodingException {
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseType.BAD_REQUEST);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
         String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\nContent-Length: 0\r\n\r\n";
         assertEquals(output, httpResponse.toString());
     }
