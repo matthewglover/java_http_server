@@ -1,6 +1,7 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.http_request.HttpRequest;
+import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseType;
@@ -22,7 +23,7 @@ public class HttpServerSocketTest {
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
-    private final HttpRequest httpRequest = new HttpRequest(loggerFactory);
+    private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
     private HttpServerSocket httpServerSocket;
 
     public HttpServerSocketTest() throws IOException {
@@ -30,10 +31,7 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setMethod(HttpRequestMethod.GET);
         httpRequest.setPath("/");
-        httpRequest.setVersion("HTTP/1.1");
-        httpRequest.setHeader("Host", "server:port");
         loggerFactory.setLogger(logger);
         httpServerSocket = new HttpServerSocket(port, serverSocketFactory, loggerFactory);
     }

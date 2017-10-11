@@ -7,23 +7,22 @@ import com.matthewglover.util.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 
-public class HeadRequest extends HttpRequest {
+public class GetRequest extends HttpRequest {
 
-    public HeadRequest(LoggerFactory loggerFactory) {
+    public GetRequest(LoggerFactory loggerFactory) {
         super(loggerFactory);
     }
 
     @Override
     public HttpResponse buildResponse() throws UnsupportedEncodingException {
-        if (getPath().equals("/")) {
-            return HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
-        } else {
-            return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
-        }
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        httpResponse.setContent("<html><head></head><body></body></html>");
+        httpResponse.setContentLengthHeader();
+        return httpResponse;
     }
 
     @Override
     public void setup() {
-        setMethod(HttpRequestMethod.HEAD);
+        setMethod(HttpRequestMethod.GET);
     }
 }

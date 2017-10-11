@@ -6,6 +6,7 @@ import com.matthewglover.util.LoggerFactory;
 import java.util.ArrayList;
 
 public class HttpRequestParser {
+
     private final ArrayList<String> rawRequest;
     private final LoggerFactory loggerFactory;
     private HttpRequest httpRequest;
