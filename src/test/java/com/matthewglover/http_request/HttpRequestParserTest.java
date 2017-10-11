@@ -11,14 +11,7 @@ public class HttpRequestParserTest {
 
     @Test
     public void parsesRawGetRequest() {
-        HttpRequest testRequest = new HttpRequest();
-        testRequest.setMethod(HttpRequestMethod.GET);
-        testRequest.setPath("/");
-        testRequest.setVersion("HTTP/1.1");
-        testRequest.setHeader("Host", "localhost:5000");
-        testRequest.setHeader("Connection", "Keep-Alive");
-        testRequest.setHeader("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
-        testRequest.setHeader("Accept-Encoding", "gzip,deflate");
+        HttpRequest testRequest = HttpRequestFactory.get(HttpRequestType.SIMPLE_GET);
         ArrayList<String> rawRequest = testRequest.toRaw();
 
         HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest);

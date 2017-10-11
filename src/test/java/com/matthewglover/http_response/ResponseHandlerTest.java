@@ -1,8 +1,6 @@
 package com.matthewglover.http_response;
 
-import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_request.HttpRequestParser;
+import com.matthewglover.http_request.*;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
@@ -16,15 +14,11 @@ public class ResponseHandlerTest {
 
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
-    private final HttpRequest httpRequest = new HttpRequest();
+    private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestType.SIMPLE_GET);
     private HttpRequestParser httpRequestParser;
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setMethod(HttpRequestMethod.GET);
-        httpRequest.setPath("/");
-        httpRequest.setVersion("HTTP/1.1");
-        httpRequest.setHeader("Host", "server:port");
         httpRequestParser = new HttpRequestParser(httpRequest.toRaw());
         loggerFactory.setLogger(logger);
     }

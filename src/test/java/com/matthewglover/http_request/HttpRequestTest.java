@@ -2,24 +2,21 @@ package com.matthewglover.http_request;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertTrue;
 
 public class HttpRequestTest {
 
-    private final HttpRequest httpRequest = new HttpRequest();
-
     @Test
     public void buildsRequestForGivenRequestType() {
-        httpRequest.setMethod(HttpRequestMethod.GET);
+        HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestType.SIMPLE_GET);
         httpRequest.setPath("/path/to/get");
-        httpRequest.setVersion("HTTP/1.1");
-        httpRequest.setHeader("Host", "host:port");
-        httpRequest.setHeader("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
-        String output = "GET /path/to/get HTTP/1.1" + "\r\n" +
-                "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
-                "Host: host:port\r\n" +
-                "\r\n";
 
-        assertEquals(output, httpRequest.toString());
+        String requestString = httpRequest.toString();
+        Pattern requestLinePattern = Pattern.compile("^GET\\s+/path/to/get\\s+HTTP/1.1\\r\\n", Pattern.MULTILINE);
+        Pattern requestEndPattern = Pattern.compile("\\r\\n\\r\\n$", Pattern.MULTILINE);
+        assertTrue(requestLinePattern.matcher(requestString).find());
+        assertTrue(requestEndPattern .matcher(requestString).find());
     }
 }

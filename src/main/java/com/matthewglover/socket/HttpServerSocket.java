@@ -14,13 +14,13 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
-    private final LoggerFactory loggerFactory;
     private ServerSocketAdapter serverSocketAdapter;
+    private final ResponseHandler responseHandler;
 
     public HttpServerSocket(int port, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
         this.port = port;
         this.serverSocketFactory = serverSocketFactory;
-        this.loggerFactory = loggerFactory;
+        responseHandler = new ResponseHandler(loggerFactory);
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
@@ -39,8 +39,8 @@ public class HttpServerSocket {
     }
 
     private void listenAndRespond() throws IOException {
-        ResponseHandler responseHandler = new ResponseHandler(loggerFactory);
-        HttpResponse httpResponse = responseHandler.handleRequest(getHttpRequestParser());
+        HttpRequestParser httpRequestParser = getHttpRequestParser();
+        HttpResponse httpResponse = responseHandler.handleRequest(httpRequestParser);
         sendResponse(httpResponse);
     }
 
