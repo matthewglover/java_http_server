@@ -1,16 +1,19 @@
 package com.matthewglover.http_request;
 
 
+import com.matthewglover.util.LoggerFactory;
+
 import java.util.ArrayList;
 
 public class HttpRequestParser {
     private final ArrayList<String> rawRequest;
-    private final HttpRequest httpRequest = new HttpRequest();
-    private HttpRequest request;
+    private final LoggerFactory loggerFactory;
+    private HttpRequest httpRequest;
     private Exception parseException;
 
-    public HttpRequestParser(ArrayList<String> rawRequest) {
+    public HttpRequestParser(ArrayList<String> rawRequest, LoggerFactory loggerFactory) {
         this.rawRequest = rawRequest;
+        this.loggerFactory = loggerFactory;
     }
 
     public void parse() {
@@ -28,7 +31,7 @@ public class HttpRequestParser {
 
     private void parseRequestLine() {
         String[] requestElements = getRawRequestLine().split("\\s+");
-        setRequestMethod(requestElements[0]);
+        createRequest(requestElements[0]);
         setRequestPath(requestElements[1]);
         setRequestVersion(requestElements[2]);
     }
@@ -37,8 +40,8 @@ public class HttpRequestParser {
         return rawRequest.get(0);
     }
 
-    private void setRequestMethod(String method) {
-        httpRequest.setMethod(HttpRequestMethod.valueOf(method));
+    private void createRequest(String method) {
+        httpRequest = HttpRequestFactory.get(HttpRequestMethod.valueOf(method), loggerFactory);
     }
 
     private void setRequestPath(String path) {

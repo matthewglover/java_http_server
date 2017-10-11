@@ -1,5 +1,7 @@
 package com.matthewglover.http_request;
 
+import com.matthewglover.util.LoggerDouble;
+import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,10 +13,14 @@ public class HttpRequestParserTest {
 
     @Test
     public void parsesRawGetRequest() {
-        HttpRequest testRequest = HttpRequestFactory.get(HttpRequestType.SIMPLE_GET);
+        LoggerDouble loggerDouble = new LoggerDouble(null, null);
+        LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+        loggerFactoryDouble.setLogger(loggerDouble);
+        HttpRequest testRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
+        testRequest.setPath("/");
         ArrayList<String> rawRequest = testRequest.toRaw();
 
-        HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest);
+        HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest, loggerFactoryDouble);
         httpRequestParser.parse();
         HttpRequest request = httpRequestParser.getRequest();
 
@@ -22,18 +28,18 @@ public class HttpRequestParserTest {
         assertEquals(HttpRequestMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
         assertEquals("HTTP/1.1", request.getVersion());
-        assertEquals("localhost:5000", request.getHeader("Host"));
-        assertEquals("Keep-Alive", request.getHeader("Connection"));
-        assertEquals("gzip,deflate", request.getHeader("Accept-Encoding"));
     }
 
 
     @Test
     public void invalidMethod() {
+        LoggerDouble loggerDouble = new LoggerDouble(null, null);
+        LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+        loggerFactoryDouble.setLogger(loggerDouble);
         ArrayList<String> rawRequest = new ArrayList<>(Arrays.asList(
                 "GQMZUUMG /file1 HTTP/1.1"
         ));
-        HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest);
+        HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest, loggerFactoryDouble);
         httpRequestParser.parse();
         assertTrue(httpRequestParser.hasErrors());
     }

@@ -7,12 +7,12 @@ import com.matthewglover.util.LoggerFactory;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class ResponseHandler {
+public class HttpResponseHandler {
 
     private final Logger logger;
 
-    public ResponseHandler(LoggerFactory loggerFactory) {
-        logger = loggerFactory.getLogger(ResponseHandler.class.getName());
+    public HttpResponseHandler(LoggerFactory loggerFactory) {
+        logger = loggerFactory.getLogger(HttpResponseHandler.class.getName());
     }
 
     public HttpResponse handleRequest(HttpRequestParser httpRequestParser) throws IOException {
@@ -33,18 +33,10 @@ public class ResponseHandler {
 
     public HttpResponse processRequest(HttpRequest httpRequest) throws IOException {
         logRequest(httpRequest);
-        return processResponse(httpRequest);
+        return httpRequest.buildResponse();
     }
 
     public void logRequest(HttpRequest httpRequest) {
         logger.info(httpRequest.toString());
-    }
-
-    public HttpResponse processResponse(HttpRequest httpRequest) throws IOException {
-        HttpResponse httpResponse = new HttpResponse();
-        httpResponse.setResponseType(HttpResponseType.OK);
-        httpResponse.setContent("<html><head></head><body></body></html>");
-        httpResponse.setContentLengthHeader();
-        return httpResponse;
     }
 }

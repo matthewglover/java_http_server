@@ -1,5 +1,7 @@
 package com.matthewglover.http_request;
 
+import com.matthewglover.util.LoggerDouble;
+import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Test;
 
 import java.util.regex.Pattern;
@@ -10,7 +12,11 @@ public class HttpRequestTest {
 
     @Test
     public void buildsRequestForGivenRequestType() {
-        HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestType.SIMPLE_GET);
+        LoggerDouble loggerDouble = new LoggerDouble(null, null);
+        LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+        loggerFactoryDouble.setLogger(loggerDouble);
+
+        HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         httpRequest.setPath("/path/to/get");
 
         String requestString = httpRequest.toString();

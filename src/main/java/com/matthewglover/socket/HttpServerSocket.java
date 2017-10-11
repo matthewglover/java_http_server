@@ -1,9 +1,8 @@
 package com.matthewglover.socket;
 
-import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.ResponseHandler;
+import com.matthewglover.http_response.HttpResponseHandler;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
@@ -14,13 +13,15 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
+    private final LoggerFactory loggerFactory;
     private ServerSocketAdapter serverSocketAdapter;
-    private final ResponseHandler responseHandler;
+    private final HttpResponseHandler httpResponseHandler;
 
     public HttpServerSocket(int port, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
         this.port = port;
         this.serverSocketFactory = serverSocketFactory;
-        responseHandler = new ResponseHandler(loggerFactory);
+        this.loggerFactory = loggerFactory;
+        httpResponseHandler = new HttpResponseHandler(loggerFactory);
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
@@ -40,14 +41,15 @@ public class HttpServerSocket {
 
     private void listenAndRespond() throws IOException {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
-        HttpResponse httpResponse = responseHandler.handleRequest(httpRequestParser);
+        HttpResponse httpResponse = httpResponseHandler.handleRequest(httpRequestParser);
+        logger.info(httpResponse.toString());
         sendResponse(httpResponse);
     }
 
     private HttpRequestParser getHttpRequestParser() throws IOException {
         HttpRequestStreamAdapter httpRequestStreamAdapter = new HttpRequestStreamAdapter(
-                serverSocketAdapter.getInputStream());
-        return new HttpRequestParser(httpRequestStreamAdapter.getRequest());
+                serverSocketAdapter.getInputStream(), loggerFactory);
+        return new HttpRequestParser(httpRequestStreamAdapter.getRequest(), loggerFactory);
     }
 
     private void sendResponse(HttpResponse httpResponse) throws IOException {

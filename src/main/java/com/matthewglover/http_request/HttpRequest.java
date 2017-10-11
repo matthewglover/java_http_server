@@ -1,5 +1,11 @@
 package com.matthewglover.http_request;
 
+import com.matthewglover.http_response.HttpResponse;
+import com.matthewglover.http_response.HttpResponseFactory;
+import com.matthewglover.http_response.HttpResponseType;
+import com.matthewglover.util.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,11 +13,17 @@ import java.util.Map;
 public class HttpRequest {
 
     private static String CRLF = "\r\n";
+    private final LoggerFactory loggerFactory;
 
     private HttpRequestMethod method;
     private Map<String, String> headers = new HashMap<>();
     private String path;
     private String version;
+
+    public HttpRequest(LoggerFactory loggerFactory) {
+        this.loggerFactory = loggerFactory;
+        setVersion("HTTP/1.1");
+    }
 
     public void setMethod(HttpRequestMethod method) {
         this.method = method;
@@ -36,6 +48,13 @@ public class HttpRequest {
             rawRequest.add(headerToString(header));
         }
         return rawRequest;
+    }
+
+    public HttpResponse buildResponse() throws UnsupportedEncodingException {
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseType.OK);
+        httpResponse.setContent("<html><head></head><body></body></html>");
+        httpResponse.setContentLengthHeader();
+        return httpResponse;
     }
 
     @Override

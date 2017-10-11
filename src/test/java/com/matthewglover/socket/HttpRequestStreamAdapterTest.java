@@ -1,5 +1,7 @@
 package com.matthewglover.socket;
 
+import com.matthewglover.util.LoggerDouble;
+import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,10 +26,13 @@ public class HttpRequestStreamAdapterTest {
                 "Connection: Keep-Alive" + CRLF +
                 "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)" + CRLF +
                 "Accept-Encoding: gzip,deflate" + CRLF + CRLF;
+        LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
+        LoggerDouble logger = new LoggerDouble(null, null);
+        loggerFactory.setLogger(logger);
         SocketDouble socketDouble = new SocketDouble();
         socketDouble.setInputString(requestString);
 
-        HttpRequestStreamAdapter httpRequestStreamAdapter = new HttpRequestStreamAdapter(socketDouble.getInputStream());
+        HttpRequestStreamAdapter httpRequestStreamAdapter = new HttpRequestStreamAdapter(socketDouble.getInputStream(), loggerFactory);
         assertEquals(rawRequest, httpRequestStreamAdapter.getRequest());
     }
 }

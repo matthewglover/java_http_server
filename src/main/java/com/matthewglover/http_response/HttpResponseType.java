@@ -20,6 +20,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 500 Internal Server Error";
         }
+    },
+
+    NOT_FOUND {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 404 Not Found";
+        }
     };
 
     public abstract String toHeader();
