@@ -4,6 +4,8 @@ import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
+import com.matthewglover.http_response.HttpResponseFactory;
+import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.http_response.HttpResponseType;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
@@ -84,9 +86,7 @@ public class HttpServerSocketTest {
         serverSocket.setInputStream("GQMZUUMG /file1 HTTP/1.1\r\n\r\n");
         serverSocketFactory.setServerSocket(serverSocket);
 
-        HttpResponse httpResponse = new HttpResponse();
-        httpResponse.setResponseType(HttpResponseType.BAD_REQUEST);
-        httpResponse.setHeader("Content-Length", "0");
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }

@@ -17,18 +17,7 @@ public class HttpResponseHandler {
 
     public HttpResponse handleRequest(HttpRequestParser httpRequestParser) throws IOException {
         httpRequestParser.parse();
-        if (httpRequestParser.hasErrors()) {
-            return respondWithBadRequest();
-        } else {
-            return processRequest(httpRequestParser.getRequest());
-        }
-    }
-
-    public HttpResponse respondWithBadRequest() throws IOException {
-        HttpResponse httpResponse = new HttpResponse();
-        httpResponse.setResponseType(HttpResponseType.BAD_REQUEST);
-        httpResponse.setHeader("Content-Length", "0");
-        return httpResponse;
+        return processRequest(httpRequestParser.getRequest());
     }
 
     public HttpResponse processRequest(HttpRequest httpRequest) throws IOException {

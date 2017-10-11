@@ -1,9 +1,13 @@
 package com.matthewglover.http_request;
 
+import com.matthewglover.http_response.HttpResponseFactory;
+import com.matthewglover.http_response.HttpResponseTemplate;
+import com.matthewglover.http_response.ResponseComparer;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Test;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,7 +36,7 @@ public class HttpRequestParserTest {
 
 
     @Test
-    public void invalidMethod() {
+    public void invalidMethod() throws UnsupportedEncodingException {
         LoggerDouble loggerDouble = new LoggerDouble(null, null);
         LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
         loggerFactoryDouble.setLogger(loggerDouble);
@@ -41,6 +45,10 @@ public class HttpRequestParserTest {
         ));
         HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest, loggerFactoryDouble);
         httpRequestParser.parse();
+        HttpRequest request = httpRequestParser.getRequest();
+
         assertTrue(httpRequestParser.hasErrors());
+        assertTrue(new ResponseComparer(HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST),
+                request.buildResponse()).areSame());
     }
 }

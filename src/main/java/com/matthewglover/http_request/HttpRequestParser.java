@@ -20,10 +20,17 @@ public class HttpRequestParser {
     public void parse() {
         try {
             parseRequestLine();
-            parseRequestHeaders();
         } catch (Exception parseException) {
+            BadRequest badRequest =
+                    (BadRequest) HttpRequestFactory.get(HttpRequestMethod.INVALID_METHOD, loggerFactory);
+            String[] requestElements = getRequestElements();
+            badRequest.setMethod(requestElements[0]);
+            httpRequest = badRequest;
+            setRequestPath(requestElements[1]);
+            setRequestVersion(requestElements[2]);
             this.parseException = parseException;
         }
+        parseRequestHeaders();
     }
 
     public HttpRequest getRequest() {
@@ -31,10 +38,14 @@ public class HttpRequestParser {
     }
 
     private void parseRequestLine() {
-        String[] requestElements = getRawRequestLine().split("\\s+");
+        String[] requestElements = getRequestElements();
         createRequest(requestElements[0]);
         setRequestPath(requestElements[1]);
         setRequestVersion(requestElements[2]);
+    }
+
+    private String[] getRequestElements() {
+        return getRawRequestLine().split("\\s+");
     }
 
     private String getRawRequestLine() {

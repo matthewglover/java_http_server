@@ -59,7 +59,11 @@ public abstract class HttpRequest {
     }
 
     private String requestLineToString() {
-        return getMethod().toString() + " " + getPath() + " " + getVersion();
+        return getMethodString() + " " + getPath() + " " + getVersion();
+    }
+
+    public String getMethodString() {
+        return getMethod().toString();
     }
 
     private String headersToString() {
