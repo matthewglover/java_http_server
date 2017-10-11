@@ -1,4 +1,6 @@
-package com.matthewglover.http;
+package com.matthewglover.http_request;
+
+import com.matthewglover.http_response.HttpResponseType;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

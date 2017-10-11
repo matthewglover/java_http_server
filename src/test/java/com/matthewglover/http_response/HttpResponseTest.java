@@ -1,5 +1,7 @@
-package com.matthewglover.http;
+package com.matthewglover.http_request;
 
+import com.matthewglover.http_response.HttpResponse;
+import com.matthewglover.http_response.HttpResponseType;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
