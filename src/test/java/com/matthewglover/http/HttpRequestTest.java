@@ -10,10 +10,12 @@ public class HttpRequestTest {
 
     @Test
     public void buildsRequestForGivenRequestType() {
-        httpRequest.setRequestType(HttpRequestType.GET);
+        httpRequest.setMethod(HttpRequestMethod.GET);
+        httpRequest.setPath("/path/to/get");
+        httpRequest.setVersion("HTTP/1.1");
         httpRequest.setHeader("Host", "host:port");
         httpRequest.setHeader("User-Agent", "Apache-HttpClient/4.3.5 (java 1.5)");
-        String output = HttpRequestType.GET.toHeader() + "\r\n" +
+        String output = "GET /path/to/get HTTP/1.1" + "\r\n" +
                 "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
                 "Host: host:port\r\n" +
                 "\r\n";

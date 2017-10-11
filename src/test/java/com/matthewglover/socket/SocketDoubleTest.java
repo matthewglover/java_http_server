@@ -23,7 +23,7 @@ public class SocketDoubleTest {
     public void setsInputStreamToProvidedStringData() throws IOException {
         String testInput = "TestInput";
         SocketDouble socketDouble = new SocketDouble();
-        socketDouble.setInputStream(testInput);
+        socketDouble.setInputString(testInput);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socketDouble.getInputStream()));
         assertEquals(testInput, bufferedReader.readLine());
     }

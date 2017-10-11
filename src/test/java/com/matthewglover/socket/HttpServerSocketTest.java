@@ -1,7 +1,7 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.http.HttpRequest;
-import com.matthewglover.http.HttpRequestType;
+import com.matthewglover.http.HttpRequestMethod;
 import com.matthewglover.http.HttpResponse;
 import com.matthewglover.http.HttpResponseType;
 import com.matthewglover.util.LoggerDouble;
@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +29,9 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setRequestType(HttpRequestType.GET);
+        httpRequest.setMethod(HttpRequestMethod.GET);
+        httpRequest.setPath("/");
+        httpRequest.setVersion("HTTP/1.1");
         httpRequest.setHeader("Host", "server:port");
         loggerFactory.setLogger(logger);
         httpServerSocket = new HttpServerSocket(port, serverSocketFactory, loggerFactory);
@@ -55,7 +58,16 @@ public class HttpServerSocketTest {
     }
 
     @Test
-    public void handlesSocketRequests() throws IOException {
+    public void logsHttpRequests() {
+        serverSocket.setInputStream(httpRequest.toString());
+        serverSocketFactory.setServerSocket(serverSocket);
+
+        httpServerSocket.run();
+        assertEquals(httpRequest.toString(), logger.popFromMessageType(LoggerDouble.INFO));
+    }
+
+    @Test
+    public void givenSimpleGetRequestReturns200() throws IOException {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);
 
@@ -68,11 +80,14 @@ public class HttpServerSocketTest {
     }
 
     @Test
-    public void logsHttpRequests() {
-        serverSocket.setInputStream(httpRequest.toString());
+    public void givenInvalidRequestMethodReturns400BadRequest() throws UnsupportedEncodingException {
+        serverSocket.setInputStream("GQMZUUMG /file1 HTTP/1.1\r\n\r\n");
         serverSocketFactory.setServerSocket(serverSocket);
 
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setResponseType(HttpResponseType.BAD_REQUEST);
+        httpResponse.setHeader("Content-Length", "0");
         httpServerSocket.run();
-        assertEquals(httpRequest.toString(), logger.popFromMessageType(LoggerDouble.INFO));
+        assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }
 }

@@ -10,7 +10,7 @@ public class HttpResponseTest {
     private final HttpResponse httpResponse = new HttpResponse();
 
     @Test
-    public void buildsRequestForGivenRequestType() throws UnsupportedEncodingException {
+    public void buildsRequestForGivenResponseType() throws UnsupportedEncodingException {
         String content = "<html><head></head><body></body></html>";
         int contentLength = content.getBytes("UTF-8").length;
         httpResponse.setResponseType(HttpResponseType.OK);
@@ -22,6 +22,13 @@ public class HttpResponseTest {
                 "Content-Length: " + contentLength + "\r\n\r\n" +
                 content + "\r\n";
 
+        assertEquals(output, httpResponse.toString());
+    }
+
+    @Test
+    public void responseOnlyRequiresResponseType() {
+        httpResponse.setResponseType(HttpResponseType.BAD_REQUEST);
+        String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\n\r\n";
         assertEquals(output, httpResponse.toString());
     }
 }

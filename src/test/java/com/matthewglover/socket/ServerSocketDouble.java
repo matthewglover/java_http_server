@@ -31,6 +31,6 @@ public class ServerSocketDouble extends ServerSocket {
     }
 
     public void setInputStream(String inputStream) {
-        socketDouble.setInputStream(inputStream);
+        socketDouble.setInputString(inputStream);
     }
 }

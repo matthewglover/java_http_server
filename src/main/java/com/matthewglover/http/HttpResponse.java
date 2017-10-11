@@ -1,6 +1,7 @@
 package com.matthewglover.http;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,11 @@ public class HttpResponse {
 
     @Override
     public String toString() {
-        return responseType.toHeader() + CRLF + headersToString() + CRLF + content + CRLF;
+        ArrayList<String> responseElements = new ArrayList<>();
+        responseElements.add(responseType.toHeader());
+        if (!headers.isEmpty()) responseElements.add(headersToString());
+        responseElements.add(content == null ? "" : content);
+        return String.join(CRLF, responseElements) + CRLF;
     }
 
     private String headersToString() {

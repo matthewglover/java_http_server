@@ -9,7 +9,7 @@ public class SocketDouble extends Socket {
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private ByteArrayInputStream inputStream;
 
-    public void setInputStream(String data) {
+    public void setInputString(String data) {
         try {
             inputStream = new ByteArrayInputStream(data.getBytes(ENCODING));
         } catch(Exception e) {
