@@ -1,4 +1,4 @@
-package com.matthewglover.http;
+package com.matthewglover.http_request;
 
 
 import java.util.ArrayList;

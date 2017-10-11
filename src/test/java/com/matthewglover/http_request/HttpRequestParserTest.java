@@ -1,6 +1,5 @@
-package com.matthewglover.http;
+package com.matthewglover.http_request;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;

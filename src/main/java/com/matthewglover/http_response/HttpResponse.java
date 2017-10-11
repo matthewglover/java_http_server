@@ -1,6 +1,4 @@
-package com.matthewglover.http_request;
-
-import com.matthewglover.http_response.HttpResponseType;
+package com.matthewglover.http_response;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -12,8 +10,12 @@ public class HttpResponse {
     private static String CRLF = "\r\n";
 
     private HttpResponseType responseType;
-    private String content;
-    private Map<String, String> headers = new HashMap<>();
+    private String content = "";
+    private final Map<String, String> headers = new HashMap<>();
+
+    public HttpResponse() throws UnsupportedEncodingException {
+        setContentLengthHeader();
+    }
 
     public void setResponseType(HttpResponseType responseType) {
         this.responseType = responseType;
@@ -39,8 +41,8 @@ public class HttpResponse {
     public String toString() {
         ArrayList<String> responseElements = new ArrayList<>();
         responseElements.add(responseType.toHeader());
-        if (!headers.isEmpty()) responseElements.add(headersToString());
-        responseElements.add(content == null ? "" : content);
+        responseElements.add(headersToString());
+        if (!content.isEmpty()) responseElements.add(content);
         return String.join(CRLF, responseElements) + CRLF;
     }
 

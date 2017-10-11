@@ -1,9 +1,9 @@
 package com.matthewglover.socket;
 
-import com.matthewglover.http.HttpRequest;
-import com.matthewglover.http.HttpRequestMethod;
-import com.matthewglover.http.HttpResponse;
-import com.matthewglover.http.HttpResponseType;
+import com.matthewglover.http_request.HttpRequest;
+import com.matthewglover.http_request.HttpRequestMethod;
+import com.matthewglover.http_response.HttpResponse;
+import com.matthewglover.http_response.HttpResponseType;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;

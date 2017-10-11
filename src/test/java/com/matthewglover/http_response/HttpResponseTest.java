@@ -1,7 +1,5 @@
-package com.matthewglover.http_request;
+package com.matthewglover.http_response;
 
-import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.HttpResponseType;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -10,6 +8,9 @@ import static org.junit.Assert.assertEquals;
 
 public class HttpResponseTest {
     private final HttpResponse httpResponse = new HttpResponse();
+
+    public HttpResponseTest() throws UnsupportedEncodingException {
+    }
 
     @Test
     public void buildsRequestForGivenResponseType() throws UnsupportedEncodingException {
@@ -30,7 +31,7 @@ public class HttpResponseTest {
     @Test
     public void responseOnlyRequiresResponseType() {
         httpResponse.setResponseType(HttpResponseType.BAD_REQUEST);
-        String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\n\r\n";
+        String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\nContent-Length: 0\r\n\r\n";
         assertEquals(output, httpResponse.toString());
     }
 }

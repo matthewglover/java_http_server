@@ -1,4 +1,4 @@
-package com.matthewglover.http_request;
+package com.matthewglover.http_response;
 
 public enum HttpResponseType {
     OK {
