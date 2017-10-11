@@ -21,20 +21,32 @@ public class HttpResponse {
         this.responseType = responseType;
     }
 
+    public HttpResponseType getResponseType() {
+        return responseType;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
 
-    public void setContentLengthHeader() throws UnsupportedEncodingException {
-       setHeader("Content-Length", getContentLength() + "");
+    public String getContent() {
+        return content;
     }
 
     private int getContentLength() throws UnsupportedEncodingException {
         return content.getBytes("UTF-8").length;
     }
 
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
     public void setHeader(String key, String value) {
         headers.put(key, value);
+    }
+
+    public void setContentLengthHeader() throws UnsupportedEncodingException {
+        setHeader("Content-Length", getContentLength() + "");
     }
 
     @Override

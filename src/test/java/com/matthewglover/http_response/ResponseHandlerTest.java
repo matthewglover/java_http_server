@@ -37,6 +37,6 @@ public class ResponseHandlerTest {
         expectedResponse.setContent("<html><head></head><body></body></html>");
         expectedResponse.setContentLengthHeader();
         HttpResponse actualResponse = responseHandler.handleRequest(httpRequestParser);
-        assertEquals(expectedResponse.toString(), actualResponse.toString());
+        assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }
 }

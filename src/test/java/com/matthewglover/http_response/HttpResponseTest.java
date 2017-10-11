@@ -13,7 +13,7 @@ public class HttpResponseTest {
     }
 
     @Test
-    public void buildsRequestForGivenResponseType() throws UnsupportedEncodingException {
+    public void buildsResponseForGivenResponseType() throws UnsupportedEncodingException {
         String content = "<html><head></head><body></body></html>";
         int contentLength = content.getBytes("UTF-8").length;
         httpResponse.setResponseType(HttpResponseType.OK);
