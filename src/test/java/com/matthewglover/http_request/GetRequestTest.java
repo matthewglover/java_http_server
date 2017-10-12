@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 import static org.junit.Assert.*;
 
@@ -26,23 +27,46 @@ public class GetRequestTest {
     public void requestToRootReturns200() throws UnsupportedEncodingException {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/");
-        HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        assertTrue(new ResponseComparer(actualResponse, getRequest.buildResponse()).areSame());
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse()).areSame());
     }
 
     @Test
     public void requestToFoobarReturns404() throws UnsupportedEncodingException {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/foobar");
-        HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
-        assertTrue(new ResponseComparer(actualResponse, getRequest.buildResponse()).areSame());
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse()).areSame());
     }
 
     @Test
     public void requestToCoffeeReturns418() throws UnsupportedEncodingException {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/coffee");
-        HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
-        assertTrue(new ResponseComparer(actualResponse, getRequest.buildResponse()).areSame());
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse()).areSame());
+    }
+
+    @Test
+    public void requestToLogsWithoutCredentialsReturns401() throws UnsupportedEncodingException {
+        HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
+        getRequest.setPath("/logs");
+        HttpResponse expecteResponse = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
+        assertTrue(new ResponseComparer(expecteResponse, getRequest.buildResponse()).areSame());
+    }
+
+    @Test
+    public void requestToLogsWithCredentialsReturns200() throws UnsupportedEncodingException {
+        String username = "admin";
+        String password = "hunter2";
+        String validCredentials = Base64.getEncoder().withoutPadding().encodeToString((username + ":" + password).getBytes());
+
+        HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
+        getRequest.setPath("/logs");
+        getRequest.setHeader("Authorization", "Basic " + validCredentials);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        expectedResponse.setContent(getRequest.toString());
+        expectedResponse.setContentLengthHeader();
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse()).areSame());
     }
 }
