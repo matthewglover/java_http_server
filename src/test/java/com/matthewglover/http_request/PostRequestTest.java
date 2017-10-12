@@ -14,8 +14,9 @@ import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.*;
 
 public class PostRequestTest {
-    LoggerDouble loggerDouble = new LoggerDouble(null, null);
-    LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+    private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
+    private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+    private final String filePath = "path/to/public/dir";
 
     @Before
     public void setUp() throws Exception {
@@ -26,6 +27,6 @@ public class PostRequestTest {
     public void requestToFormReturns200() throws UnsupportedEncodingException {
         HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.POST, loggerFactoryDouble);
         HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse()).areSame());
+        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse(filePath)).areSame());
     }
 }

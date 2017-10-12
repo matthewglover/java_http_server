@@ -18,7 +18,7 @@ public class BadRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse() throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
         return HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
     }
 }

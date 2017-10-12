@@ -26,7 +26,7 @@ public abstract class HttpRequest {
     }
 
     public abstract void setup();
-    public abstract HttpResponse buildResponse() throws UnsupportedEncodingException;
+    public abstract HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException;
 
     public void setMethod(HttpRequestMethod method) {
         this.method = method;

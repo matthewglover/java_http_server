@@ -3,7 +3,6 @@ package com.matthewglover.socket;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.HttpResponseHandler;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
@@ -15,14 +14,14 @@ public class HttpServerSocket {
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
     private final LoggerFactory loggerFactory;
+    private final String filePath;
     private ServerSocketAdapter serverSocketAdapter;
-    private final HttpResponseHandler httpResponseHandler;
 
-    public HttpServerSocket(int port, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
+    public HttpServerSocket(int port, String filePath, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
         this.port = port;
+        this.filePath = filePath;
         this.serverSocketFactory = serverSocketFactory;
         this.loggerFactory = loggerFactory;
-        httpResponseHandler = new HttpResponseHandler(loggerFactory);
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
@@ -36,7 +35,7 @@ public class HttpServerSocket {
     }
 
     private void connectSocket() throws IOException {
-        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port, filePath);
         serverSocketAdapter.accept();
     }
 
@@ -44,7 +43,7 @@ public class HttpServerSocket {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
-        HttpResponse httpResponse = httpResponseHandler.handleRequest(httpRequest);
+        HttpResponse httpResponse = httpRequest.buildResponse(filePath);
         sendResponse(httpResponse);
     }
 

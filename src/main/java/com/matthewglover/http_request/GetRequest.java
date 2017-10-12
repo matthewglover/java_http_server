@@ -20,7 +20,7 @@ public class GetRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse() throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
         switch (getPath()) {
             case "/foobar": return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
             case "/coffee": return HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);

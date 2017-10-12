@@ -14,7 +14,7 @@ public class OptionsRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse() throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
         switch (getPath()) {
             case "/method_options": return HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_ALL);
             case "/method_options2": return HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);

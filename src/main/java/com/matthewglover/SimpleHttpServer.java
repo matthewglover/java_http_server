@@ -38,7 +38,7 @@ public class SimpleHttpServer {
 
     private void runHttpSocketListener() {
         while (true) {
-            HttpServerSocket httpServerSocket = new HttpServerSocket(argumentParser.getPort(), serverSocketFactory, loggerFactory);
+            HttpServerSocket httpServerSocket = new HttpServerSocket(argumentParser.getPort(), argumentParser.getFilePath(), serverSocketFactory, loggerFactory);
             httpServerSocket.run();
         }
     }

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 public class HttpServerSocketTest {
 
     private final int port = 5050;
+    private final String filePath = "/path/to/public/dir/";
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
@@ -34,7 +35,7 @@ public class HttpServerSocketTest {
     public void setUp() throws Exception {
         httpRequest.setPath("/");
         loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(port, serverSocketFactory, loggerFactory);
+        httpServerSocket = new HttpServerSocket(port, filePath, serverSocketFactory, loggerFactory);
     }
 
     @Test
