@@ -36,12 +36,38 @@ public abstract class HttpRequest {
         return method;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     public void setHeader(String key, String value) {
         headers.put(key, value);
     }
 
     public String getHeader(String key) {
         return headers.get(key);
+    }
+
+    public void parse(RawRequestParser parser) {
+        setPath(parser.getPath());
+        setVersion(parser.getVersion());
+        parser.getRawRequestHeaders().forEach(this::setHeaderFromPair);
+    }
+
+    public String getMethodString() {
+        return getMethod().toString();
     }
 
     public ArrayList<String> toRaw() {
@@ -62,8 +88,8 @@ public abstract class HttpRequest {
         return getMethodString() + " " + getPath() + " " + getVersion();
     }
 
-    public String getMethodString() {
-        return getMethod().toString();
+    private void setHeaderFromPair(String[] headerPair) {
+        this.setHeader(headerPair[0], headerPair[1]);
     }
 
     private String headersToString() {
@@ -76,21 +102,5 @@ public abstract class HttpRequest {
 
     private String headerToString(Map.Entry<String, String> header) {
         return header.getKey() + ": " + header.getValue();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 }

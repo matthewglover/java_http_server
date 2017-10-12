@@ -28,7 +28,6 @@ public class HttpRequestParserTest {
         httpRequestParser.parse();
         HttpRequest request = httpRequestParser.getRequest();
 
-        assertFalse(httpRequestParser.hasErrors());
         assertEquals(HttpRequestMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
         assertEquals("HTTP/1.1", request.getVersion());
@@ -47,7 +46,6 @@ public class HttpRequestParserTest {
         httpRequestParser.parse();
         HttpRequest request = httpRequestParser.getRequest();
 
-        assertTrue(httpRequestParser.hasErrors());
         assertTrue(new ResponseComparer(HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST),
                 request.buildResponse()).areSame());
     }
