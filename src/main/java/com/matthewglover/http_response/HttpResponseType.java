@@ -27,6 +27,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 418 I'm a Teapot";
         }
+    },
+
+    UNAUTHORIZED_ACCESS {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 401 Unauthorized Access";
+        }
     };
 
     public abstract String toHeader();

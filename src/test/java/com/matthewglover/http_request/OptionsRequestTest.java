@@ -11,8 +11,9 @@ import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.*;
 
 public class OptionsRequestTest {
-    LoggerDouble loggerDouble = new LoggerDouble(null, null);
-    LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+    private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
+    private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
+    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
 
     @Before
     public void setUp() throws Exception {
@@ -23,7 +24,7 @@ public class OptionsRequestTest {
     public void allowAllMethodsForMethodOptions() throws UnsupportedEncodingException {
         HttpRequest optionsRequest = HttpRequestFactory.get(HttpRequestMethod.OPTIONS, loggerFactoryDouble);
         optionsRequest.setPath("/method_options");
-        HttpResponse actualResponse = optionsRequest.buildResponse();
+        HttpResponse actualResponse = optionsRequest.buildResponse(rootDirectory);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_ALL);
         expectedResponse.setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
@@ -33,7 +34,7 @@ public class OptionsRequestTest {
     public void selectivelyAllowMethodsForMethodOptions2() throws UnsupportedEncodingException {
         HttpRequest optionsRequest = HttpRequestFactory.get(HttpRequestMethod.OPTIONS, loggerFactoryDouble);
         optionsRequest.setPath("/method_options2");
-        HttpResponse actualResponse = optionsRequest.buildResponse();
+        HttpResponse actualResponse = optionsRequest.buildResponse(rootDirectory);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);
         expectedResponse.setHeader("Allow", "GET,OPTIONS");
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());

@@ -5,6 +5,7 @@ import com.matthewglover.socket.HttpServerSocket;
 import com.matthewglover.util.LoggerFactory;
 import com.matthewglover.socket.ServerSocketFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -38,7 +39,8 @@ public class SimpleHttpServer {
 
     private void runHttpSocketListener() {
         while (true) {
-            HttpServerSocket httpServerSocket = new HttpServerSocket(argumentParser.getPort(), serverSocketFactory, loggerFactory);
+            HttpServerSocket httpServerSocket = new HttpServerSocket(
+                    argumentParser.getPort(), new File(argumentParser.getFilePath()), serverSocketFactory, loggerFactory);
             httpServerSocket.run();
         }
     }
@@ -55,7 +57,8 @@ public class SimpleHttpServer {
         LoggerFactory loggerFactory = new LoggerFactory();
         loggerFactory.setHandler(fileHandler);
 
-        SimpleHttpServer simpleHttpServer = new SimpleHttpServer(argumentParser, serverSocketFactory, loggerFactory);
+        SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
+                argumentParser, serverSocketFactory, loggerFactory);
         simpleHttpServer.run();
     }
 }

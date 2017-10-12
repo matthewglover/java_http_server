@@ -23,6 +23,7 @@ public class ServerSocketAdapterTest {
         serverSocketFactory.setServerSocket(serverSocket);
 
         int port = 0;
+        String filePath = "path/to/public/dir";
         ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
         serverSocketAdapter.accept();
 
@@ -48,6 +49,7 @@ public class ServerSocketAdapterTest {
 
 
         int port = 0;
+        String filePath = "path/to/public/dir";
         ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
         serverSocketAdapter.accept();
 

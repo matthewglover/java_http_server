@@ -1,5 +1,6 @@
 package com.matthewglover.socket;
 
+import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 public class HttpServerSocketTest {
 
     private final int port = 5050;
+    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
@@ -32,9 +34,9 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setPath("/");
+        httpRequest.setPath("/some/valid/path");
         loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(port, serverSocketFactory, loggerFactory);
+        httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, loggerFactory);
     }
 
     @Test

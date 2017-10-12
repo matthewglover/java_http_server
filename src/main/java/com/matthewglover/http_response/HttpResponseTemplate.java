@@ -6,5 +6,6 @@ public enum HttpResponseTemplate {
     OPTIONS_ALLOW_SELECTED,
     BAD_REQUEST,
     NOT_FOUND,
-    IM_A_TEAPOT;
+    IM_A_TEAPOT,
+    UNAUTHORIZED_ACCESS;
 }
