@@ -20,6 +20,7 @@ public class BadRequest extends HttpRequest {
 
     @Override
     public void setup() {
+        setMethod(HttpRequestMethod.INVALID_METHOD);
     }
 
     @Override
