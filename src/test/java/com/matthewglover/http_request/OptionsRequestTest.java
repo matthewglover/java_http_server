@@ -24,7 +24,7 @@ public class OptionsRequestTest {
         HttpRequest optionsRequest = HttpRequestFactory.get(HttpRequestMethod.OPTIONS, loggerFactoryDouble);
         optionsRequest.setPath("/method_options");
         HttpResponse actualResponse = optionsRequest.buildResponse();
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_ALL);
         expectedResponse.setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }
@@ -34,7 +34,7 @@ public class OptionsRequestTest {
         HttpRequest optionsRequest = HttpRequestFactory.get(HttpRequestMethod.OPTIONS, loggerFactoryDouble);
         optionsRequest.setPath("/method_options2");
         HttpResponse actualResponse = optionsRequest.buildResponse();
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);
         expectedResponse.setHeader("Allow", "GET,OPTIONS");
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }

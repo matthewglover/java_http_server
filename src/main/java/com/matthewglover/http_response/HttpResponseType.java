@@ -20,6 +20,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 404 Not Found";
         }
+    },
+
+    IM_A_TEAPOT {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 418 I'm a Teapot";
+        }
     };
 
     public abstract String toHeader();

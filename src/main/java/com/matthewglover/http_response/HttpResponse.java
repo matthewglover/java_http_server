@@ -13,7 +13,7 @@ public abstract class HttpResponse {
     private String content = "";
     private final Map<String, String> headers = new HashMap<>();
 
-    public HttpResponse() throws UnsupportedEncodingException {
+    public HttpResponse() {
         setContentLengthHeader();
         setup();
     }
@@ -36,8 +36,12 @@ public abstract class HttpResponse {
         return content;
     }
 
-    private int getContentLength() throws UnsupportedEncodingException {
-        return content.getBytes("UTF-8").length;
+    private int getContentLength() {
+        try {
+            return content.getBytes("UTF-8").length;
+        } catch (UnsupportedEncodingException exception) {
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 
     public Map<String, String> getHeaders() {
@@ -52,7 +56,7 @@ public abstract class HttpResponse {
         return headers.get(key);
     }
 
-    public void setContentLengthHeader() throws UnsupportedEncodingException {
+    public void setContentLengthHeader() {
         setHeader("Content-Length", getContentLength() + "");
     }
 

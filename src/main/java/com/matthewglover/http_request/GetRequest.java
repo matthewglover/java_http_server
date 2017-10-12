@@ -14,13 +14,16 @@ public class GetRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse() throws UnsupportedEncodingException {
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        return httpResponse;
+    public void setup() {
+        setMethod(HttpRequestMethod.GET);
     }
 
     @Override
-    public void setup() {
-        setMethod(HttpRequestMethod.GET);
+    public HttpResponse buildResponse() throws UnsupportedEncodingException {
+        switch (getPath()) {
+            case "/foobar": return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
+            case "/coffee": return HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
+            default: return HttpResponseFactory.get(HttpResponseTemplate.OK);
+        }
     }
 }
