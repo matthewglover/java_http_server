@@ -8,14 +8,8 @@ import com.matthewglover.util.LoggerFactory;
 import java.io.UnsupportedEncodingException;
 
 public class BadRequest extends HttpRequest {
-    private String method;
-
     public BadRequest(LoggerFactory loggerFactory) {
         super(loggerFactory);
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
     }
 
     @Override
@@ -26,10 +20,5 @@ public class BadRequest extends HttpRequest {
     @Override
     public HttpResponse buildResponse() throws UnsupportedEncodingException {
         return HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
-    }
-
-    @Override
-    public String getMethodString() {
-        return method;
     }
 }

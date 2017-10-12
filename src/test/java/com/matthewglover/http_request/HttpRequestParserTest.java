@@ -39,9 +39,7 @@ public class HttpRequestParserTest {
         LoggerDouble loggerDouble = new LoggerDouble(null, null);
         LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
         loggerFactoryDouble.setLogger(loggerDouble);
-        ArrayList<String> rawRequest = new ArrayList<>(Arrays.asList(
-                "GQMZUUMG /file1 HTTP/1.1"
-        ));
+        ArrayList<String> rawRequest = new ArrayList<>(Arrays.asList("GQMZUUMG /file1 HTTP/1.1"));
         HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest, loggerFactoryDouble);
         httpRequestParser.parse();
         HttpRequest request = httpRequestParser.getRequest();

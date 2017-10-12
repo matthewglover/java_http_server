@@ -16,8 +16,6 @@ public class GetRequest extends HttpRequest {
     @Override
     public HttpResponse buildResponse() throws UnsupportedEncodingException {
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
-        httpResponse.setContent("<html><head></head><body></body></html>");
-        httpResponse.setContentLengthHeader();
         return httpResponse;
     }
 

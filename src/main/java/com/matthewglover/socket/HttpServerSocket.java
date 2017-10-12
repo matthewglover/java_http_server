@@ -1,5 +1,6 @@
 package com.matthewglover.socket;
 
+import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseHandler;
@@ -41,8 +42,9 @@ public class HttpServerSocket {
 
     private void listenAndRespond() throws IOException {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
-        HttpResponse httpResponse = httpResponseHandler.handleRequest(httpRequestParser);
-        logger.info(httpResponse.toString());
+        httpRequestParser.parse();
+        HttpRequest httpRequest = httpRequestParser.getRequest();
+        HttpResponse httpResponse = httpResponseHandler.handleRequest(httpRequest);
         sendResponse(httpResponse);
     }
 

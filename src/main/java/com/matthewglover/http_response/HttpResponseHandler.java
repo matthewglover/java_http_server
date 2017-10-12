@@ -1,7 +1,6 @@
 package com.matthewglover.http_response;
 
 import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.IOException;
@@ -15,9 +14,8 @@ public class HttpResponseHandler {
         logger = loggerFactory.getLogger(HttpResponseHandler.class.getName());
     }
 
-    public HttpResponse handleRequest(HttpRequestParser httpRequestParser) throws IOException {
-        httpRequestParser.parse();
-        return processRequest(httpRequestParser.getRequest());
+    public HttpResponse handleRequest(HttpRequest httpRequest) throws IOException {
+        return processRequest(httpRequest);
     }
 
     public HttpResponse processRequest(HttpRequest httpRequest) throws IOException {

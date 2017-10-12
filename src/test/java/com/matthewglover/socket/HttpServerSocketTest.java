@@ -75,8 +75,6 @@ public class HttpServerSocketTest {
 
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setResponseType(HttpResponseType.OK);
-        httpResponse.setContent("<html><head></head><body></body></html>");
-        httpResponse.setContentLengthHeader();
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }
