@@ -20,6 +20,7 @@ public class HttpRequestParser {
     public void parse() {
         try {
             parseRequestLine();
+            parseRequestHeaders();
         } catch (Exception parseException) {
             BadRequest badRequest =
                     (BadRequest) HttpRequestFactory.get(HttpRequestMethod.INVALID_METHOD, loggerFactory);
@@ -29,8 +30,8 @@ public class HttpRequestParser {
             setRequestPath(requestElements[1]);
             setRequestVersion(requestElements[2]);
             this.parseException = parseException;
+            parseRequestHeaders();
         }
-        parseRequestHeaders();
     }
 
     public HttpRequest getRequest() {
