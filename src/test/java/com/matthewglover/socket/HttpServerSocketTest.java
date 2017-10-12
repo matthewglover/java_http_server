@@ -34,7 +34,7 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setPath("/");
+        httpRequest.setPath("/some/valid/path");
         loggerFactory.setLogger(logger);
         httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, loggerFactory);
     }
