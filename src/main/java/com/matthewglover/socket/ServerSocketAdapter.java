@@ -9,7 +9,7 @@ public class ServerSocketAdapter {
     private final ServerSocket serverSocket;
     private Socket socket;
 
-    public ServerSocketAdapter(ServerSocketFactory serverSocketFactory, int port, String filePath) throws IOException {
+    public ServerSocketAdapter(ServerSocketFactory serverSocketFactory, int port) throws IOException {
         serverSocket = serverSocketFactory.getServerSocket(port);
     }
 

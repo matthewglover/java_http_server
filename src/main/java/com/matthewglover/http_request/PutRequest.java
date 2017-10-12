@@ -5,6 +5,7 @@ import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.util.LoggerFactory;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 public class PutRequest extends HttpRequest {
@@ -18,7 +19,7 @@ public class PutRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(File rootDirectory) throws UnsupportedEncodingException {
         return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 }

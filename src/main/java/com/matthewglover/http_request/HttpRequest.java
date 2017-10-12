@@ -3,6 +3,7 @@ package com.matthewglover.http_request;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.util.LoggerFactory;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public abstract class HttpRequest {
     }
 
     public abstract void setup();
-    public abstract HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException;
+    public abstract HttpResponse buildResponse(File rootDirectory) throws UnsupportedEncodingException;
 
     public void setMethod(HttpRequestMethod method) {
         this.method = method;

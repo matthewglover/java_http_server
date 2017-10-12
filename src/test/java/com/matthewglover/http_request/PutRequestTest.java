@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class PutRequestTest {
     private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final String filePath = "path/to/public/dir";
+    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +27,7 @@ public class PutRequestTest {
     public void requestToFormReturns200() throws UnsupportedEncodingException {
         HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.PUT, loggerFactoryDouble);
         HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse(rootDirectory)).areSame());
     }
 }
 

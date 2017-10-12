@@ -6,6 +6,7 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.request_handler.BasicAuthHandler;
 import com.matthewglover.util.LoggerFactory;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 public class GetRequest extends HttpRequest {
@@ -20,7 +21,7 @@ public class GetRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(File rootDirectory) throws UnsupportedEncodingException {
         switch (getPath()) {
             case "/foobar": return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
             case "/coffee": return HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);

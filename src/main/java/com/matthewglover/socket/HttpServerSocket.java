@@ -13,13 +13,13 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
+    private final File rootDirectory;
     private final LoggerFactory loggerFactory;
-    private final String filePath;
     private ServerSocketAdapter serverSocketAdapter;
 
-    public HttpServerSocket(int port, String filePath, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
+    public HttpServerSocket(int port, File rootDirectory, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
         this.port = port;
-        this.filePath = filePath;
+        this.rootDirectory = rootDirectory;
         this.serverSocketFactory = serverSocketFactory;
         this.loggerFactory = loggerFactory;
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
@@ -35,7 +35,7 @@ public class HttpServerSocket {
     }
 
     private void connectSocket() throws IOException {
-        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port, filePath);
+        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
         serverSocketAdapter.accept();
     }
 
@@ -43,7 +43,7 @@ public class HttpServerSocket {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
-        HttpResponse httpResponse = httpRequest.buildResponse(filePath);
+        HttpResponse httpResponse = httpRequest.buildResponse(rootDirectory);
         sendResponse(httpResponse);
     }
 

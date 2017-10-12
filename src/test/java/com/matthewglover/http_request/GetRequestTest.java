@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class GetRequestTest {
     private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final String filePath = "path/to/public/dir";
+    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +29,7 @@ public class GetRequestTest {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/");
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(rootDirectory)).areSame());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class GetRequestTest {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/foobar");
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
-        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(rootDirectory)).areSame());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class GetRequestTest {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/coffee");
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
-        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(rootDirectory)).areSame());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class GetRequestTest {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/logs");
         HttpResponse expecteResponse = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
-        assertTrue(new ResponseComparer(expecteResponse, getRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(expecteResponse, getRequest.buildResponse(rootDirectory)).areSame());
     }
 
     @Test
@@ -68,6 +68,6 @@ public class GetRequestTest {
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         expectedResponse.setContent(getRequest.toString());
         expectedResponse.setContentLengthHeader();
-        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(filePath)).areSame());
+        assertTrue(new ResponseComparer(expectedResponse, getRequest.buildResponse(rootDirectory)).areSame());
     }
 }

@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class HeadRequestTest {
     private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final String filePath = "path/to/public/dir";
+    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +24,7 @@ public class HeadRequestTest {
     public void respondsWithOKForRootPath() throws UnsupportedEncodingException {
         HttpRequest httpHeadRequest = HttpRequestFactory.get(HttpRequestMethod.HEAD, loggerFactoryDouble);
         httpHeadRequest.setPath("/");
-        HttpResponse actualResponse = httpHeadRequest.buildResponse(filePath);
+        HttpResponse actualResponse = httpHeadRequest.buildResponse(rootDirectory);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }
@@ -33,7 +33,7 @@ public class HeadRequestTest {
     public void respondsWithNotFoundForNonRootPath() throws UnsupportedEncodingException {
         HttpRequest httpHeadRequest = HttpRequestFactory.get(HttpRequestMethod.HEAD, loggerFactoryDouble);
         httpHeadRequest.setPath("/foobar");
-        HttpResponse actualResponse = httpHeadRequest.buildResponse(filePath);
+        HttpResponse actualResponse = httpHeadRequest.buildResponse(rootDirectory);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }

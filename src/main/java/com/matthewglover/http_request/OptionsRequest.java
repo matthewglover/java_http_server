@@ -5,6 +5,7 @@ import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.util.LoggerFactory;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 public class OptionsRequest extends HttpRequest {
@@ -14,7 +15,7 @@ public class OptionsRequest extends HttpRequest {
     }
 
     @Override
-    public HttpResponse buildResponse(String filePath) throws UnsupportedEncodingException {
+    public HttpResponse buildResponse(File rootDirectory) throws UnsupportedEncodingException {
         switch (getPath()) {
             case "/method_options": return HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_ALL);
             case "/method_options2": return HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);
