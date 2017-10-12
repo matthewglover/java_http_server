@@ -6,7 +6,6 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.HttpResponseType;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
@@ -73,8 +72,7 @@ public class HttpServerSocketTest {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);
 
-        HttpResponse httpResponse = new HttpResponse();
-        httpResponse.setResponseType(HttpResponseType.OK);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }

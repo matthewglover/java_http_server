@@ -19,13 +19,13 @@ public class HttpResponseHandlerTest {
     @Before
     public void setUp() throws Exception {
         loggerFactory.setLogger(logger);
+        httpRequest.setPath("/");
     }
 
     @Test
     public void givenSimpleGetRequestReturns200() throws IOException {
         HttpResponseHandler httpResponseHandler = new HttpResponseHandler(loggerFactory);
-        HttpResponse expectedResponse = new HttpResponse();
-        expectedResponse.setResponseType(HttpResponseType.OK);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         HttpResponse actualResponse = httpResponseHandler.handleRequest(httpRequest);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }

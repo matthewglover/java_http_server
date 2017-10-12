@@ -5,5 +5,5 @@ public enum HttpResponseTemplate {
     OPTIONS_ALLOW_ALL,
     OPTIONS_ALLOW_SELECTED,
     BAD_REQUEST,
-    NOT_FOUND;
+    NOT_FOUND, COFFEE;
 }

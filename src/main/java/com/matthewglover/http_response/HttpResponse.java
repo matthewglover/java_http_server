@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpResponse {
+public abstract class HttpResponse {
 
     private static String CRLF = "\r\n";
 
@@ -15,7 +15,10 @@ public class HttpResponse {
 
     public HttpResponse() throws UnsupportedEncodingException {
         setContentLengthHeader();
+        setup();
     }
+
+    public abstract void setup();
 
     public void setResponseType(HttpResponseType responseType) {
         this.responseType = responseType;
