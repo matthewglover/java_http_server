@@ -1,7 +1,7 @@
 package com.matthewglover.http_response;
 
 public enum HttpResponseTemplate {
-    SIMPLE_GET,
+    OK,
     OPTIONS_ALLOW_ALL,
     OPTIONS_ALLOW_SELECTED,
     BAD_REQUEST,

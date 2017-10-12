@@ -9,19 +9,19 @@ public class HttpResponseFactory {
             case OPTIONS_ALLOW_ALL: return buildOptoinsAllowAllResponse();
             case BAD_REQUEST: return buildBadRequestResponse();
             case NOT_FOUND: return buildNotFoundResponse();
-            case SIMPLE_GET:
+            case OK:
             default: return buildOkResponse();
         }
     }
 
     private static HttpResponse buildOptionsAllowSelectedResponse() throws UnsupportedEncodingException {
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setHeader("Allow", "GET,OPTIONS");
         return httpResponse;
     }
 
     private static HttpResponse buildOptoinsAllowAllResponse() throws UnsupportedEncodingException {
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
         return httpResponse;
     }

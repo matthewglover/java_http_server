@@ -16,7 +16,7 @@ public class HeadRequest extends HttpRequest {
     @Override
     public HttpResponse buildResponse() throws UnsupportedEncodingException {
         if (getPath().equals("/")) {
-            return HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+            return HttpResponseFactory.get(HttpResponseTemplate.OK);
         } else {
             return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
         }

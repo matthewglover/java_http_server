@@ -18,7 +18,7 @@ public class HeadRequestTest {
         HttpRequest httpHeadRequest = HttpRequestFactory.get(HttpRequestMethod.HEAD, loggerFactoryDouble);
         httpHeadRequest.setPath("/");
         HttpResponse actualResponse = httpHeadRequest.buildResponse();
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }
 

@@ -14,7 +14,7 @@ public class HttpResponseTest {
     public void buildsResponseForGivenResponseType() throws UnsupportedEncodingException {
         String content = "<html><head></head><body></body></html>";
 
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.SIMPLE_GET);
+        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setHeader("Response-Type", "text/html");
         httpResponse.setContent(content);
         httpResponse.setContentLengthHeader();
