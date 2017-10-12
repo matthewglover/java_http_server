@@ -44,7 +44,8 @@ public class HttpServerSocket {
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
         HttpResponse httpResponse = httpRequest.buildResponse(rootDirectory);
-        sendResponse(httpResponse);
+        httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
+        serverSocketAdapter.close();
     }
 
     private HttpRequestParser getHttpRequestParser() throws IOException {
@@ -52,11 +53,4 @@ public class HttpServerSocket {
                 serverSocketAdapter.getInputStream(), loggerFactory);
         return new HttpRequestParser(httpRequestStreamAdapter.getRequest(), loggerFactory);
     }
-
-    private void sendResponse(HttpResponse httpResponse) throws IOException {
-        DataOutputStream outputStream = new DataOutputStream(serverSocketAdapter.getOutputStream());
-        outputStream.writeBytes(httpResponse.toString());
-        serverSocketAdapter.close();
-    }
-
 }

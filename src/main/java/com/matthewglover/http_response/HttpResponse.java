@@ -1,5 +1,8 @@
 package com.matthewglover.http_response;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,5 +78,10 @@ public abstract class HttpResponse {
             headersString += header.getKey() + ": " + header.getValue() + CRLF;
         }
         return headersString;
+    }
+
+    public void sendResponseOverSocket(OutputStream outputStream) throws IOException {
+        DataOutputStream dataStream = new DataOutputStream(outputStream);
+        dataStream.writeBytes(toString());
     }
 }

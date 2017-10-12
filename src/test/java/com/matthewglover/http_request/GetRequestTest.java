@@ -4,12 +4,15 @@ import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.http_response.ResponseComparer;
+import com.matthewglover.socket.ServerSocketDouble;
+import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.HtmlBuilder;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
