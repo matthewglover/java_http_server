@@ -60,8 +60,7 @@ public abstract class HttpRequest {
         return headers.get(key);
     }
 
-    public void parse(ArrayList<String> rawRequest) {
-        RawRequestParser parser = new RawRequestParser(rawRequest);
+    public void parse(RawRequestParser parser) {
         setPath(parser.getPath());
         setVersion(parser.getVersion());
         parser.getRawRequestHeaders().forEach(this::setHeaderFromPair);

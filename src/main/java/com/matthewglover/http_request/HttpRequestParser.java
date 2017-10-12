@@ -7,34 +7,22 @@ import java.util.ArrayList;
 
 public class HttpRequestParser {
 
-    private final ArrayList<String> rawRequest;
     private final LoggerFactory loggerFactory;
+    private final RawRequestParser rawRequestParser;
     private HttpRequest httpRequest;
 
     public HttpRequestParser(ArrayList<String> rawRequest, LoggerFactory loggerFactory) {
-        this.rawRequest = rawRequest;
+        rawRequestParser = new RawRequestParser(rawRequest);
         this.loggerFactory = loggerFactory;
     }
 
     public void parse() {
-        HttpRequestMethod requestMethod = HttpRequestMethod.parse(getRequestMethodName());
+        HttpRequestMethod requestMethod = HttpRequestMethod.parse(rawRequestParser.getMethod());
         httpRequest = HttpRequestFactory.get(requestMethod, loggerFactory);
-        httpRequest.parse(rawRequest);
+        httpRequest.parse(rawRequestParser);
     }
 
     public HttpRequest getRequest() {
         return httpRequest;
-    }
-
-    private String getRequestMethodName() {
-        return getRequestElements()[0];
-    }
-
-    private String[] getRequestElements() {
-        return getRawRequestLine().split("\\s+");
-    }
-
-    private String getRawRequestLine() {
-        return rawRequest.get(0);
     }
 }

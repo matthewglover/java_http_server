@@ -39,7 +39,8 @@ public class HttpRequestTest {
     public void parsesRawGetRequest() {
         ArrayList<String> rawRequest = testRequest.toRaw();
         HttpRequest request = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
-        request.parse(rawRequest);
+        RawRequestParser parser = new RawRequestParser(rawRequest);
+        request.parse(parser);
 
         assertEquals(HttpRequestMethod.GET, request.getMethod());
         assertEquals("/test/path", request.getPath());
