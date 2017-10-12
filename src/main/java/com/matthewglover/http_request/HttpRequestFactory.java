@@ -5,6 +5,7 @@ import com.matthewglover.util.LoggerFactory;
 public class HttpRequestFactory {
     public static HttpRequest get(HttpRequestMethod httpRequestMethod, LoggerFactory loggerFactory) {
         switch (httpRequestMethod) {
+            case PUT: return new PutRequest(loggerFactory);
             case POST: return new PostRequest(loggerFactory);
             case INVALID_METHOD: return new BadRequest(loggerFactory);
             case OPTIONS: return new OptionsRequest(loggerFactory);
