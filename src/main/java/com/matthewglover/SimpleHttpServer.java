@@ -1,5 +1,6 @@
 package com.matthewglover;
 
+import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.ArgumentParser;
 import com.matthewglover.socket.HttpServerSocket;
 import com.matthewglover.util.LoggerFactory;
@@ -17,10 +18,12 @@ public class SimpleHttpServer {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final LoggerFactory loggerFactory;
+    private final RouterBuilder routerBuilder;
 
-    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
+    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
         this.serverSocketFactory = serverSocketFactory;
+        this.routerBuilder = routerBuilder;
         this.loggerFactory = loggerFactory;
         this.logger = loggerFactory.getLogger(SimpleHttpServer.class.getName());
     }
@@ -38,9 +41,15 @@ public class SimpleHttpServer {
     }
 
     private void runHttpSocketListener() {
+        RequestRouter requestRouter = routerBuilder.build(new File(argumentParser.getFilePath()));
+
         while (true) {
             HttpServerSocket httpServerSocket = new HttpServerSocket(
-                    argumentParser.getPort(), new File(argumentParser.getFilePath()), serverSocketFactory, loggerFactory);
+                    argumentParser.getPort(),
+                    new File(argumentParser.getFilePath()),
+                    serverSocketFactory,
+                    requestRouter,
+                    loggerFactory);
             httpServerSocket.run();
         }
     }
@@ -57,8 +66,10 @@ public class SimpleHttpServer {
         LoggerFactory loggerFactory = new LoggerFactory();
         loggerFactory.setHandler(fileHandler);
 
+        RouterBuilder routerBuilder = new DefaultRouter();
+
         SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
-                argumentParser, serverSocketFactory, loggerFactory);
+                argumentParser, serverSocketFactory, routerBuilder, loggerFactory);
         simpleHttpServer.run();
     }
 }

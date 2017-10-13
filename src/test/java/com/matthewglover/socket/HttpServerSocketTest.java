@@ -1,5 +1,6 @@
 package com.matthewglover.socket;
 
+import com.matthewglover.DefaultRouter;
 import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
@@ -7,6 +8,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
+import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
@@ -27,6 +29,7 @@ public class HttpServerSocketTest {
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
+    private final RequestRouter requestRouter = new DefaultRouter().build(null);
     private HttpServerSocket httpServerSocket;
 
     public HttpServerSocketTest() throws IOException {
@@ -34,9 +37,9 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setPath("/some/valid/path");
+        httpRequest.setPath("/log");
         loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, loggerFactory);
+        httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, requestRouter, loggerFactory);
     }
 
     @Test
@@ -75,6 +78,8 @@ public class HttpServerSocketTest {
         serverSocketFactory.setServerSocket(serverSocket);
 
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        httpResponse.setContent(httpRequest.requestLineToString());
+        httpResponse.setContentLengthHeader();
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }

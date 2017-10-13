@@ -81,7 +81,7 @@ public abstract class HttpRequest {
         return requestLineToString() + CRLF + headersToString() + CRLF;
     }
 
-    private String requestLineToString() {
+    public String requestLineToString() {
         return getMethod().toString() + " " + getPath() + " " + getVersion();
     }
 

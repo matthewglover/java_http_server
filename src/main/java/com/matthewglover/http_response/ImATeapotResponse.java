@@ -1,9 +1,7 @@
 package com.matthewglover.http_response;
 
-import java.io.UnsupportedEncodingException;
-
 public class ImATeapotResponse extends HttpResponse {
-    public ImATeapotResponse() throws UnsupportedEncodingException {
+    public ImATeapotResponse() {
         super();
     }
 

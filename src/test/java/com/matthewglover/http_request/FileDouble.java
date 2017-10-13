@@ -29,6 +29,11 @@ public class FileDouble extends File {
         return fileName;
     }
 
+    @Override
+    public boolean isDirectory() {
+        return false;
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

@@ -1,9 +1,7 @@
 package com.matthewglover.http_response;
 
-import java.io.UnsupportedEncodingException;
-
 public class HttpResponseFactory {
-    public static HttpResponse get(HttpResponseTemplate responseTemplate) throws UnsupportedEncodingException {
+    public static HttpResponse get(HttpResponseTemplate responseTemplate) {
         switch (responseTemplate) {
             case UNAUTHORIZED_ACCESS: return new UnauthorizedAccessResponse();
             case IM_A_TEAPOT: return new ImATeapotResponse();
