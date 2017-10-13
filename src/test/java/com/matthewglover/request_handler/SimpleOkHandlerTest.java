@@ -27,12 +27,20 @@ public class SimpleOkHandlerTest {
         requestHandler.addHandledPath("/log");
         requestHandler.addHandledPath("/these");
         requestHandler.addHandledPath("/requests");
+        requestHandler.addHandledPath("/tea");
     }
 
     @Test
     public void handlesGetRequestToLogs() {
         HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
         getRequest.setPath("/logs");
+        assertValidResponse(getRequest);
+    }
+
+    @Test
+    public void handlesGetRequestToTea() {
+        HttpRequest getRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
+        getRequest.setPath("/tea");
         assertValidResponse(getRequest);
     }
 

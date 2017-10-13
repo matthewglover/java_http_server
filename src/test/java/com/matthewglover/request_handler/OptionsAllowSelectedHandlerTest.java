@@ -3,6 +3,7 @@ package com.matthewglover.request_handler;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
+import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.http_response.ResponseComparer;
@@ -13,11 +14,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BadRequestHandlerTest {
+public class OptionsAllowSelectedHandlerTest {
 
     private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final RequestHandler requestHandler = new BadRequestHandler();
 
     @Before
     public void setUp() throws Exception {
@@ -25,11 +25,12 @@ public class BadRequestHandlerTest {
     }
 
     @Test
-    public void handlesBadRequest() {
-        HttpRequest badRequest = HttpRequestFactory.get(HttpRequestMethod.INVALID_METHOD, loggerFactoryDouble);
-        assertTrue(requestHandler.handles(badRequest));
-        assertTrue(new ResponseComparer(
-                HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST),
-                requestHandler.getResponse(badRequest)).areSame());
+    public void selectivelyAllowMethodsForMethodOptions2() {
+        HttpRequest optionsRequest = HttpRequestFactory.get(HttpRequestMethod.OPTIONS, loggerFactoryDouble);
+        optionsRequest.setPath("/method_options2");
+        HttpResponse actualResponse = new OptionsAllowSelectedHandler().getResponse(optionsRequest);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);
+        expectedResponse.setHeader("Allow", "GET,OPTIONS");
+        assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());
     }
 }

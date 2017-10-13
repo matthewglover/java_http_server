@@ -23,11 +23,11 @@ public class PutRequestTest {
         loggerFactoryDouble.setLogger(loggerDouble);
     }
 
-    @Test
-    public void requestToFormReturns200() throws UnsupportedEncodingException {
-        HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.PUT, loggerFactoryDouble);
-        HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse(rootDirectory)).areSame());
-    }
+//    @Test
+//    public void requestToFormReturns200() throws UnsupportedEncodingException {
+//        HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.PUT, loggerFactoryDouble);
+//        HttpResponse actualResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
+//        assertTrue(new ResponseComparer(actualResponse, postRequest.buildResponse(rootDirectory)).areSame());
+//    }
 }
 

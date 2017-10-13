@@ -46,8 +46,8 @@ public class HttpServerSocket {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
+        logger.info(httpRequest.toString());
         HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
-//        HttpResponse httpResponse = httpRequest.buildResponse(rootDirectory);
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
         serverSocketAdapter.close();
     }

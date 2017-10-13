@@ -5,10 +5,7 @@ import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.HttpResponseFactory;
-import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.ResponseComparer;
+import com.matthewglover.http_response.*;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +45,13 @@ public class RequestRouterTest {
     }
 
     @Test
+    public void getToTeaReturns200() {
+        simpleGet.setPath("/tea");
+        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
+    }
+
+    @Test
     public void unauthorisedGetToLogsReturns401() {
         simpleGet.setPath("/logs");
         HttpResponse actualResponse = router.handleRequest(simpleGet);
@@ -61,5 +65,29 @@ public class RequestRouterTest {
         simpleGet.setHeader("Authorization", "Basic " + validCredentials);
         HttpResponse actualResponse = router.handleRequest(simpleGet);
         assertEquals(simpleGet.requestLineToString(), actualResponse.getContent());
+    }
+
+    @Test
+    public void postRequestToFormReturns200() {
+        HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.POST, loggerFactoryDouble);
+        postRequest.setPath("/form");
+        HttpResponse actualResponse = router.handleRequest(postRequest);
+        assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
+    }
+
+    @Test
+    public void putRequestToFormReturns200() {
+        HttpRequest putRequest = HttpRequestFactory.get(HttpRequestMethod.PUT, loggerFactoryDouble);
+        putRequest.setPath("/form");
+        HttpResponse actualResponse = router.handleRequest(putRequest);
+        assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
+    }
+
+    @Test
+    public void getRequestWithCookieUrlReturns200WithEat() {
+        simpleGet.setPath("/cookie?type=chocolate");
+        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
+        assertEquals("Eat", actualResponse.getContent());
     }
 }

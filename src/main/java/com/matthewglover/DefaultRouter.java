@@ -22,9 +22,21 @@ public class DefaultRouter implements RouterBuilder {
         router.addHandler(getBasicAuthHandler());
         router.addHandler(getOptionsAllowAllHandler());
         router.addHandler(getOptionsAllowSelectedHandler());
+        router.addHandler(getCookieHandler());
         router.addHandler(getImATeapotHandler());
         router.addHandler(getSimpleOkHandler());
+        router.addHandler(getFormDataHandler());
         router.addHandler(getDirectoryListingHandler());
+    }
+
+    private RequestHandler getCookieHandler() {
+        return new CookieHandler();
+    }
+
+    private RequestHandler getFormDataHandler() {
+        FormDataHandler requestHandler = new FormDataHandler();
+        requestHandler.addHandledPath("/form");
+        return requestHandler;
     }
 
     private RequestHandler getDirectoryListingHandler() {
@@ -67,6 +79,7 @@ public class DefaultRouter implements RouterBuilder {
         requestHandler.addHandledPath("/log");
         requestHandler.addHandledPath("/these");
         requestHandler.addHandledPath("/requests");
+        requestHandler.addHandledPath("/tea");
         return requestHandler;
     }
 }
