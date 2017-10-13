@@ -1,7 +1,6 @@
 package com.matthewglover.http_response;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 public abstract class HttpResponse {
 
-    private static String CRLF = "\r\n";
+    public static String CRLF = "\r\n";
 
     private HttpResponseType responseType;
     private String content = "";
@@ -39,7 +38,7 @@ public abstract class HttpResponse {
         return content;
     }
 
-    private int getContentLength() {
+    public long getContentLength() {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
@@ -63,16 +62,16 @@ public abstract class HttpResponse {
         setHeader("Content-Length", getContentLength() + "");
     }
 
-    @Override
-    public String toString() {
-        ArrayList<String> responseElements = new ArrayList<>();
-        responseElements.add(responseType.toHeader());
-        responseElements.add(headersToString());
-        if (!content.isEmpty()) responseElements.add(content);
-        return String.join(CRLF, responseElements) + CRLF;
+    public void sendResponseOverSocket(OutputStream outputStream) throws Exception {
+        DataOutputStream dataStream = new DataOutputStream(outputStream);
+        dataStream.writeBytes(toString());
     }
 
-    private String headersToString() {
+    public String getStatusLine() {
+        return responseType.toHeader() + CRLF;
+    }
+
+    public String headersToString() {
         String headersString = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
             headersString += header.getKey() + ": " + header.getValue() + CRLF;
@@ -80,8 +79,11 @@ public abstract class HttpResponse {
         return headersString;
     }
 
-    public void sendResponseOverSocket(OutputStream outputStream) throws IOException {
-        DataOutputStream dataStream = new DataOutputStream(outputStream);
-        dataStream.writeBytes(toString());
+    @Override
+    public String toString() {
+        String output = getStatusLine() + headersToString();
+        if (!content.isEmpty()) output += CRLF + content;
+        output += CRLF;
+        return output;
     }
 }

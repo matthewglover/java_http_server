@@ -37,7 +37,7 @@ public class HttpResponseTest {
     }
 
     @Test
-    public void sendResponseToSocket() throws IOException {
+    public void sendResponseToSocket() throws Exception {
         SocketDouble socketDouble = new SocketDouble();
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setContent("blah blah blah");

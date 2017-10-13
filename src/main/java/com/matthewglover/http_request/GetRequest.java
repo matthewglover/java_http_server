@@ -27,9 +27,16 @@ public class GetRequest extends HttpRequest {
             case "/foobar": return HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
             case "/coffee": return HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
             case "/logs": return handleAuthorizedPath();
+            case "/file1": return handleFile(rootDirectory);
             case "/": return handleDirectoryListing(rootDirectory);
             default: return HttpResponseFactory.get(HttpResponseTemplate.OK);
         }
+    }
+
+    private HttpResponse handleFile(File rootDirectory) throws UnsupportedEncodingException {
+        FileResponse fileResponse = (FileResponse) HttpResponseFactory.get(HttpResponseTemplate.FILE);
+        fileResponse.setFile(rootDirectory, getPath());
+        return fileResponse;
     }
 
     private HttpResponse handleDirectoryListing(File rootDirectory) throws UnsupportedEncodingException {

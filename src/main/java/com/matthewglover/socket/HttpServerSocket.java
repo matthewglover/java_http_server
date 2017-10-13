@@ -39,7 +39,7 @@ public class HttpServerSocket {
         serverSocketAdapter.accept();
     }
 
-    private void listenAndRespond() throws IOException {
+    private void listenAndRespond() throws Exception {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
