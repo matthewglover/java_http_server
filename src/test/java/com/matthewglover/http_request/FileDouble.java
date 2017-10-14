@@ -5,7 +5,8 @@ import java.io.File;
 public class FileDouble extends File {
     private File[] fileList;
     private String fileName;
-    private boolean isFile;
+    private boolean isFile = false;
+    private boolean isDirectory = false;
 
     public FileDouble(String pathname) {
         super(pathname);
@@ -16,6 +17,7 @@ public class FileDouble extends File {
         for (int i = 0; i < fileNameList.length; i++) {
             FileDouble fileDouble = new FileDouble("/path/to/file");
             fileDouble.setFileName(fileNameList[i]);
+            fileDouble.setIsFile(true);
             fileList[i] = fileDouble;
         }
     }
@@ -32,7 +34,7 @@ public class FileDouble extends File {
 
     @Override
     public boolean isDirectory() {
-        return false;
+        return isDirectory;
     }
 
     @Override
@@ -46,5 +48,9 @@ public class FileDouble extends File {
 
     public void setIsFile(boolean isFile) {
         this.isFile = isFile;
+    }
+
+    public void setIsDirectory(boolean isDirectory) {
+        this.isDirectory = isDirectory;
     }
 }

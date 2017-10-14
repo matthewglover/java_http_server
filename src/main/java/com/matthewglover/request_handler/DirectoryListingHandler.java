@@ -13,10 +13,14 @@ import java.io.File;
 public class DirectoryListingHandler extends RequestHandler {
 
     private final File rootDirectory;
+    private final FileAccessor fileAccessor;
+    private final String rootDirectoryPath;
 
     public DirectoryListingHandler(String rootDirectoryPath, FileAccessor fileAccessor) {
         super();
         this.rootDirectory = fileAccessor.getFileFromPath(rootDirectoryPath);
+        this.rootDirectoryPath = rootDirectoryPath;
+        this.fileAccessor = fileAccessor;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class DirectoryListingHandler extends RequestHandler {
     }
 
     private boolean isValidDirectory(String path) {
-        File file = new File(rootDirectory.getPath() + path);
+        File file = fileAccessor.getFileFromPath(rootDirectoryPath + path);
         return file.isDirectory();
     }
 

@@ -1,6 +1,7 @@
 package com.matthewglover.request_handler;
 
 import com.matthewglover.DefaultRouter;
+import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
@@ -10,7 +11,6 @@ import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -109,5 +109,21 @@ public class RequestRouterTest {
 
         actualResponse.sendResponseOverSocket(socketDouble.getOutputStream());
         assertThat(socketDouble.getOutput(), CoreMatchers.containsString(testData));
+    }
+
+    @Test
+    public void getRequestToRootReturns200WithDirectoryListing() throws Exception {
+        String[] fileNames = new String[]{ "file1", "file2.txt", "file3.jpg" };
+        FileDouble fileDouble = fileAccessorDouble.getFile();
+        fileDouble.setIsDirectory(true);
+        fileDouble.setFileList(fileNames);
+
+        simpleGet.setPath("/");
+
+        HttpResponse actualResponse = router.handleRequest(simpleGet);
+
+        assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file1\">file1</a>"));
+        assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
+        assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file3.jpg\">file3.jpg</a>"));
     }
 }
