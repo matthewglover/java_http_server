@@ -1,14 +1,10 @@
 package com.matthewglover.request_handler;
 
-import com.matthewglover.DefaultRouter;
-import com.matthewglover.http_request.FileDouble;
-import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestFactory;
-import com.matthewglover.http_request.HttpRequestMethod;
+import com.matthewglover.DefaultRouterBuilder;
+import com.matthewglover.http_request.*;
 import com.matthewglover.http_response.*;
 import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
-import com.matthewglover.util.LoggerFactoryDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,18 +15,14 @@ import static org.junit.Assert.*;
 
 public class RequestRouterTest {
 
-    private final String rootDirectoryPath = "/path/to/public";
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final HttpRequest simpleGet = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
-    private final String username = "admin";
-    private final String password = "hunter2";
-    private final String validCredentials = Base64.getEncoder().withoutPadding().encodeToString((username + ":" + password).getBytes());
+    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private RequestRouter router;
 
     @Before
     public void setUp() throws Exception {
-        router = new DefaultRouter().build(rootDirectoryPath, fileAccessorDouble);
+        String rootDirectoryPath = "/path/to/public";
+        router = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
     }
 
     @Test
@@ -67,6 +59,7 @@ public class RequestRouterTest {
     @Test
     public void authorisedGetToLogsReturns200WithRequestLineAsBody() {
         simpleGet.setPath("/logs");
+        String validCredentials = Base64.getEncoder().withoutPadding().encodeToString(("admin:hunter2").getBytes());
         simpleGet.setHeader("Authorization", "Basic " + validCredentials);
         HttpResponse actualResponse = router.handleRequest(simpleGet);
         assertEquals(simpleGet.requestLineToString(), actualResponse.getContent());
@@ -74,7 +67,7 @@ public class RequestRouterTest {
 
     @Test
     public void postRequestToFormReturns200() {
-        HttpRequest postRequest = HttpRequestFactory.get(HttpRequestMethod.POST, loggerFactoryDouble);
+        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
         postRequest.setPath("/form");
         HttpResponse actualResponse = router.handleRequest(postRequest);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
@@ -82,7 +75,7 @@ public class RequestRouterTest {
 
     @Test
     public void putRequestToFormReturns200() {
-        HttpRequest putRequest = HttpRequestFactory.get(HttpRequestMethod.PUT, loggerFactoryDouble);
+        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
         putRequest.setPath("/form");
         HttpResponse actualResponse = router.handleRequest(putRequest);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());

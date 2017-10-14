@@ -60,19 +60,21 @@ public class SimpleHttpServer {
         argumentParser.parse(args);
 
         ServerSocketFactory serverSocketFactory = new ServerSocketFactory();
+        RouterBuilder routerBuilder = new DefaultRouterBuilder();
+        FileAccessor fileAccessor = new FileAccessor();
+        LoggerFactory loggerFactory = getLoggerFactory();
 
+        SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
+                argumentParser, serverSocketFactory, routerBuilder, fileAccessor, loggerFactory);
+        simpleHttpServer.run();
+    }
+
+    public static LoggerFactory getLoggerFactory() throws IOException {
         FileHandler fileHandler = new FileHandler("simple_http_server.log");
         fileHandler.setFormatter(new SimpleFormatter());
 
         LoggerFactory loggerFactory = new LoggerFactory();
         loggerFactory.setHandler(fileHandler);
-
-        RouterBuilder routerBuilder = new DefaultRouter();
-
-        FileAccessor fileAccessor = new FileAccessor();
-
-        SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
-                argumentParser, serverSocketFactory, routerBuilder, fileAccessor, loggerFactory);
-        simpleHttpServer.run();
+        return loggerFactory;
     }
 }

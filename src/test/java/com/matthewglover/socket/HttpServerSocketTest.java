@@ -1,6 +1,6 @@
 package com.matthewglover.socket;
 
-import com.matthewglover.DefaultRouter;
+import com.matthewglover.DefaultRouterBuilder;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
@@ -31,7 +31,7 @@ public class HttpServerSocketTest {
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
-    private final RequestRouter requestRouter = new DefaultRouter().build(rootDirectoryPath, fileAccessorDouble);
+    private final RequestRouter requestRouter = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
     private HttpServerSocket httpServerSocket;
     private final FileAccessor fileAccessor = new FileAccessorDouble();
 

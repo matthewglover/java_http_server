@@ -23,7 +23,7 @@ public class SimpleHttpServerTest {
     public void logsInvalidArgumentErrors() {
         loggerFactory.setLogger(logger);
         SimpleHttpServer simpleHttpServer =
-                new SimpleHttpServer(argumentParser, serverSocketFactory, new DefaultRouter(), fileAccessor, loggerFactory);
+                new SimpleHttpServer(argumentParser, serverSocketFactory, new DefaultRouterBuilder(), fileAccessor, loggerFactory);
         String invalidArgumentsMessage = "Test Error Message";
         argumentParser.addError(invalidArgumentsMessage);
         simpleHttpServer.run();

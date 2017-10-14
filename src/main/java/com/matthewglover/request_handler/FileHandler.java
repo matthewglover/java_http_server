@@ -42,6 +42,6 @@ public class FileHandler extends RequestHandler {
     }
 
     private String getFilePath(HttpRequest httpRequest) {
-        return rootDirectoryPath + httpRequest.getPath();
+        return rootDirectoryPath + httpRequest.getPath().replaceAll("^/+", "");
     }
 }

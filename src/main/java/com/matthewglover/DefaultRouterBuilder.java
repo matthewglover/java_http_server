@@ -4,7 +4,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.request_handler.*;
 import com.matthewglover.util.FileAccessor;
 
-public class DefaultRouter implements RouterBuilder {
+public class DefaultRouterBuilder implements RouterBuilder {
 
     private final RequestRouter router = new RequestRouter();
     private String rootDirectoryPath;

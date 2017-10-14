@@ -15,6 +15,15 @@ public class OkFileResponse extends OkResponse {
         this.filePath = filePath;
         this.fileAccessor = fileAccessor;
         setContentLengthHeader();
+        setMimeTypeHeader(filePath);
+    }
+
+    private void setMimeTypeHeader(String filePath) {
+        try {
+            setHeader("Content-Type", fileAccessor.probeContentType(filePath));
+        } catch(Exception exception) {
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 
     @Override

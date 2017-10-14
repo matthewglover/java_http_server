@@ -25,4 +25,9 @@ public class FileAccessorDouble extends FileAccessor {
     public FileDouble getFile() {
         return fileDouble;
     }
+
+    @Override
+    public String probeContentType(String filePath) throws IOException {
+        return new FileAccessor().determineMimeTypeFromExtension(filePath);
+    }
 }

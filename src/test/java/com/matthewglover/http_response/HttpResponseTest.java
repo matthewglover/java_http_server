@@ -3,14 +3,11 @@ package com.matthewglover.http_response;
 import com.matthewglover.socket.SocketDouble;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
 
 public class HttpResponseTest {
-    public HttpResponseTest() throws UnsupportedEncodingException {
-    }
 
     @Test
     public void buildsResponseForGivenResponseType() throws UnsupportedEncodingException {
