@@ -31,7 +31,9 @@ public abstract class RequestHandler {
     }
 
     public boolean isHandledPath(HttpRequest request) {
-        return handledPaths.contains(request.getPath());
+        String basePath = request.getBasePath();
+        String handledPath = handledPaths.get(0);
+        return handledPaths.contains(request.getBasePath());
     }
 
     public boolean handles(HttpRequest request) {

@@ -26,6 +26,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
         router.addHandler(getImATeapotHandler());
         router.addHandler(getSimpleOkHandler());
         router.addHandler(getFormDataHandler());
+        router.addHandler(getParametersHander());
         router.addHandler(getFileHandler());
         router.addHandler(getDirectoryListingHandler());
     }
@@ -82,5 +83,9 @@ public class DefaultRouterBuilder implements RouterBuilder {
         requestHandler.addHandledPath("/requests");
         requestHandler.addHandledPath("/tea");
         return requestHandler;
+    }
+
+    public RequestHandler getParametersHander() {
+        return new ParametersHandler();
     }
 }

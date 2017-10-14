@@ -12,6 +12,7 @@ public abstract class HttpRequest {
     private static String CRLF = "\r\n";
     public final Logger logger;
 
+    private PathDetails pathDetails;
     private HttpRequestMethod method;
     private Map<String, String> headers = new HashMap<>();
     private String path;
@@ -39,6 +40,12 @@ public abstract class HttpRequest {
 
     public void setPath(String path) {
         this.path = path;
+        buildPathDetails();
+    }
+
+    private void buildPathDetails() {
+        this.pathDetails = new PathDetails(path);
+        pathDetails.parse();
     }
 
     public String getVersion() {
@@ -95,5 +102,13 @@ public abstract class HttpRequest {
 
     private String headerToString(Map.Entry<String, String> header) {
         return header.getKey() + ": " + header.getValue();
+    }
+
+    public String getQueryParam(String queryParam) {
+        return pathDetails.getQueryParam(queryParam);
+    }
+
+    public String getBasePath() {
+        return pathDetails.getBasePath();
     }
 }
