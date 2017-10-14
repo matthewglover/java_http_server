@@ -13,11 +13,9 @@ import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +31,6 @@ public class HttpServerSocketTest {
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
     private final RequestRouter requestRouter = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
     private HttpServerSocket httpServerSocket;
-    private final FileAccessor fileAccessor = new FileAccessorDouble();
 
     public HttpServerSocketTest() throws IOException {
     }
@@ -66,7 +63,6 @@ public class HttpServerSocketTest {
     }
 
     @Test
-    @Ignore
     public void logsHttpRequests() {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);
@@ -83,16 +79,6 @@ public class HttpServerSocketTest {
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setContent(httpRequest.requestLineToString());
         httpResponse.setContentLengthHeader();
-        httpServerSocket.run();
-        assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
-    }
-
-    @Test
-    public void givenInvalidRequestMethodReturns400BadRequest() throws UnsupportedEncodingException {
-        serverSocket.setInputStream("GQMZUUMG /file1 HTTP/1.1\r\n\r\n");
-        serverSocketFactory.setServerSocket(serverSocket);
-
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }

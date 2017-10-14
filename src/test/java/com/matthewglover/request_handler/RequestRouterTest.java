@@ -105,6 +105,25 @@ public class RequestRouterTest {
     }
 
     @Test
+    public void postRequestToFileReturns405() throws Exception {
+        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        fileRequestReturns405(postRequest);
+    }
+
+    @Test
+    public void putRequestToFileReturns405() throws Exception {
+        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
+        fileRequestReturns405(putRequest);
+    }
+
+    @Test
+    public void invalidRequestToFileReturns405() throws Exception {
+        HttpRequest invalidRequest = HttpTestRequestFactory.get(HttpRequestMethod.INVALID_METHOD);
+        fileRequestReturns405(invalidRequest);
+    }
+
+
+    @Test
     public void getRequestToRootReturns200WithDirectoryListing() throws Exception {
         String[] fileNames = new String[]{ "file1", "file2.txt", "file3.jpg" };
         FileDouble fileDouble = fileAccessorDouble.getFile();
@@ -118,5 +137,12 @@ public class RequestRouterTest {
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file1\">file1</a>"));
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file3.jpg\">file3.jpg</a>"));
+    }
+
+    private void fileRequestReturns405(HttpRequest request) {
+        request.setPath("/file1");
+        fileAccessorDouble.getFile().setIsFile(true);
+        HttpResponse actualResponse = router.handleRequest(request);
+        assertEquals(HttpResponseType.METHOD_NOT_ALLOWED, actualResponse.getResponseType());
     }
 }

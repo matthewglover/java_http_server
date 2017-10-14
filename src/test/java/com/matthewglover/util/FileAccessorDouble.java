@@ -18,16 +18,16 @@ public class FileAccessorDouble extends FileAccessor {
         return new ByteArrayInputStream(fileInputStreamData.getBytes());
     }
 
+    @Override
+    public String probeContentType(String filePath) throws IOException {
+        return new FileAccessor().determineMimeTypeFromExtension(filePath);
+    }
+
     public void setFileInputStreamData(String fileInputStreamData) {
         this.fileInputStreamData = fileInputStreamData;
     }
 
     public FileDouble getFile() {
         return fileDouble;
-    }
-
-    @Override
-    public String probeContentType(String filePath) throws IOException {
-        return new FileAccessor().determineMimeTypeFromExtension(filePath);
     }
 }

@@ -24,6 +24,9 @@ public class FileHandler extends RequestHandler {
     @Override
     public void setup() {
         addHandledMethodType(HttpRequestMethod.GET);
+        addHandledMethodType(HttpRequestMethod.POST);
+        addHandledMethodType(HttpRequestMethod.PUT);
+        addHandledMethodType(HttpRequestMethod.INVALID_METHOD);
     }
 
     @Override
@@ -34,6 +37,18 @@ public class FileHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest httpRequest) {
+        if (isMethodAllowed(httpRequest)) {
+            return getFileOkResponse(httpRequest);
+        } else {
+            return HttpResponseFactory.get(HttpResponseTemplate.METHOD_NOT_ALLOWED);
+        }
+    }
+
+    private boolean isMethodAllowed(HttpRequest httpRequest) {
+        return httpRequest.getMethod() == HttpRequestMethod.GET;
+    }
+
+    private HttpResponse getFileOkResponse(HttpRequest httpRequest) {
         OkFileResponse fileResponse =
                 (OkFileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
 

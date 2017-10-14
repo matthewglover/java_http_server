@@ -19,7 +19,6 @@ public class DefaultRouterBuilder implements RouterBuilder {
     }
 
     private void buildHandlers() {
-        router.addHandler(getBadRequestHandler());
         router.addHandler(getBasicAuthHandler());
         router.addHandler(getOptionsAllowAllHandler());
         router.addHandler(getOptionsAllowSelectedHandler());
@@ -47,10 +46,6 @@ public class DefaultRouterBuilder implements RouterBuilder {
 
     private RequestHandler getDirectoryListingHandler() {
         return new DirectoryListingHandler(rootDirectoryPath, fileAccessor);
-    }
-
-    public RequestHandler getBadRequestHandler() {
-        return new BadRequestHandler();
     }
 
     private RequestHandler getBasicAuthHandler() {

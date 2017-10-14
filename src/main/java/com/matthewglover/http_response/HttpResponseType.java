@@ -34,6 +34,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 401 Unauthorized Access";
         }
+    },
+
+    METHOD_NOT_ALLOWED {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 405 Method Not Allowed";
+        }
     };
 
     public abstract String toHeader();
