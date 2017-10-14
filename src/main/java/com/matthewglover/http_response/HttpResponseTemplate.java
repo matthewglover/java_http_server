@@ -7,5 +7,5 @@ public enum HttpResponseTemplate {
     BAD_REQUEST,
     NOT_FOUND,
     IM_A_TEAPOT,
-    UNAUTHORIZED_ACCESS;
+    UNAUTHORIZED_ACCESS, OK_FILE;
 }

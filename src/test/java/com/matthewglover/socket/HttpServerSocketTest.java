@@ -1,7 +1,6 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.DefaultRouter;
-import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
@@ -9,6 +8,8 @@ import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.request_handler.RequestRouter;
+import com.matthewglover.util.FileAccessor;
+import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
@@ -23,14 +24,16 @@ import static org.junit.Assert.*;
 public class HttpServerSocketTest {
 
     private final int port = 5050;
-    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
+    private final String rootDirectoryPath = "/path/to/public";
+    private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
-    private final RequestRouter requestRouter = new DefaultRouter().build(null);
+    private final RequestRouter requestRouter = new DefaultRouter().build(rootDirectoryPath, fileAccessorDouble);
     private HttpServerSocket httpServerSocket;
+    private final FileAccessor fileAccessor = new FileAccessorDouble();
 
     public HttpServerSocketTest() throws IOException {
     }
@@ -39,7 +42,7 @@ public class HttpServerSocketTest {
     public void setUp() throws Exception {
         httpRequest.setPath("/log");
         loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, requestRouter, loggerFactory);
+        httpServerSocket = new HttpServerSocket(port, serverSocketFactory, requestRouter, loggerFactory);
     }
 
     @Test

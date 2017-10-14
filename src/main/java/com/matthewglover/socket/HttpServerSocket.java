@@ -14,14 +14,14 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
-    private final File rootDirectory;
     private final LoggerFactory loggerFactory;
     private final RequestRouter requestRouter;
     private ServerSocketAdapter serverSocketAdapter;
 
-    public HttpServerSocket(int port, File rootDirectory, ServerSocketFactory serverSocketFactory, RequestRouter requestRouter, LoggerFactory loggerFactory) {
+    public HttpServerSocket(
+            int port, ServerSocketFactory serverSocketFactory,
+            RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.port = port;
-        this.rootDirectory = rootDirectory;
         this.serverSocketFactory = serverSocketFactory;
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
@@ -42,7 +42,7 @@ public class HttpServerSocket {
         serverSocketAdapter.accept();
     }
 
-    private void listenAndRespond() throws IOException {
+    private void listenAndRespond() throws Exception {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();

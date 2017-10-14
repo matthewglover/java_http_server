@@ -3,10 +3,10 @@ package com.matthewglover;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.ArgumentParser;
 import com.matthewglover.socket.HttpServerSocket;
+import com.matthewglover.util.FileAccessor;
 import com.matthewglover.util.LoggerFactory;
 import com.matthewglover.socket.ServerSocketFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -19,11 +19,13 @@ public class SimpleHttpServer {
     private final ServerSocketFactory serverSocketFactory;
     private final LoggerFactory loggerFactory;
     private final RouterBuilder routerBuilder;
+    private final FileAccessor fileAccessor;
 
-    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, LoggerFactory loggerFactory) {
+    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
         this.serverSocketFactory = serverSocketFactory;
         this.routerBuilder = routerBuilder;
+        this.fileAccessor = fileAccessor;
         this.loggerFactory = loggerFactory;
         this.logger = loggerFactory.getLogger(SimpleHttpServer.class.getName());
     }
@@ -41,12 +43,11 @@ public class SimpleHttpServer {
     }
 
     private void runHttpSocketListener() {
-        RequestRouter requestRouter = routerBuilder.build(new File(argumentParser.getFilePath()));
+        RequestRouter requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
 
         while (true) {
             HttpServerSocket httpServerSocket = new HttpServerSocket(
                     argumentParser.getPort(),
-                    new File(argumentParser.getFilePath()),
                     serverSocketFactory,
                     requestRouter,
                     loggerFactory);
@@ -68,8 +69,10 @@ public class SimpleHttpServer {
 
         RouterBuilder routerBuilder = new DefaultRouter();
 
+        FileAccessor fileAccessor = new FileAccessor();
+
         SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
-                argumentParser, serverSocketFactory, routerBuilder, loggerFactory);
+                argumentParser, serverSocketFactory, routerBuilder, fileAccessor, loggerFactory);
         simpleHttpServer.run();
     }
 }

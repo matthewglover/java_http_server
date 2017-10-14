@@ -1,13 +1,16 @@
 package com.matthewglover.request_handler;
 
 import com.matthewglover.DefaultRouter;
-import com.matthewglover.http_request.FileDouble;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.*;
+import com.matthewglover.socket.SocketDouble;
+import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -16,6 +19,8 @@ import static org.junit.Assert.*;
 
 public class RequestRouterTest {
 
+    private final String rootDirectoryPath = "/path/to/public";
+    private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
     private final HttpRequest simpleGet = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
     private final String username = "admin";
@@ -25,7 +30,7 @@ public class RequestRouterTest {
 
     @Before
     public void setUp() throws Exception {
-        router = new DefaultRouter().build(new FileDouble(""));
+        router = new DefaultRouter().build(rootDirectoryPath, fileAccessorDouble);
     }
 
     @Test
@@ -89,5 +94,20 @@ public class RequestRouterTest {
         HttpResponse actualResponse = router.handleRequest(simpleGet);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
         assertEquals("Eat", actualResponse.getContent());
+    }
+
+    @Test
+    public void getRequestToFileReturns200WithFile() throws Exception {
+        String testData = "Test file contents";
+        fileAccessorDouble.setFileInputStreamData(testData);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        simpleGet.setPath("/file1");
+
+        SocketDouble socketDouble = new SocketDouble();
+        HttpResponse actualResponse = router.handleRequest(simpleGet);
+
+        actualResponse.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertThat(socketDouble.getOutput(), CoreMatchers.containsString(testData));
     }
 }

@@ -3,6 +3,7 @@ package com.matthewglover.http_response;
 public class HttpResponseFactory {
     public static HttpResponse get(HttpResponseTemplate responseTemplate) {
         switch (responseTemplate) {
+            case OK_FILE: return new OkFileResponse();
             case UNAUTHORIZED_ACCESS: return new UnauthorizedAccessResponse();
             case IM_A_TEAPOT: return new ImATeapotResponse();
             case OPTIONS_ALLOW_SELECTED: return new OptionsResponse("GET,OPTIONS");

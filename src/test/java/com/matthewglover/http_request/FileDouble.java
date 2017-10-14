@@ -5,6 +5,7 @@ import java.io.File;
 public class FileDouble extends File {
     private File[] fileList;
     private String fileName;
+    private boolean isFile;
 
     public FileDouble(String pathname) {
         super(pathname);
@@ -34,7 +35,16 @@ public class FileDouble extends File {
         return false;
     }
 
+    @Override
+    public boolean isFile() {
+        return isFile;
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public void setIsFile(boolean isFile) {
+        this.isFile = isFile;
     }
 }

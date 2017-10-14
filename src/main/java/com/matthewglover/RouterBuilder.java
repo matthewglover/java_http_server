@@ -1,9 +1,8 @@
 package com.matthewglover;
 
 import com.matthewglover.request_handler.RequestRouter;
-
-import java.io.File;
+import com.matthewglover.util.FileAccessor;
 
 public interface RouterBuilder {
-    RequestRouter build(File rootDirectory);
+    RequestRouter build(String filePath, FileAccessor fileAccessor);
 }

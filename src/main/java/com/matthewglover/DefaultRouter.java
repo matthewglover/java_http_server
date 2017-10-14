@@ -2,17 +2,18 @@ package com.matthewglover;
 
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.request_handler.*;
-
-import java.io.File;
+import com.matthewglover.util.FileAccessor;
 
 public class DefaultRouter implements RouterBuilder {
 
     private final RequestRouter router = new RequestRouter();
-    private File rootDirectory;
+    private String rootDirectoryPath;
+    private FileAccessor fileAccessor;
 
     @Override
-    public RequestRouter build(File rootDirectory) {
-        this.rootDirectory = rootDirectory;
+    public RequestRouter build(String filePath, FileAccessor fileAccessor) {
+        this.rootDirectoryPath = filePath;
+        this.fileAccessor = fileAccessor;
         buildHandlers();
         return router;
     }
@@ -26,7 +27,12 @@ public class DefaultRouter implements RouterBuilder {
         router.addHandler(getImATeapotHandler());
         router.addHandler(getSimpleOkHandler());
         router.addHandler(getFormDataHandler());
+        router.addHandler(getFileHandler());
         router.addHandler(getDirectoryListingHandler());
+    }
+
+    private RequestHandler getFileHandler() {
+        return new FileHandler(rootDirectoryPath, fileAccessor);
     }
 
     private RequestHandler getCookieHandler() {
@@ -40,7 +46,7 @@ public class DefaultRouter implements RouterBuilder {
     }
 
     private RequestHandler getDirectoryListingHandler() {
-        return new DirectoryListingHandler(rootDirectory);
+        return new DirectoryListingHandler(rootDirectoryPath, fileAccessor);
     }
 
     public RequestHandler getBadRequestHandler() {

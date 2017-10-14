@@ -5,6 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
+import com.matthewglover.util.FileAccessor;
 import com.matthewglover.util.HtmlBuilder;
 
 import java.io.File;
@@ -13,9 +14,9 @@ public class DirectoryListingHandler extends RequestHandler {
 
     private final File rootDirectory;
 
-    public DirectoryListingHandler(File rootDirectory) {
+    public DirectoryListingHandler(String rootDirectoryPath, FileAccessor fileAccessor) {
         super();
-        this.rootDirectory = rootDirectory;
+        this.rootDirectory = fileAccessor.getFileFromPath(rootDirectoryPath);
     }
 
     @Override

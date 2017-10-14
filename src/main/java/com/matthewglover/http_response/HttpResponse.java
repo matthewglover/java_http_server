@@ -10,7 +10,7 @@ import java.util.Map;
 
 public abstract class HttpResponse {
 
-    private static String CRLF = "\r\n";
+    public static final String CRLF = "\r\n";
 
     private HttpResponseType responseType;
     private String content = "";
@@ -39,7 +39,7 @@ public abstract class HttpResponse {
         return content;
     }
 
-    private int getContentLength() {
+    public long getContentLength() {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
@@ -63,6 +63,10 @@ public abstract class HttpResponse {
         setHeader("Content-Length", getContentLength() + "");
     }
 
+    public String getStatusLine() {
+        return responseType.toHeader() + CRLF;
+    }
+
     @Override
     public String toString() {
         ArrayList<String> responseElements = new ArrayList<>();
@@ -72,7 +76,7 @@ public abstract class HttpResponse {
         return String.join(CRLF, responseElements) + CRLF;
     }
 
-    private String headersToString() {
+    public String headersToString() {
         String headersString = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
             headersString += header.getKey() + ": " + header.getValue() + CRLF;
@@ -80,7 +84,7 @@ public abstract class HttpResponse {
         return headersString;
     }
 
-    public void sendResponseOverSocket(OutputStream outputStream) throws IOException {
+    public void sendResponseOverSocket(OutputStream outputStream) throws Exception {
         DataOutputStream dataStream = new DataOutputStream(outputStream);
         dataStream.writeBytes(toString());
     }
