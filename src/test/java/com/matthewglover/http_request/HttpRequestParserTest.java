@@ -1,8 +1,5 @@
 package com.matthewglover.http_request;
 
-import com.matthewglover.http_response.HttpResponseFactory;
-import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.ResponseComparer;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
