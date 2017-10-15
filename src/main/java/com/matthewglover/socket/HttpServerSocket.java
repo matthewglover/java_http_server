@@ -19,8 +19,10 @@ public class HttpServerSocket {
     private ServerSocketAdapter serverSocketAdapter;
 
     public HttpServerSocket(
-            int port, ServerSocketFactory serverSocketFactory,
-            RequestRouter requestRouter, LoggerFactory loggerFactory) {
+            int port,
+            ServerSocketFactory serverSocketFactory,
+            RequestRouter requestRouter,
+            LoggerFactory loggerFactory) {
         this.port = port;
         this.serverSocketFactory = serverSocketFactory;
         this.requestRouter = requestRouter;
@@ -28,18 +30,21 @@ public class HttpServerSocket {
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
-    public void run() {
+    public void connect() {
         try {
-            connectSocket();
-            listenAndRespond();
+            serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+            serverSocketAdapter.accept();
         } catch (Exception exception) {
             logger.warning(exception.getMessage());
         }
     }
 
-    private void connectSocket() throws IOException {
-        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
-        serverSocketAdapter.accept();
+    public void run() {
+        try {
+            listenAndRespond();
+        } catch (Exception exception) {
+            logger.warning(exception.getMessage());
+        }
     }
 
     private void listenAndRespond() throws Exception {

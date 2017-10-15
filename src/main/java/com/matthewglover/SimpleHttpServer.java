@@ -51,6 +51,7 @@ public class SimpleHttpServer {
                     serverSocketFactory,
                     requestRouter,
                     loggerFactory);
+            httpServerSocket.connect();
             httpServerSocket.run();
         }
     }

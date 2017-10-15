@@ -48,7 +48,7 @@ public class HttpServerSocketTest {
         IOException testException = new IOException(socketCreationExceptionMessage);
         serverSocketFactory.setTestException(testException);
         serverSocketFactory.setServerSocket(serverSocket);
-        httpServerSocket.run();
+        httpServerSocket.connect();
         assertEquals(socketCreationExceptionMessage, logger.popFromMessageType(LoggerDouble.WARNING));
     }
 
@@ -58,7 +58,7 @@ public class HttpServerSocketTest {
         IOException testException = new IOException(socketAcceptExceptionMessage);
         serverSocket.setTestException(testException);
         serverSocketFactory.setServerSocket(serverSocket);
-        httpServerSocket.run();
+        httpServerSocket.connect();
         assertEquals(socketAcceptExceptionMessage, logger.popFromMessageType(LoggerDouble.WARNING));
     }
 
@@ -67,6 +67,7 @@ public class HttpServerSocketTest {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);
 
+        httpServerSocket.connect();
         httpServerSocket.run();
         assertEquals(httpRequest.toString(), logger.popFromMessageType(LoggerDouble.INFO));
     }
@@ -79,6 +80,8 @@ public class HttpServerSocketTest {
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setContent(httpRequest.requestLineToString());
         httpResponse.setContentLengthHeader();
+
+        httpServerSocket.connect();
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }
