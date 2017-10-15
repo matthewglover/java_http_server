@@ -21,15 +21,22 @@ public class HttpRequestStreamAdapter {
     }
 
     public ArrayList<String> getRequest() throws IOException {
+        logger.info("----------------------------");
         processRequest();
+        logger.info("----------------------------");
         return rawRequest;
     }
 
     private void processRequest() throws IOException {
         String line = bufferedReader.readLine();
         if (line.length() > 0) {
-            rawRequest.add(line);
+            logger.info("'" + line + "'");
+            updateRawRequest(line);
             processRequest();
         }
+    }
+
+    private boolean updateRawRequest(String line) {
+        return rawRequest.add(line);
     }
 }

@@ -17,6 +17,7 @@ public abstract class HttpRequest {
     private Map<String, String> headers = new HashMap<>();
     private String path;
     private String version;
+    private String content;
 
     public HttpRequest(LoggerFactory loggerFactory) {
         logger = loggerFactory.getLogger(HeadRequest.class.getName());
@@ -110,5 +111,17 @@ public abstract class HttpRequest {
 
     public String getBasePath() {
         return pathDetails.getBasePath();
+    }
+
+    public boolean hasContent() {
+        return getContent() != null;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

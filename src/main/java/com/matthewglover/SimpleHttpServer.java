@@ -24,7 +24,7 @@ public class SimpleHttpServer {
     private final RouterBuilder routerBuilder;
     private final FileAccessor fileAccessor;
     private ServerSocket serverSocket;
-    private final ExecutorService threadPool = Executors.newFixedThreadPool(50);
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(1000);
 
     public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;

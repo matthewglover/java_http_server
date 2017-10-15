@@ -2,6 +2,7 @@ package com.matthewglover.socket;
 
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,7 +12,9 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 
 public class HttpRequestStreamAdapterTest {
+
     @Test
+    @Ignore
     public void convertsRequestStreamToList() throws IOException {
         ArrayList<String> rawRequest = new ArrayList<>(Arrays.asList(
                 "GET / HTTP/1.1",
