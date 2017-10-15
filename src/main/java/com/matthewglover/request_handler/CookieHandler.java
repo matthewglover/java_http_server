@@ -8,7 +8,7 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class CookieHandler extends RequestHandler {
 
-    private final String chocolateCookiePath = "/cookie?type=chocolate";
+    private final String chocolateCookiePath = "/cookie";
     private final String eatCookiePath = "/eat_cookie";
 
     @Override
@@ -20,13 +20,30 @@ public class CookieHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        response.setContent(getContent(request.getPath()));
-        response.setContentLengthHeader();
+        if (isCookieRequest(request)) {
+            return buildSetCookieResponse(request, getOkResponse());
+        } else {
+            return setResponseContent(getOkResponse(), "mmmm chocolate");
+        }
+    }
+
+    private HttpResponse getOkResponse() {
+        return HttpResponseFactory.get(HttpResponseTemplate.OK);
+    }
+
+    private boolean isCookieRequest(HttpRequest request) {
+        return request.getBasePath().equals("/cookie");
+    }
+
+    private HttpResponse buildSetCookieResponse(HttpRequest request, HttpResponse response) {
+        response.setHeader("Set-Cookie", request.getQueryParam("type"));
+        setResponseContent(response, "Eat");
         return response;
     }
 
-    private String getContent(String path) {
-        return path.equals(chocolateCookiePath) ? "Eat" : "mmmm chocolate";
+    private HttpResponse setResponseContent(HttpResponse response, String content) {
+        response.setContent(content);
+        response.setContentLengthHeader();
+        return response;
     }
 }

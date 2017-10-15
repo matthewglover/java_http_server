@@ -7,7 +7,6 @@ import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -83,7 +82,6 @@ public class RequestRouterTest {
     }
 
     @Test
-    @Ignore
     public void getRequestWithCookieUrlReturns200WithEat() {
         simpleGet.setPath("/cookie?type=chocolate");
         HttpResponse actualResponse = router.handleRequest(simpleGet);
