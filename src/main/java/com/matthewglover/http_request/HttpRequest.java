@@ -1,10 +1,7 @@
 package com.matthewglover.http_request;
 
-import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.util.LoggerFactory;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +12,7 @@ public abstract class HttpRequest {
     private static String CRLF = "\r\n";
     public final Logger logger;
 
+    private PathDetails pathDetails;
     private HttpRequestMethod method;
     private Map<String, String> headers = new HashMap<>();
     private String path;
@@ -27,7 +25,6 @@ public abstract class HttpRequest {
     }
 
     public abstract void setup();
-    public abstract HttpResponse buildResponse(File rootDirectory) throws UnsupportedEncodingException;
 
     public void setMethod(HttpRequestMethod method) {
         this.method = method;
@@ -43,6 +40,12 @@ public abstract class HttpRequest {
 
     public void setPath(String path) {
         this.path = path;
+        buildPathDetails();
+    }
+
+    private void buildPathDetails() {
+        this.pathDetails = new PathDetails(path);
+        pathDetails.parse();
     }
 
     public String getVersion() {
@@ -81,7 +84,7 @@ public abstract class HttpRequest {
         return requestLineToString() + CRLF + headersToString() + CRLF;
     }
 
-    private String requestLineToString() {
+    public String requestLineToString() {
         return getMethod().toString() + " " + getPath() + " " + getVersion();
     }
 
@@ -99,5 +102,13 @@ public abstract class HttpRequest {
 
     private String headerToString(Map.Entry<String, String> header) {
         return header.getKey() + ": " + header.getValue();
+    }
+
+    public String getQueryParam(String queryParam) {
+        return pathDetails.getQueryParam(queryParam);
+    }
+
+    public String getBasePath() {
+        return pathDetails.getBasePath();
     }
 }

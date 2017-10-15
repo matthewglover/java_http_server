@@ -3,6 +3,7 @@ package com.matthewglover.socket;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
+import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
@@ -13,14 +14,16 @@ public class HttpServerSocket {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final int port;
-    private final File rootDirectory;
     private final LoggerFactory loggerFactory;
+    private final RequestRouter requestRouter;
     private ServerSocketAdapter serverSocketAdapter;
 
-    public HttpServerSocket(int port, File rootDirectory, ServerSocketFactory serverSocketFactory, LoggerFactory loggerFactory) {
+    public HttpServerSocket(
+            int port, ServerSocketFactory serverSocketFactory,
+            RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.port = port;
-        this.rootDirectory = rootDirectory;
         this.serverSocketFactory = serverSocketFactory;
+        this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
@@ -39,11 +42,12 @@ public class HttpServerSocket {
         serverSocketAdapter.accept();
     }
 
-    private void listenAndRespond() throws IOException {
+    private void listenAndRespond() throws Exception {
         HttpRequestParser httpRequestParser = getHttpRequestParser();
         httpRequestParser.parse();
         HttpRequest httpRequest = httpRequestParser.getRequest();
-        HttpResponse httpResponse = httpRequest.buildResponse(rootDirectory);
+        logger.info(httpRequest.toString());
+        HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
         serverSocketAdapter.close();
     }

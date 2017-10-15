@@ -1,14 +1,12 @@
 package com.matthewglover.request_handler;
 
 import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
+import com.matthewglover.http_request.HttpTestRequestFactory;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.http_response.ResponseComparer;
-import com.matthewglover.util.LoggerDouble;
-import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,9 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BasicAuthHandlerTest {
 
-    private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
-    private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final HttpRequest testRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
+    private final HttpRequest testRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final BasicAuthHandler basicAuthHandler = new BasicAuthHandler();
 
     private final String username = "admin";
@@ -31,7 +27,6 @@ public class BasicAuthHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-        loggerFactoryDouble.setLogger(loggerDouble);
         basicAuthHandler.addUsernameAndPassword(username, password);
     }
 

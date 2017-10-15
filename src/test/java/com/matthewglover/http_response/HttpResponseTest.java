@@ -3,14 +3,11 @@ package com.matthewglover.http_response;
 import com.matthewglover.socket.SocketDouble;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
 
 public class HttpResponseTest {
-    public HttpResponseTest() throws UnsupportedEncodingException {
-    }
 
     @Test
     public void buildsResponseForGivenResponseType() throws UnsupportedEncodingException {
@@ -30,14 +27,14 @@ public class HttpResponseTest {
     }
 
     @Test
-    public void responseOnlyRequiresResponseType() throws UnsupportedEncodingException {
+    public void responseOnlyRequiresResponseType() {
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
         String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\nContent-Length: 0\r\n\r\n";
         assertEquals(output, httpResponse.toString());
     }
 
     @Test
-    public void sendResponseToSocket() throws IOException {
+    public void sendResponseToSocket() throws Exception {
         SocketDouble socketDouble = new SocketDouble();
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         httpResponse.setContent("blah blah blah");

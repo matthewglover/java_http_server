@@ -1,32 +1,35 @@
 package com.matthewglover.socket;
 
-import com.matthewglover.http_request.FileDouble;
+import com.matthewglover.DefaultRouterBuilder;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
+import com.matthewglover.request_handler.RequestRouter;
+import com.matthewglover.util.FileAccessor;
+import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.*;
 
 public class HttpServerSocketTest {
 
     private final int port = 5050;
-    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
+    private final String rootDirectoryPath = "/path/to/public";
+    private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
+    private final RequestRouter requestRouter = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
     private HttpServerSocket httpServerSocket;
 
     public HttpServerSocketTest() throws IOException {
@@ -34,9 +37,9 @@ public class HttpServerSocketTest {
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setPath("/some/valid/path");
+        httpRequest.setPath("/log");
         loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(port, rootDirectory, serverSocketFactory, loggerFactory);
+        httpServerSocket = new HttpServerSocket(port, serverSocketFactory, requestRouter, loggerFactory);
     }
 
     @Test
@@ -60,7 +63,6 @@ public class HttpServerSocketTest {
     }
 
     @Test
-    @Ignore
     public void logsHttpRequests() {
         serverSocket.setInputStream(httpRequest.toString());
         serverSocketFactory.setServerSocket(serverSocket);
@@ -75,16 +77,8 @@ public class HttpServerSocketTest {
         serverSocketFactory.setServerSocket(serverSocket);
 
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        httpServerSocket.run();
-        assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
-    }
-
-    @Test
-    public void givenInvalidRequestMethodReturns400BadRequest() throws UnsupportedEncodingException {
-        serverSocket.setInputStream("GQMZUUMG /file1 HTTP/1.1\r\n\r\n");
-        serverSocketFactory.setServerSocket(serverSocket);
-
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
+        httpResponse.setContent(httpRequest.requestLineToString());
+        httpResponse.setContentLengthHeader();
         httpServerSocket.run();
         assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }

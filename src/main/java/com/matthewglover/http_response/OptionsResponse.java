@@ -1,9 +1,7 @@
 package com.matthewglover.http_response;
 
-import java.io.UnsupportedEncodingException;
-
 public class OptionsResponse extends OkResponse {
-    public OptionsResponse(String allowable) throws UnsupportedEncodingException {
+    public OptionsResponse(String allowable) {
         super();
         setHeader("Allow", allowable);
     }

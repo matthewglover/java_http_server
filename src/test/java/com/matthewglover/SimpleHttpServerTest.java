@@ -1,9 +1,7 @@
 package com.matthewglover;
 
 import com.matthewglover.socket.*;
-import com.matthewglover.util.ArgumentParserDouble;
-import com.matthewglover.util.LoggerDouble;
-import com.matthewglover.util.LoggerFactoryDouble;
+import com.matthewglover.util.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +14,7 @@ public class SimpleHttpServerTest {
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
+    private final FileAccessor fileAccessor = new FileAccessorDouble();
 
     public SimpleHttpServerTest() throws IOException {
     }
@@ -24,7 +23,7 @@ public class SimpleHttpServerTest {
     public void logsInvalidArgumentErrors() {
         loggerFactory.setLogger(logger);
         SimpleHttpServer simpleHttpServer =
-                new SimpleHttpServer(argumentParser, serverSocketFactory, loggerFactory);
+                new SimpleHttpServer(argumentParser, serverSocketFactory, new DefaultRouterBuilder(), fileAccessor, loggerFactory);
         String invalidArgumentsMessage = "Test Error Message";
         argumentParser.addError(invalidArgumentsMessage);
         simpleHttpServer.run();

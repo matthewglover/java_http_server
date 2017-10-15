@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 public class HttpRequestParserTest {
     private final LoggerDouble loggerDouble = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final FileDouble rootDirectory = new FileDouble("/path/to/public");
 
     @Before
     public void setUp() throws Exception {
@@ -46,8 +45,6 @@ public class HttpRequestParserTest {
         HttpRequestParser httpRequestParser = new HttpRequestParser(rawRequest, loggerFactoryDouble);
         httpRequestParser.parse();
         HttpRequest request = httpRequestParser.getRequest();
-
-        assertTrue(new ResponseComparer(HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST),
-                request.buildResponse(rootDirectory)).areSame());
+        assertTrue(request instanceof BadRequest);
     }
 }
