@@ -32,7 +32,7 @@ public class HttpServerSocket {
 
     public void connect() {
         try {
-            serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+            serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory.getServerSocket(port));
             serverSocketAdapter.accept();
         } catch (Exception exception) {
             logger.warning(exception.getMessage());
