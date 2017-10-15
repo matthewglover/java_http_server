@@ -41,6 +41,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 405 Method Not Allowed";
         }
+    },
+
+    PARTIAL_CONTENT {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 206 Partial Content";
+        }
     };
 
     public abstract String toHeader();

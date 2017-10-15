@@ -35,4 +35,8 @@ public class FileAccessor {
             return null;
         }
     }
+
+    public RandomAccessFile getRandomAccessFileFromPath(String filePath) throws Exception {
+        return new RandomAccessFile(filePath, "r");
+    }
 }
