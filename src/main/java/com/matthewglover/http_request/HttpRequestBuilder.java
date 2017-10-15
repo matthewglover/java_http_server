@@ -6,34 +6,44 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class HttpRequestBuilder {
+
+    private final ArrayList<String> lines = new ArrayList<>();
     private final LoggerFactory loggerFactory;
     private final BufferedReader bufferedReader;
+    private final Logger logger;
     private String firstLine;
     private HttpRequest request;
 
     public HttpRequestBuilder(InputStream inputStream, LoggerFactory loggerFactory) {
         this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         this.loggerFactory = loggerFactory;
+        this.logger = loggerFactory.getLogger(HttpRequestBuilder.class.getName());
     }
 
     public HttpRequest build() throws IOException {
-        buildBasicRequest();
-        processHeaderLines();
-        if (request.getHeader("Content-Length") != null) processContent("");
+        buildRequest();
+        if (hasContent()) {
+            buildContent();
+        }
         return request;
     }
 
-    private void processContent(String content) throws IOException {
-        String line = bufferedReader.readLine();
-        if (line.length() > 0) {
-            processContent(content + line);
-        } else {
-            request.setContent(content);
-        }
+    private void buildRequest() throws IOException {
+        getRawRequestDetails();
+        buildBasicRequest();
+        processHeaderLines();
     }
 
+    private void getRawRequestDetails() throws IOException {
+        String line;
+        while((line = bufferedReader.readLine()).length() > 0) {
+            lines.add(line);
+        }
+    }
 
     private void buildBasicRequest() throws IOException {
         processFirstLine();
@@ -43,7 +53,8 @@ public class HttpRequestBuilder {
     }
 
     private void processFirstLine() throws IOException {
-        firstLine = bufferedReader.readLine();
+        firstLine = lines.get(0);
+        logger.info(firstLine);
     }
 
     public HttpRequestMethod getMethod() {
@@ -63,19 +74,35 @@ public class HttpRequestBuilder {
     }
 
     private void processHeaderLines() throws IOException {
-        String headerLine = bufferedReader.readLine();
-        if (headerLine.length() > 0) {
+        for (String headerLine : lines.subList(1, lines.size())) {
             buildHeader(headerLine);
-            processHeaderLines();
         }
     }
 
     private void buildHeader(String headerLine) {
         String[] parts = getHeaderParts(headerLine);
+        logger.info(headerLine);
         request.setHeader(parts[0], parts[1]);
     }
 
     private String[] getHeaderParts(String headerLine) {
         return headerLine.split(":\\s+");
+    }
+
+    private boolean hasContent() {
+        return request.getHeader("Content-Length") != null &&
+                Integer.parseInt(request.getHeader("Content-Length")) > 0 &&
+                request.getMethod() != HttpRequestMethod.PATCH;
+    }
+
+    private void buildContent() throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        int byteCount = Integer.parseInt(request.getHeader("Content-Length"));
+
+        for (int count = 0; count < byteCount; count++) {
+            char ch = (char) bufferedReader.read();
+            stringBuilder.append(ch);
+        }
+        request.setContent(stringBuilder.toString());
     }
 }

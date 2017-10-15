@@ -12,7 +12,7 @@ public class LoggerDouble extends Logger {
     private List<String> warningMessages = new ArrayList<>();
 
     public LoggerDouble(String name, String resourceBundleName) {
-        super(name, resourceBundleName);
+        super(null, null);
     }
 
     @Override
