@@ -49,6 +49,6 @@ public class OkFileResponse extends OkResponse {
             outputStream.write(buffer, 0, bytes);
         }
 
-        inputStream.close();
+//        inputStream.close();
     }
 }

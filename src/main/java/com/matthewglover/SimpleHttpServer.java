@@ -1,6 +1,7 @@
 package com.matthewglover;
 
 import com.matthewglover.request_handler.RequestRouter;
+import com.matthewglover.socket.Worker;
 import com.matthewglover.util.ArgumentParser;
 import com.matthewglover.socket.HttpServerSocket;
 import com.matthewglover.util.FileAccessor;
@@ -8,6 +9,9 @@ import com.matthewglover.util.LoggerFactory;
 import com.matthewglover.socket.ServerSocketFactory;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -20,8 +24,14 @@ public class SimpleHttpServer {
     private final LoggerFactory loggerFactory;
     private final RouterBuilder routerBuilder;
     private final FileAccessor fileAccessor;
+    private final ExecutorService workers = Executors.newCachedThreadPool();
 
-    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
+    public SimpleHttpServer(
+            ArgumentParser argumentParser,
+            ServerSocketFactory serverSocketFactory,
+            RouterBuilder routerBuilder,
+            FileAccessor fileAccessor,
+            LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
         this.serverSocketFactory = serverSocketFactory;
         this.routerBuilder = routerBuilder;
@@ -30,7 +40,7 @@ public class SimpleHttpServer {
         this.logger = loggerFactory.getLogger(SimpleHttpServer.class.getName());
     }
 
-    public void run() {
+    public void run() throws IOException {
         if (argumentParser.hasErrors()) {
             logArgumentErrors();
         } else {
@@ -42,18 +52,26 @@ public class SimpleHttpServer {
         argumentParser.getErrors().forEach(logger::warning);
     }
 
-    private void runHttpSocketListener() {
-        RequestRouter requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
+    private void runHttpSocketListener() throws IOException {
+        ServerSocket serverSocket = serverSocketFactory.getServerSocket(argumentParser.getPort());
 
         while (true) {
-            HttpServerSocket httpServerSocket = new HttpServerSocket(
-                    argumentParser.getPort(),
-                    serverSocketFactory,
-                    requestRouter,
-                    loggerFactory);
-            httpServerSocket.connect();
-            httpServerSocket.run();
+            HttpServerSocket server = buildServer(serverSocket);
+            server.connect();
+            server.run();
         }
+    }
+
+    private HttpServerSocket buildServer(ServerSocket serverSocket) {
+        return new HttpServerSocket(
+                argumentParser.getPort(),
+                serverSocket,
+                buildRouter(),
+                loggerFactory);
+    }
+
+    private RequestRouter buildRouter() {
+        return routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
     }
 
     public static void main(String[] args) throws IOException {

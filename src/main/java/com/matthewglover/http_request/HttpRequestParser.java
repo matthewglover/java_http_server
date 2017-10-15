@@ -18,6 +18,8 @@ public class HttpRequestParser {
 
     public void parse() {
         HttpRequestMethod requestMethod = HttpRequestMethod.parse(rawRequestParser.getMethod());
+        System.out.println(requestMethod instanceof HttpRequestMethod);
+//        HttpRequestMethod requestMethod = HttpRequestMethod.GET;
         httpRequest = HttpRequestFactory.get(requestMethod, loggerFactory);
         httpRequest.parse(rawRequestParser);
     }

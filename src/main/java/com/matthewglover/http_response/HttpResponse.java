@@ -1,7 +1,6 @@
 package com.matthewglover.http_response;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -43,7 +42,8 @@ public abstract class HttpResponse {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException("booom");
+//            throw new RuntimeException(exception.getMessage());
         }
     }
 

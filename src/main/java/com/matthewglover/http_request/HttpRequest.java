@@ -19,7 +19,7 @@ public abstract class HttpRequest {
     private String version;
 
     public HttpRequest(LoggerFactory loggerFactory) {
-        logger = loggerFactory.getLogger(HeadRequest.class.getName());
+        logger = loggerFactory.getLogger(HttpRequest.class.getName());
         setVersion("HTTP/1.1");
         setup();
     }
@@ -67,7 +67,10 @@ public abstract class HttpRequest {
     public void parse(RawRequestParser parser) {
         setPath(parser.getPath());
         setVersion(parser.getVersion());
-        parser.getRawRequestHeaders().forEach(this::setHeaderFromPair);
+        for(String[] headerPair : parser.getRawRequestHeaders()) {
+            this.setHeaderFromPair(headerPair);
+        }
+//        parser.getRawRequestHeaders().forEach(this::setHeaderFromPair);
     }
 
     public ArrayList<String> toRaw() {

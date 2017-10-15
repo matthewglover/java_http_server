@@ -7,24 +7,23 @@ import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.util.logging.Logger;
 
 public class HttpServerSocket {
 
     private final Logger logger;
-    private final ServerSocketFactory serverSocketFactory;
-    private final int port;
+    private final ServerSocket serverSocket;
     private final LoggerFactory loggerFactory;
     private final RequestRouter requestRouter;
     private ServerSocketAdapter serverSocketAdapter;
 
     public HttpServerSocket(
             int port,
-            ServerSocketFactory serverSocketFactory,
+            ServerSocket serverSocket,
             RequestRouter requestRouter,
             LoggerFactory loggerFactory) {
-        this.port = port;
-        this.serverSocketFactory = serverSocketFactory;
+        this.serverSocket = serverSocket;
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
@@ -32,7 +31,7 @@ public class HttpServerSocket {
 
     public void connect() {
         try {
-            serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+            serverSocketAdapter = new ServerSocketAdapter(serverSocket);
             serverSocketAdapter.accept();
         } catch (Exception exception) {
             logger.warning(exception.getMessage());
@@ -43,7 +42,7 @@ public class HttpServerSocket {
         try {
             listenAndRespond();
         } catch (Exception exception) {
-            logger.warning(exception.getMessage());
+            logger.info(exception.toString());
         }
     }
 
@@ -54,7 +53,7 @@ public class HttpServerSocket {
         logger.info(httpRequest.toString());
         HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
-        serverSocketAdapter.close();
+//        serverSocketAdapter.close();
     }
 
     private HttpRequestParser getHttpRequestParser() throws IOException {

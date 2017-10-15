@@ -25,10 +25,15 @@ public class RawRequestParser {
     }
 
     public List<String[]> getRawRequestHeaders() {
-        return getHeaderArray()
-                .stream()
-                .map(this::parseHeader)
-                .collect(Collectors.toList());
+        List<String[]> headers = new ArrayList<>();
+        for (String header : getHeaderArray()) {
+            headers.add(parseHeader(header));
+        }
+        return headers;
+//        return getHeaderArray()
+//                .stream()
+//                .map(this::parseHeader)
+//                .collect(Collectors.toList());
     }
 
     private String[] getRequestElements() {
@@ -44,6 +49,6 @@ public class RawRequestParser {
     }
 
     private String[] parseHeader(String header) {
-        return header.split(":\\s+");
+        return header.split(":", 2);
     }
 }

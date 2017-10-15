@@ -13,15 +13,14 @@ public class HttpRequestStreamAdapter {
 
     private final ArrayList<String> rawRequest = new ArrayList<>();
     private final BufferedReader bufferedReader;
-    private final Logger logger;
 
     public HttpRequestStreamAdapter(InputStream inputStream, LoggerFactory loggerFactory) {
         bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        logger = loggerFactory.getLogger(HttpRequestStreamAdapter.class.getName());
     }
 
     public ArrayList<String> getRequest() throws IOException {
         processRequest();
+//        bufferedReader.close();
         return rawRequest;
     }
 
