@@ -8,6 +8,7 @@ import com.matthewglover.util.LoggerFactory;
 import com.matthewglover.socket.ServerSocketFactory;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -43,16 +44,19 @@ public class SimpleHttpServer {
     }
 
     private void runHttpSocketListener() {
-        RequestRouter requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
-
-        while (true) {
-            HttpServerSocket httpServerSocket = new HttpServerSocket(
-                    argumentParser.getPort(),
-                    serverSocketFactory,
-                    requestRouter,
-                    loggerFactory);
-            httpServerSocket.connect();
-            httpServerSocket.run();
+        try {
+            RequestRouter requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
+            ServerSocket serverSocket = serverSocketFactory.getServerSocket(argumentParser.getPort());
+            while (true) {
+                HttpServerSocket httpServerSocket = new HttpServerSocket(
+                        serverSocket,
+                        requestRouter,
+                        loggerFactory);
+                httpServerSocket.connect();
+                httpServerSocket.run();
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
         }
     }
 
