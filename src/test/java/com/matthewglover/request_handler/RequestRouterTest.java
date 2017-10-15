@@ -138,7 +138,6 @@ public class RequestRouterTest {
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file3.jpg\">file3.jpg</a>"));
     }
-
     @Test
     public void getRequestToParametersReturns200WithParamsAsBodyContent() {
         simpleGet.setPath("/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2" +
@@ -147,6 +146,13 @@ public class RequestRouterTest {
         assertEquals(HttpResponseType.OK, response.getResponseType());
         assertThat(response.getContent(),
                 CoreMatchers.containsString("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?"));
+    }
+
+    @Test
+    public void getRequestToRedirectReturns302WithRootLocation() {
+        simpleGet.setPath("/redirect");
+        HttpResponse response = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.REDIRECT, response.getResponseType());
     }
 
     private void fileRequestReturns405(HttpRequest request) {
