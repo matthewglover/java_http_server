@@ -3,6 +3,7 @@ package com.matthewglover.http_response;
 public class HttpResponseFactory {
     public static HttpResponse get(HttpResponseTemplate responseTemplate) {
         switch (responseTemplate) {
+            case REDIRECT: return new RedirectResponse();
             case METHOD_NOT_ALLOWED: return new MethodNotAllowedResponse();
             case OK_FILE: return new OkFileResponse();
             case UNAUTHORIZED_ACCESS: return new UnauthorizedAccessResponse();

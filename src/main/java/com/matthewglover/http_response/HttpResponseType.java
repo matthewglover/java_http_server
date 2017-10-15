@@ -41,6 +41,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 405 Method Not Allowed";
         }
+    },
+
+    REDIRECT {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 302 Found";
+        }
     };
 
     public abstract String toHeader();

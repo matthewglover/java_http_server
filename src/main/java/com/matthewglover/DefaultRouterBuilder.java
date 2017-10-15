@@ -27,8 +27,13 @@ public class DefaultRouterBuilder implements RouterBuilder {
         router.addHandler(getSimpleOkHandler());
         router.addHandler(getFormDataHandler());
         router.addHandler(getParametersHander());
+        router.addHandler(getRedirectHandler());
         router.addHandler(getFileHandler());
         router.addHandler(getDirectoryListingHandler());
+    }
+
+    private RequestHandler getRedirectHandler() {
+        return new RedirectHandler();
     }
 
     private RequestHandler getFileHandler() {

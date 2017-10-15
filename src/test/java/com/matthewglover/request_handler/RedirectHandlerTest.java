@@ -4,28 +4,19 @@ import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_request.HttpTestRequestFactory;
 import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.HttpResponseFactory;
-import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.ResponseComparer;
-import org.junit.Before;
+import com.matthewglover.http_response.HttpResponseType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ImATeapotHandlerTest {
+public class RedirectHandlerTest {
 
     private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-    private final RequestHandler requestHandler = new ImATeapotHandler();
-
-    @Before
-    public void setUp() throws Exception {
-        requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledPath("/coffee");
-    }
+    private final RequestHandler requestHandler = new RedirectHandler();
 
     @Test
     public void handlesGetRequestToCoffee() {
-        simpleGet.setPath("/coffee");
+        simpleGet.setPath("/redirect");
         assertTrue(requestHandler.handles(simpleGet));
     }
 
@@ -38,15 +29,15 @@ public class ImATeapotHandlerTest {
     @Test
     public void onlyAcceptsGetRequests() {
         HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        postRequest.setPath("/coffee");
+        postRequest.setPath("/redirect");
         assertFalse(requestHandler.handles(postRequest));
     }
 
     @Test
-    public void returnsImATeapotResponse() {
-        simpleGet.setPath("/coffee");
+    public void returnsRedirectResponse() {
+        simpleGet.setPath("/redirect");
         HttpResponse actualResponse = requestHandler.getResponse(simpleGet);
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
-        assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
+        assertEquals(HttpResponseType.REDIRECT, actualResponse.getResponseType());
+        assertEquals("/", actualResponse.getHeader("Location"));
     }
 }
