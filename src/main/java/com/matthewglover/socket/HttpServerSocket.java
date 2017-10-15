@@ -7,39 +7,42 @@ import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.util.logging.Logger;
 
 public class HttpServerSocket {
 
     private final Logger logger;
-    private final ServerSocketFactory serverSocketFactory;
-    private final int port;
+    private final ServerSocket serverSocket;
     private final LoggerFactory loggerFactory;
     private final RequestRouter requestRouter;
     private ServerSocketAdapter serverSocketAdapter;
 
     public HttpServerSocket(
-            int port, ServerSocketFactory serverSocketFactory,
-            RequestRouter requestRouter, LoggerFactory loggerFactory) {
-        this.port = port;
-        this.serverSocketFactory = serverSocketFactory;
+            ServerSocket serverSocket,
+            RequestRouter requestRouter,
+            LoggerFactory loggerFactory) {
+        this.serverSocket = serverSocket;
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
-    public void run() {
+    public void connect() {
         try {
-            connectSocket();
-            listenAndRespond();
+            serverSocketAdapter = new ServerSocketAdapter(serverSocket);
+            serverSocketAdapter.accept();
         } catch (Exception exception) {
             logger.warning(exception.getMessage());
         }
     }
 
-    private void connectSocket() throws IOException {
-        serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
-        serverSocketAdapter.accept();
+    public void run() {
+        try {
+            listenAndRespond();
+        } catch (Exception exception) {
+            logger.warning(exception.getMessage());
+        }
     }
 
     private void listenAndRespond() throws Exception {

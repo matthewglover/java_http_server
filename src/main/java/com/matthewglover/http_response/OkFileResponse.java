@@ -48,7 +48,5 @@ public class OkFileResponse extends OkResponse {
         while((bytes = inputStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, bytes);
         }
-
-        inputStream.close();
     }
 }

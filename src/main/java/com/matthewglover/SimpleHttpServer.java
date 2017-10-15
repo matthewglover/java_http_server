@@ -8,6 +8,9 @@ import com.matthewglover.util.LoggerFactory;
 import com.matthewglover.socket.ServerSocketFactory;
 
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -20,6 +23,8 @@ public class SimpleHttpServer {
     private final LoggerFactory loggerFactory;
     private final RouterBuilder routerBuilder;
     private final FileAccessor fileAccessor;
+    private ServerSocket serverSocket;
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(50);
 
     public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
@@ -43,17 +48,30 @@ public class SimpleHttpServer {
     }
 
     private void runHttpSocketListener() {
-        RequestRouter requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
-
-        while (true) {
-            HttpServerSocket httpServerSocket = new HttpServerSocket(
-                    argumentParser.getPort(),
-                    serverSocketFactory,
-                    requestRouter,
-                    loggerFactory);
-            httpServerSocket.run();
+        try {
+            buildSocket();
+            while (true) {
+                HttpServerSocket httpServerSocket = buildHttpServerSocket();
+                httpServerSocket.connect();
+                threadPool.execute(() -> httpServerSocket.run());
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
         }
     }
+
+    private HttpServerSocket buildHttpServerSocket() {
+        return new HttpServerSocket(serverSocket, buildRouter(), loggerFactory);
+    }
+
+    private void buildSocket() throws IOException {
+        serverSocket = serverSocketFactory.getServerSocket(argumentParser.getPort());
+    }
+
+    private RequestRouter buildRouter() {
+        return routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
+    }
+
 
     public static void main(String[] args) throws IOException {
         ArgumentParser argumentParser = new ArgumentParser();

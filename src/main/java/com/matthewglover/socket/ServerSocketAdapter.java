@@ -9,8 +9,8 @@ public class ServerSocketAdapter {
     private final ServerSocket serverSocket;
     private Socket socket;
 
-    public ServerSocketAdapter(ServerSocketFactory serverSocketFactory, int port) throws IOException {
-        serverSocket = serverSocketFactory.getServerSocket(port);
+    public ServerSocketAdapter(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 
     public void accept() throws IOException {
@@ -26,6 +26,6 @@ public class ServerSocketAdapter {
     }
 
     public void close() throws IOException {
-        serverSocket.close();
+        socket.close();
     }
 }

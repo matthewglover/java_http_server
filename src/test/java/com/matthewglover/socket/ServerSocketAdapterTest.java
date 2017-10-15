@@ -19,12 +19,7 @@ public class ServerSocketAdapterTest {
         ServerSocketDouble serverSocket = new ServerSocketDouble();
         serverSocket.setInputStream(testInput);
 
-        ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
-        serverSocketFactory.setServerSocket(serverSocket);
-
-        int port = 0;
-        String filePath = "path/to/public/dir";
-        ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+        ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocket);
         serverSocketAdapter.accept();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(serverSocketAdapter.getInputStream()));
@@ -44,13 +39,7 @@ public class ServerSocketAdapterTest {
 
         ServerSocketDouble serverSocket = new ServerSocketDouble();
 
-        ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
-        serverSocketFactory.setServerSocket(serverSocket);
-
-
-        int port = 0;
-        String filePath = "path/to/public/dir";
-        ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocketFactory, port);
+        ServerSocketAdapter serverSocketAdapter = new ServerSocketAdapter(serverSocket);
         serverSocketAdapter.accept();
 
         DataOutputStream outputStream = new DataOutputStream(serverSocketAdapter.getOutputStream());
