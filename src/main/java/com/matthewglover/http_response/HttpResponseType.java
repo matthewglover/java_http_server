@@ -48,6 +48,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 302 Found";
         }
+    },
+
+    PARTIAL_CONTENT {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 206 Partial Content";
+        }
     };
 
     public abstract String toHeader();

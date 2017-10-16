@@ -7,6 +7,7 @@ public class FileDouble extends File {
     private String fileName;
     private boolean isFile = false;
     private boolean isDirectory = false;
+    private long length;
 
     public FileDouble(String pathname) {
         super(pathname);
@@ -52,5 +53,13 @@ public class FileDouble extends File {
 
     public void setIsDirectory(boolean isDirectory) {
         this.isDirectory = isDirectory;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public long length() {
+        return length;
     }
 }

@@ -88,4 +88,5 @@ public abstract class HttpResponse {
         DataOutputStream dataStream = new DataOutputStream(outputStream);
         dataStream.writeBytes(toString());
     }
+
 }
