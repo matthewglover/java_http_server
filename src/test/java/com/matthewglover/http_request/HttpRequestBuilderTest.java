@@ -4,7 +4,6 @@ import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -58,7 +57,6 @@ public class HttpRequestBuilderTest {
     }
 
     @Test
-    @Ignore
     public void buildsGetRequestFromStream() throws IOException {
         socketDouble.setInputString(getRequest);
         HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);

@@ -2,12 +2,10 @@ package com.matthewglover.socket;
 
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestBuilder;
-import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
-import java.io.*;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 

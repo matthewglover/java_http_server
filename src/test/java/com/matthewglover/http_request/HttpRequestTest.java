@@ -5,10 +5,8 @@ import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class HttpRequestTest {
@@ -33,19 +31,5 @@ public class HttpRequestTest {
         Pattern requestEndPattern = Pattern.compile("\\r\\n\\r\\n$", Pattern.MULTILINE);
         assertTrue(requestLinePattern.matcher(requestString).find());
         assertTrue(requestEndPattern .matcher(requestString).find());
-    }
-
-    @Test
-    public void parsesRawGetRequest() {
-        ArrayList<String> rawRequest = testRequest.toRaw();
-        HttpRequest request = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactoryDouble);
-        RawRequestParser parser = new RawRequestParser(rawRequest);
-        request.parse(parser);
-
-        assertEquals(HttpRequestMethod.GET, request.getMethod());
-        assertEquals("/test/path", request.getPath());
-        assertEquals("HTTP/1.0", request.getVersion());
-        assertEquals("Value1", request.getHeader("Header1"));
-        assertEquals("Value2", request.getHeader("Header2"));
     }
 }

@@ -65,12 +65,6 @@ public abstract class HttpRequest {
         return headers.get(key);
     }
 
-    public void parse(RawRequestParser parser) {
-        setPath(parser.getPath());
-        setVersion(parser.getVersion());
-        parser.getRawRequestHeaders().forEach(this::setHeaderFromPair);
-    }
-
     public ArrayList<String> toRaw() {
         ArrayList<String> rawRequest = new ArrayList<>();
         rawRequest.add(requestLineToString());
@@ -87,10 +81,6 @@ public abstract class HttpRequest {
 
     public String requestLineToString() {
         return getMethod().toString() + " " + getPath() + " " + getVersion();
-    }
-
-    private void setHeaderFromPair(String[] headerPair) {
-        this.setHeader(headerPair[0], headerPair[1]);
     }
 
     private String headersToString() {
