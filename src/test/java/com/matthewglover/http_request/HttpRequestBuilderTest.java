@@ -27,7 +27,7 @@ public class HttpRequestBuilderTest {
                     "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
                     "Accept-Encoding: gzip,deflate\r\n" +
                     "\r\n" +
-                    "\"My\"=\"Data\"\r\n\r\n";
+                    "\"My\"=\"Data\"";
 
     private final String putRequest =
             "PUT /form HTTP/1.0\r\n" +
@@ -37,7 +37,7 @@ public class HttpRequestBuilderTest {
                     "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
                     "Accept-Encoding: gzip,deflate\r\n" +
                     "\r\n" +
-                    "\"My\"=\"Data\"\r\n\r\n";
+                    "\"My\"=\"Data\"";
 
     private final String putRequestNoContent =
             "PUT /form HTTP/1.0\r\n" +
@@ -90,6 +90,33 @@ public class HttpRequestBuilderTest {
         assertEquals("HTTP/1.0", request.getVersion());
         assertEquals("localhost:5000", request.getHeader("Host"));
         assertFalse(request.hasContent());
+    }
+
+    @Test
+    public void returnsRequestAsString() throws IOException {
+        isValidRequestString(getRequest);
+    }
+
+    @Test
+    public void returnsGetRequestAsString() throws IOException {
+        isValidRequestString(getRequest);
+    }
+
+    @Test
+    public void returnsPostRequestAsString() throws IOException {
+        isValidRequestString(postRequest);
+    }
+
+    @Test
+    public void returnsPutRequestAsString() throws IOException {
+        isValidRequestString(putRequest);
+    }
+
+    private void isValidRequestString(String request) throws IOException {
+        socketDouble.setInputString(request);
+        HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
+        HttpRequest httpRequest = builder.build();
+        assertEquals(request, httpRequest.getRaw());
     }
 
     private void isValidFormRequestOfType(HttpRequestMethod requestMethod) throws IOException {

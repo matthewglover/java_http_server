@@ -2,14 +2,12 @@ package com.matthewglover.http_request;
 
 import com.matthewglover.util.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public abstract class HttpRequest {
 
-    private static String CRLF = "\r\n";
     public final Logger logger;
 
     private PathDetails pathDetails;
@@ -18,6 +16,7 @@ public abstract class HttpRequest {
     private String path;
     private String version;
     private String content;
+    private String raw;
 
     public HttpRequest(LoggerFactory loggerFactory) {
         logger = loggerFactory.getLogger(HeadRequest.class.getName());
@@ -65,34 +64,8 @@ public abstract class HttpRequest {
         return headers.get(key);
     }
 
-    public ArrayList<String> toRaw() {
-        ArrayList<String> rawRequest = new ArrayList<>();
-        rawRequest.add(requestLineToString());
-        for (Map.Entry<String, String> header : headers.entrySet()) {
-            rawRequest.add(headerToString(header));
-        }
-        return rawRequest;
-    }
-
-    @Override
-    public String toString() {
-        return requestLineToString() + CRLF + headersToString() + CRLF;
-    }
-
     public String requestLineToString() {
         return getMethod().toString() + " " + getPath() + " " + getVersion();
-    }
-
-    private String headersToString() {
-        String headersString = "";
-        for (Map.Entry<String, String> header : headers.entrySet()) {
-            headersString += headerToString(header) + CRLF;
-        }
-        return headersString;
-    }
-
-    private String headerToString(Map.Entry<String, String> header) {
-        return header.getKey() + ": " + header.getValue();
     }
 
     public String getQueryParam(String queryParam) {
@@ -113,5 +86,13 @@ public abstract class HttpRequest {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
     }
 }

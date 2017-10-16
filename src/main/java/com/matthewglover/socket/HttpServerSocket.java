@@ -48,7 +48,7 @@ public class HttpServerSocket {
         HttpRequestBuilder httpRequestBuilder =
                 new HttpRequestBuilder(serverSocketAdapter.getInputStream(), loggerFactory);
         HttpRequest httpRequest = httpRequestBuilder.build();
-        logger.info(httpRequest.toString());
+        logger.info(httpRequest.getRaw());
         HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
         serverSocketAdapter.close();
