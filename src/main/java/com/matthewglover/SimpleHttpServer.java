@@ -25,6 +25,7 @@ public class SimpleHttpServer {
     private final FileAccessor fileAccessor;
     private ServerSocket serverSocket;
     private final ExecutorService threadPool = Executors.newFixedThreadPool(20);
+    private RequestRouter requestRouter;
 
     public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
@@ -50,6 +51,7 @@ public class SimpleHttpServer {
     private void runHttpSocketListener() {
         try {
             buildSocket();
+            buildRouter();
             while (true) {
                 HttpServerSocket httpServerSocket = buildHttpServerSocket();
                 httpServerSocket.connect();
@@ -61,15 +63,15 @@ public class SimpleHttpServer {
     }
 
     private HttpServerSocket buildHttpServerSocket() {
-        return new HttpServerSocket(serverSocket, buildRouter(), loggerFactory);
+        return new HttpServerSocket(serverSocket, requestRouter, loggerFactory);
     }
 
     private void buildSocket() throws IOException {
         serverSocket = serverSocketFactory.getServerSocket(argumentParser.getPort());
     }
 
-    private RequestRouter buildRouter() {
-        return routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
+    private void buildRouter() {
+        requestRouter = routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
     }
 
 
