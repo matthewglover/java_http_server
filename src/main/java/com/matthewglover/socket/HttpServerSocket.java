@@ -1,12 +1,11 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestParser;
+import com.matthewglover.http_request.HttpRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
-import java.io.*;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
@@ -46,18 +45,12 @@ public class HttpServerSocket {
     }
 
     private void listenAndRespond() throws Exception {
-        HttpRequestParser httpRequestParser = getHttpRequestParser();
-        httpRequestParser.parse();
-        HttpRequest httpRequest = httpRequestParser.getRequest();
-        logger.info(httpRequest.toString());
+        HttpRequestBuilder httpRequestBuilder =
+                new HttpRequestBuilder(serverSocketAdapter.getInputStream(), loggerFactory);
+        HttpRequest httpRequest = httpRequestBuilder.build();
+        logger.info(httpRequest.getRaw());
         HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
         serverSocketAdapter.close();
-    }
-
-    private HttpRequestParser getHttpRequestParser() throws IOException {
-        HttpRequestStreamAdapter httpRequestStreamAdapter = new HttpRequestStreamAdapter(
-                serverSocketAdapter.getInputStream(), loggerFactory);
-        return new HttpRequestParser(httpRequestStreamAdapter.getRequest(), loggerFactory);
     }
 }

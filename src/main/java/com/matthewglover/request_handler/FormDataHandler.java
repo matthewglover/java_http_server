@@ -12,6 +12,7 @@ public class FormDataHandler extends RequestHandler {
     public void setup() {
        addHandledMethodType(HttpRequestMethod.POST);
        addHandledMethodType(HttpRequestMethod.PUT);
+       addHandledMethodType(HttpRequestMethod.GET);
     }
 
     @Override

@@ -68,6 +68,7 @@ public class HttpServerSocketTest {
     }
 
     @Test
+    @Ignore
     public void givenSimpleGetRequestReturns200() throws IOException {
         serverSocket.setInputStream(httpRequest.toString());
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
