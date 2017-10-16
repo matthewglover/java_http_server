@@ -169,6 +169,18 @@ public class RequestRouterTest {
         assertEquals("This ", response.getContent());
     }
 
+    @Test
+    public void getRequestToFormReturnsData() {
+        HttpRequest simplePost = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        simplePost.setPath("/form");
+        simplePost.setContent("data=fatcat");
+        router.handleRequest(simplePost);
+
+        simpleGet.setPath("/form");
+        HttpResponse response = router.handleRequest(simpleGet);
+        assertEquals("data=fatcat", response.getContent());
+    }
+
     private void fileRequestReturns405(HttpRequest request) {
         request.setPath("/file1");
         fileAccessorDouble.getFile().setIsFile(true);

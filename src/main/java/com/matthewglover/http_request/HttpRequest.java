@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 public abstract class HttpRequest {
 
     public final Logger logger;
-
     private PathDetails pathDetails;
     private HttpRequestMethod method;
     private Map<String, String> headers = new HashMap<>();

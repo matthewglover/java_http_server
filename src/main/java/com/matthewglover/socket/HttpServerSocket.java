@@ -3,7 +3,6 @@ package com.matthewglover.socket;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.OkFileResponse;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
@@ -51,9 +50,6 @@ public class HttpServerSocket {
         HttpRequest httpRequest = httpRequestBuilder.build();
         logger.info(httpRequest.getRaw());
         HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
-        if (!(httpResponse instanceof OkFileResponse)) {
-            logger.info(httpResponse.toString());
-        }
         httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
         serverSocketAdapter.close();
     }
