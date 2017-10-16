@@ -30,7 +30,7 @@ public class PartialResponseTest {
         response.setFile("/partial_content.txt", fileAccessorDouble);
         response.setRange(0, 4);
         response.build();
-        assertEquals("This", response.getContent());
+        assertEquals("This ", response.getContent());
     }
 
     @Test
@@ -38,6 +38,6 @@ public class PartialResponseTest {
         response.setFile("/partial_content.txt", fileAccessorDouble);
         response.setRange(4, 10);
         response.build();
-        assertEquals(" is a ", response.getContent());
+        assertEquals(" is a f", response.getContent());
     }
 }

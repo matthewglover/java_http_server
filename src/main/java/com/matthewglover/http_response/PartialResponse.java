@@ -2,10 +2,7 @@ package com.matthewglover.http_response;
 
 import com.matthewglover.util.FileAccessor;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class PartialResponse extends HttpResponse {
 
@@ -45,13 +42,14 @@ public class PartialResponse extends HttpResponse {
             StringBuilder stringBuilder = new StringBuilder();
             processContent(bufferedReader, stringBuilder);
             setContent(stringBuilder.toString());
+            setContentLengthHeader();
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());
         }
     }
 
     private void processContent(BufferedReader bufferedReader, StringBuilder stringBuilder) throws IOException {
-        for (int count = 0; count < rangeEnd; count++) {
+        for (int count = 0; count <= rangeEnd; count++) {
             int data = bufferedReader.read();
             if (count >= rangeStart) {
                 stringBuilder.append((char) data);

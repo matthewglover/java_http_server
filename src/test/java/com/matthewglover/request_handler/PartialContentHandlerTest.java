@@ -40,27 +40,27 @@ public class PartialContentHandlerTest {
         assertEquals(HttpResponseType.PARTIAL_CONTENT, response.getResponseType());
     }
 
-//    @Test
-//    public void returnsPartOfFile() throws Exception {
-//        request.setHeader("Range", "bytes=0-4");
-//        HttpResponse response = handler.getResponse(request);
-//        response.sendResponseOverSocket(socketDouble.getOutputStream());
-//        assertEquals("This", response.getContent());
-//    }
-//
-//    @Test
-//    public void startRangeDefaultsToZero() throws Exception {
-//        request.setHeader("Range", "bytes=-6");
-//        HttpResponse response = handler.getResponse(request);
-//        response.sendResponseOverSocket(socketDouble.getOutputStream());
-//        assertEquals("This i", response.getContent());
-//    }
-//
-//    @Test
-//    public void endRangeDefaultsToFileLength() throws Exception {
-//        request.setHeader("Range", "bytes=4-");
-//        HttpResponse response = handler.getResponse(request);
-//        response.sendResponseOverSocket(socketDouble.getOutputStream());
-//        assertEquals(" is a file that contains text to read part of in order to fulfill a 206.\n", response.getContent());
-//    }
+    @Test
+    public void returnsPartOfFile() throws Exception {
+        request.setHeader("Range", "bytes=0-4");
+        HttpResponse response = handler.getResponse(request);
+        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertEquals("This ", response.getContent());
+    }
+
+    @Test
+    public void startRangeDefaultsToZero() throws Exception {
+        request.setHeader("Range", "bytes=-6");
+        HttpResponse response = handler.getResponse(request);
+        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertEquals(" 206.\n", response.getContent());
+    }
+
+    @Test
+    public void endRangeDefaultsToFileLength() throws Exception {
+        request.setHeader("Range", "bytes=4-");
+        HttpResponse response = handler.getResponse(request);
+        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertEquals(" is a file that contains text to read part of in order to fulfill a 206.\n", response.getContent());
+    }
 }

@@ -28,34 +28,19 @@ public class PartialContentHandler extends RequestHandler {
     @Override
     public HttpResponse getResponse(HttpRequest request) {
         PartialResponse response = (PartialResponse) HttpResponseFactory.get(HttpResponseTemplate.PARTIAL_CONTENT);
+        RangeBuilder rangeBuilder = new RangeBuilder(request.getHeader("Range"), getFileLength(request));
         response.setFile(getFilePath(request), fileAccessor);
-//        response.setRange(getRangeStart(request), getRangeEnd(request));
-        response.setRange(0, 3);
+        response.setRange(rangeBuilder.getStart(), rangeBuilder.getEnd());
         response.build();
         return response;
     }
 
-    private int getRangeStart(HttpRequest request) {
-        String[] rangePair = getRangePair(request);
-        return rangePair[0].equals("")  ? 0 : Integer.parseInt(rangePair[0]);
-    }
-
-    private int getRangeEnd(HttpRequest request) {
-        String[] rangePair = getRangePair(request);
-        return rangePair.length == 1 ? getFileLength(request) : Integer.parseInt(rangePair[1]);
-    }
-
-    private String[] getRangePair(HttpRequest request) {
-        String range = request.getHeader("Range");
-        String rangeData = range.split("=")[1];
-        return rangeData.split("-");
-    }
 
     private String getFilePath(HttpRequest request) {
         return rootDirectoryPath + request.getPath().replaceAll("^/+", "");
     }
 
     public int getFileLength(HttpRequest request) {
-        return (int) fileAccessor.getFileFromPath(getFilePath(request)).length();
+        return (int) fileAccessor.getFileFromPath(getFilePath(request)).length() - 1;
     }
 }

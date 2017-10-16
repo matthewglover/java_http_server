@@ -155,19 +155,19 @@ public class RequestRouterTest {
         assertEquals(HttpResponseType.REDIRECT, response.getResponseType());
     }
 
-//    @Test
-//    public void partialContentRequestWithRange0to4Returns206WithCorrectContent() throws Exception {
-//        String partialContent = "This is a file that contains text to read part of in order to fulfill a 206.\n";
-//        fileAccessorDouble.setFileInputStreamData(partialContent);
-//        fileAccessorDouble.getFile().setIsFile(true);
-//
-//        simpleGet.setPath("/partial_content.txt");
-//        simpleGet.setHeader("Range", "bytes=0-4");
-//        HttpResponse response = router.handleRequest(simpleGet);
-//        assertEquals(HttpResponseType.PARTIAL_CONTENT, response.getResponseType());
-//
-//        assertEquals("This", response.getContent());
-//    }
+    @Test
+    public void partialContentRequestWithRange0to4Returns206WithCorrectContent() throws Exception {
+        String partialContent = "This is a file that contains text to read part of in order to fulfill a 206.\n";
+        fileAccessorDouble.setFileInputStreamData(partialContent);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        simpleGet.setPath("/partial_content.txt");
+        simpleGet.setHeader("Range", "bytes=0-4");
+        HttpResponse response = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.PARTIAL_CONTENT, response.getResponseType());
+
+        assertEquals("This ", response.getContent());
+    }
 
     private void fileRequestReturns405(HttpRequest request) {
         request.setPath("/file1");
