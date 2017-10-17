@@ -6,6 +6,7 @@ import java.io.*;
 
 public class FileAccessorDouble extends FileAccessor {
     private final FileDouble fileDouble = new FileDouble("");
+    private ByteArrayOutputStream outputStream;
     private String fileInputStreamData;
 
     @Override
@@ -23,11 +24,21 @@ public class FileAccessorDouble extends FileAccessor {
         return new FileAccessor().determineMimeTypeFromExtension(filePath);
     }
 
+    @Override
+    public OutputStream getFileOutputStreamFromFile(String filePath) {
+        outputStream = new ByteArrayOutputStream();
+        return outputStream;
+    }
+
     public void setFileInputStreamData(String fileInputStreamData) {
         this.fileInputStreamData = fileInputStreamData;
     }
 
     public FileDouble getFile() {
         return fileDouble;
+    }
+
+    public String getFileOutput() {
+        return (outputStream == null) ? null : outputStream.toString();
     }
 }

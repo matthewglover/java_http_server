@@ -198,7 +198,6 @@ public class RequestRouterTest {
     }
 
     @Test
-    @Ignore
     public void patchRequestToPatchedContentReturns204() throws Exception {
         String patchedContent = "Default content\n";
         fileAccessorDouble.setFileInputStreamData(patchedContent);

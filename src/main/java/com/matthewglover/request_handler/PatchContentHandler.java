@@ -7,6 +7,7 @@ import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.http_response.OkFileResponse;
 import com.matthewglover.util.FileAccessor;
+import com.matthewglover.util.FileWriter;
 
 public class PatchContentHandler extends RequestHandler {
 
@@ -29,8 +30,14 @@ public class PatchContentHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        if (request.getMethod() == HttpRequestMethod.GET) return handleGetRequest(request);
-        else return HttpResponseFactory.get(HttpResponseTemplate.NO_CONTENT);
+        if (request.getMethod() == HttpRequestMethod.PATCH) return handlePatchRequest(request);
+        else return handleGetRequest(request);
+    }
+
+    private HttpResponse handlePatchRequest(HttpRequest request) {
+        FileWriter fileWriter = new FileWriter(getFilePath(request), fileAccessor);
+        if (request.hasContent()) fileWriter.write(request.getContent());
+        return HttpResponseFactory.get(HttpResponseTemplate.NO_CONTENT);
     }
 
     private HttpResponse handleGetRequest(HttpRequest request) {

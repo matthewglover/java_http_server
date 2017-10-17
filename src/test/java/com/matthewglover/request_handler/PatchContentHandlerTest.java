@@ -35,7 +35,7 @@ public class PatchContentHandlerTest {
     }
 
     @Test
-    public void patchRequestToPatchedContentReturns204() throws Exception {
+    public void patchRequestToPatchedContentReturns204AndPatchesContent() throws Exception {
         HttpRequest patchRequest = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
         patchRequest.setPath("/patch-content.txt");
         patchRequest.setContent("patched content");
@@ -44,7 +44,6 @@ public class PatchContentHandlerTest {
         HttpResponse response = handler.getResponse(patchRequest);
 
         assertEquals(HttpResponseType.NO_CONTENT, response.getResponseType());
+        assertEquals("patched content", fileAccessorDouble.getFileOutput());
     }
-
-    
 }
