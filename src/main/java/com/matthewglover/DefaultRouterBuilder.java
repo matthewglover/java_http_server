@@ -55,9 +55,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
     }
 
     private RequestHandler getFormDataHandler() {
-        FormDataHandler requestHandler = new FormDataHandler();
-        requestHandler.addHandledPath("/form");
-        return requestHandler;
+        return new FormDataHandler();
     }
 
     private RequestHandler getDirectoryListingHandler() {
@@ -77,10 +75,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
     }
 
     private RequestHandler getImATeapotHandler() {
-        ImATeapotHandler requestHandler = new ImATeapotHandler();
-        requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledPath("/coffee");
-        return requestHandler;
+        return new ImATeapotHandler();
     }
 
     private RequestHandler getSimpleOkHandler() {

@@ -36,12 +36,12 @@ public class PatchContentHandlerTest {
 
     @Test
     public void patchRequestToPatchedContentReturns204AndPatchesContent() throws Exception {
-        HttpRequest patchRequest = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
-        patchRequest.setPath("/patch-content.txt");
-        patchRequest.setContent("patched content");
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
+        request.setPath("/patch-content.txt");
+        request.setContent("patched content");
 
         RequestHandler handler = new PatchContentHandler("root/to/public", fileAccessorDouble);
-        HttpResponse response = handler.getResponse(patchRequest);
+        HttpResponse response = handler.getResponse(request);
 
         assertEquals(HttpResponseType.NO_CONTENT, response.getResponseType());
         assertEquals("patched content", fileAccessorDouble.getFileOutput());

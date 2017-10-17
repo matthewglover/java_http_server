@@ -5,7 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.OkFileGeneratedResponse;
+import com.matthewglover.http_response.FileResponse;
 import com.matthewglover.util.FileAccessor;
 
 import java.io.File;
@@ -37,23 +37,26 @@ public class FileHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest httpRequest) {
-        if (isMethodAllowed(httpRequest)) {
-            return getFileOkResponse(httpRequest);
-        } else {
-            return HttpResponseFactory.get(HttpResponseTemplate.METHOD_NOT_ALLOWED);
-        }
+        return isDisallowedMethod(httpRequest) ?  handleDisallowedMethodResponse() : handleFileResponse(httpRequest);
     }
 
-    private boolean isMethodAllowed(HttpRequest httpRequest) {
-        return httpRequest.getMethod() == HttpRequestMethod.GET;
+    private boolean isDisallowedMethod(HttpRequest httpRequest) {
+        return httpRequest.getMethod() != HttpRequestMethod.GET;
     }
 
-    private HttpResponse getFileOkResponse(HttpRequest httpRequest) {
-        OkFileGeneratedResponse fileResponse =
-                (OkFileGeneratedResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
+    private HttpResponse handleDisallowedMethodResponse() {
+        return HttpResponseFactory.get(HttpResponseTemplate.METHOD_NOT_ALLOWED);
+    }
+
+    private HttpResponse handleFileResponse(HttpRequest httpRequest) {
+        FileResponse fileResponse = getFileResponse();
 
         fileResponse.setFile(getFilePath(httpRequest), fileAccessor);
         return fileResponse;
+    }
+
+    private FileResponse getFileResponse() {
+        return (FileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
     }
 
     private String getFilePath(HttpRequest httpRequest) {

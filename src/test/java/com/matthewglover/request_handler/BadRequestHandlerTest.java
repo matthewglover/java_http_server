@@ -15,10 +15,10 @@ public class BadRequestHandlerTest {
     @Test
     public void handlesBadRequest() {
         RequestHandler requestHandler = new BadRequestHandler();
-        HttpRequest badRequest = HttpTestRequestFactory.get(HttpRequestMethod.INVALID_METHOD);
-        assertTrue(requestHandler.handles(badRequest));
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.INVALID_METHOD);
+        assertTrue(requestHandler.handles(request));
         assertTrue(new ResponseComparer(
                 HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST),
-                requestHandler.getResponse(badRequest)).areSame());
+                requestHandler.getResponse(request)).areSame());
     }
 }

@@ -21,50 +21,50 @@ public class FormDataHandlerTest {
 
     @Test
     public void handlesPostRequestToForm() {
-        HttpRequest simplePost = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        simplePost.setPath("/form");
-        assertTrue(requestHandler.handles(simplePost));
-        assertEquals(HttpResponseType.OK, requestHandler.getResponse(simplePost).getResponseType());
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        request.setPath("/form");
+        assertTrue(requestHandler.handles(request));
+        assertEquals(HttpResponseType.OK, requestHandler.getResponse(request).getResponseType());
     }
 
     @Test
     public void handlesPutRequestToForm() {
-        HttpRequest simplePut = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
-        simplePut.setPath("/form");
-        assertTrue(requestHandler.handles(simplePut));
-        assertEquals(HttpResponseType.OK, requestHandler.getResponse(simplePut).getResponseType());
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
+        request.setPath("/form");
+        assertTrue(requestHandler.handles(request));
+        assertEquals(HttpResponseType.OK, requestHandler.getResponse(request).getResponseType());
     }
 
     @Test
     public void sendsFormDataBackInResponseBody() {
-        HttpRequest simplePost = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        simplePost.setPath("/form");
-        simplePost.setContent("data=fatcat");
-        assertTrue(requestHandler.handles(simplePost));
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        request.setPath("/form");
+        request.setContent("data=fatcat");
+        assertTrue(requestHandler.handles(request));
     }
 
     @Test
     public void handlerHasTemporalState() {
-        HttpRequest simplePost = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        simplePost.setPath("/form");
-        simplePost.setContent("data=fatcat");
+        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        postRequest.setPath("/form");
+        postRequest.setContent("data=fatcat");
 
 
-        HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        simpleGet.setPath("/form");
+        HttpRequest getRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        getRequest.setPath("/form");
 
-        HttpRequest simpleDelete = HttpTestRequestFactory.get(HttpRequestMethod.DELETE);
-        simpleDelete.setPath("/form");
+        HttpRequest deleteRequest = HttpTestRequestFactory.get(HttpRequestMethod.DELETE);
+        deleteRequest.setPath("/form");
 
-        requestHandler.getResponse(simplePost);
+        requestHandler.getResponse(postRequest);
 
-        HttpResponse firstResponse = requestHandler.getResponse(simpleGet);
+        HttpResponse firstResponse = requestHandler.getResponse(getRequest);
         assertEquals("data=fatcat", firstResponse.getContent());
 
 
-        requestHandler.getResponse(simpleDelete);
+        requestHandler.getResponse(deleteRequest);
 
-        HttpResponse secondResponse = requestHandler.getResponse(simpleGet);
+        HttpResponse secondResponse = requestHandler.getResponse(getRequest);
         assertEquals("", secondResponse.getContent());
     }
 }

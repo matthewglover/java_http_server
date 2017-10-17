@@ -7,7 +7,7 @@ public class HttpResponseFactory {
             case PARTIAL_CONTENT: return new PartialResponse();
             case REDIRECT: return new RedirectResponse();
             case METHOD_NOT_ALLOWED: return new MethodNotAllowedResponse();
-            case OK_FILE: return new OkFileGeneratedResponse();
+            case OK_FILE: return new FileResponse();
             case UNAUTHORIZED_ACCESS: return new UnauthorizedAccessResponse();
             case IM_A_TEAPOT: return new ImATeapotResponse();
             case OPTIONS_ALLOW_SELECTED: return new OptionsGeneratedResponse("GET,OPTIONS");

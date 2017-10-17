@@ -15,16 +15,16 @@ import static org.junit.Assert.*;
 public class PartialContentHandlerTest {
 
     private final String partialContent = "This is a file that contains text to read part of in order to fulfill a 206.\n";
-    private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final SocketDouble socketDouble = new SocketDouble();
+    private final FileAccessorDouble fileAccessor = new FileAccessorDouble();
+    private final SocketDouble socket = new SocketDouble();
     private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-    private final RequestHandler handler = new PartialContentHandler("path/to/public/", fileAccessorDouble);
+    private final RequestHandler handler = new PartialContentHandler("path/to/public/", fileAccessor);
 
     @Before
     public void setUp() throws Exception {
-        fileAccessorDouble.setFileInputStreamData(partialContent);
-        fileAccessorDouble.getFile().setIsFile(true);
-        fileAccessorDouble.getFile().setLength(partialContent.getBytes().length);
+        fileAccessor.setFileInputStreamData(partialContent);
+        fileAccessor.getFile().setIsFile(true);
+        fileAccessor.getFile().setLength(partialContent.getBytes().length);
         request.setPath("/partial_content.txt");
     }
 
@@ -44,7 +44,7 @@ public class PartialContentHandlerTest {
     public void returnsPartOfFile() throws Exception {
         request.setHeader("Range", "bytes=0-4");
         HttpResponse response = handler.getResponse(request);
-        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        response.sendResponseOverSocket(socket.getOutputStream());
         assertEquals("This ", response.getContent());
     }
 
@@ -52,7 +52,7 @@ public class PartialContentHandlerTest {
     public void startRangeDefaultsToZero() throws Exception {
         request.setHeader("Range", "bytes=-6");
         HttpResponse response = handler.getResponse(request);
-        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        response.sendResponseOverSocket(socket.getOutputStream());
         assertEquals(" 206.\n", response.getContent());
     }
 
@@ -60,7 +60,7 @@ public class PartialContentHandlerTest {
     public void endRangeDefaultsToFileLength() throws Exception {
         request.setHeader("Range", "bytes=4-");
         HttpResponse response = handler.getResponse(request);
-        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        response.sendResponseOverSocket(socket.getOutputStream());
         assertEquals(" is a file that contains text to read part of in order to fulfill a 206.\n", response.getContent());
     }
 }

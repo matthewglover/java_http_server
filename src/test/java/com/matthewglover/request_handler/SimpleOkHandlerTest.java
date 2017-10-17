@@ -28,37 +28,37 @@ public class SimpleOkHandlerTest {
 
     @Test
     public void handlesGetRequestToLogs() {
-        HttpRequest getRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        getRequest.setPath("/logs");
-        assertValidResponse(getRequest);
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        request.setPath("/logs");
+        assertValidResponse(request);
     }
 
     @Test
     public void handlesGetRequestToTea() {
-        HttpRequest getRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        getRequest.setPath("/tea");
-        assertValidResponse(getRequest);
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        request.setPath("/tea");
+        assertValidResponse(request);
     }
 
     @Test
     public void handlesPutRequestToLog() {
-        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
-        putRequest.setPath("/log");
-        assertValidResponse(putRequest);
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
+        request.setPath("/log");
+        assertValidResponse(request);
     }
 
     @Test
     public void handlesHeadRequestToThese() {
-        HttpRequest headRequest = HttpTestRequestFactory.get(HttpRequestMethod.HEAD);
-        headRequest.setPath("/these");
-        assertValidResponse(headRequest);
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.HEAD);
+        request.setPath("/these");
+        assertValidResponse(request);
     }
 
     @Test
     public void doesntHandlePostRequestToRequests() {
-        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        postRequest.setPath("/requests");
-        assertFalse(requestHandler.handles(postRequest));
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        request.setPath("/requests");
+        assertFalse(requestHandler.handles(request));
     }
 
     private void assertValidResponse(HttpRequest request) {

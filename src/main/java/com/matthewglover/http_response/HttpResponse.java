@@ -32,6 +32,7 @@ public abstract class HttpResponse {
 
     public void setContent(String content) {
         this.content = content;
+        setContentLengthHeader();
     }
 
     public String getContent() {

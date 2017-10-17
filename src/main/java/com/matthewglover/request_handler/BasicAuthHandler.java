@@ -10,6 +10,7 @@ public class BasicAuthHandler extends RequestHandler {
 
     private final String username = "admin";
     private final String password = "hunter2";
+    private final String logsAccessPath = "/logs";
     private String temporalContent = "";
 
     @Override
@@ -17,7 +18,7 @@ public class BasicAuthHandler extends RequestHandler {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledMethodType(HttpRequestMethod.PUT);
         addHandledMethodType(HttpRequestMethod.HEAD);
-        addHandledPath("/logs");
+        addHandledPath(logsAccessPath);
         addHandledPath("/log");
         addHandledPath("/these");
         addHandledPath("/requests");
@@ -29,7 +30,7 @@ public class BasicAuthHandler extends RequestHandler {
     }
 
     private boolean isLoggableRequest(HttpRequest request) {
-        return !request.getPath().equals("/logs");
+        return !request.getPath().equals(logsAccessPath);
     }
 
     private HttpResponse handleLoggableRequest(HttpRequest request) {
