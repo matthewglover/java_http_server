@@ -35,6 +35,7 @@ public class SimpleHttpServer {
     }
 
     public void run() {
+        argumentParser.parse();
         if (argumentParser.hasErrors()) {
             logArgumentErrors();
         } else {

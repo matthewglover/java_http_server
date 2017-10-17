@@ -11,17 +11,17 @@ import java.util.logging.SimpleFormatter;
 
 public class AppLauncher {
     public static void main(String[] args) throws IOException {
-        ArgumentParser argumentParser = new ArgumentParser();
-        argumentParser.parse(args);
-
-        ServerSocketFactory serverSocketFactory = new ServerSocketFactory();
-        RouterBuilder routerBuilder = new DefaultRouterBuilder();
-        FileAccessor fileAccessor = new FileAccessor();
-        LoggerFactory loggerFactory = getLoggerFactory();
-
-        SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
-                argumentParser, serverSocketFactory, routerBuilder, fileAccessor, loggerFactory);
+        SimpleHttpServer simpleHttpServer = getSimpleHttpServer(args);
         simpleHttpServer.run();
+    }
+
+    private static SimpleHttpServer getSimpleHttpServer(String[] args) throws IOException {
+        return new SimpleHttpServer(
+                    new ArgumentParser(args),
+                    new ServerSocketFactory(),
+                    new DefaultRouterBuilder(),
+                    new FileAccessor(),
+                    getLoggerFactory());
     }
 
     public static LoggerFactory getLoggerFactory() throws IOException {
