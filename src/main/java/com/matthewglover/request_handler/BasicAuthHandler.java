@@ -5,44 +5,51 @@ import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
-public class BasicAuthHandler {
+public class BasicAuthHandler extends RequestHandler {
+
     private String username;
     private String password;
 
-    public void addUsernameAndPassword(String username, String password) {
+    @Override
+    public void setup() {
+    }
+
+    @Override
+    public HttpResponse getResponse(HttpRequest request) {
+        return HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
+    }
+
+    @Override
+    public boolean handles(HttpRequest request) {
+        return super.handles(request) && isRequestUnauthorized(request);
+    }
+
+    public void addAuthCredentials(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public HttpResponse handleRequest(HttpRequest request) throws UnsupportedEncodingException {
-        if (isAuthenticated(request)) {
-            HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
-            response.setContent(request.toString());
-            response.setContentLengthHeader();
-            return response;
-        } else {
-            return HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
-        }
-    }
-
-    private boolean isAuthenticated(HttpRequest request) {
+    private boolean isRequestUnauthorized(HttpRequest request) {
         String authHeader = request.getHeader("Authorization");
-        return isValidHeader(authHeader) && isAuthorizedUsernameAndPassword(authHeader);
+        return isInValidHeader(authHeader) || isInvalidCredentials(authHeader);
     }
 
-    private boolean isValidHeader(String authHeader) {
-        return authHeader != null && authHeader.matches("^Basic\\s+\\w+$");
+    private boolean isInValidHeader(String authHeader) {
+        return authHeader == null || isMalformedHeader(authHeader);
     }
 
-    private boolean isAuthorizedUsernameAndPassword(String authHeader) {
-        String[] usernameAndPassword = getUsernameAndPassword(authHeader);
-        return isValidToken(usernameAndPassword[0], username) && isValidToken(usernameAndPassword[1], password);
+    private boolean isMalformedHeader(String authHeader) {
+        return !authHeader.matches("^Basic\\s+\\w+$");
     }
 
-    private String[] getUsernameAndPassword(String authHeader) {
+    private boolean isInvalidCredentials(String authHeader) {
+        String[] credentials = getCredentials(authHeader);
+        return isInValidToken(credentials[0], username) || isInValidToken(credentials[1], password);
+    }
+
+    private String[] getCredentials(String authHeader) {
         String encodedString = authHeader.split("\\s+")[1];
         return decodeString(encodedString).split(":");
     }
@@ -51,7 +58,7 @@ public class BasicAuthHandler {
         return new String(Base64.getDecoder().decode(encodedString));
     }
 
-    private boolean isValidToken(String token, String referenceValue) {
-        return token.equals(referenceValue);
+    private boolean isInValidToken(String token, String referenceValue) {
+        return !token.equals(referenceValue);
     }
 }

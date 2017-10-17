@@ -26,7 +26,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
         router.addHandler(getImATeapotHandler());
         router.addHandler(getSimpleOkHandler());
         router.addHandler(getFormDataHandler());
-        router.addHandler(getParametersHander());
+        router.addHandler(getParametersHandler());
         router.addHandler(getRedirectHandler());
         router.addHandler(getPartialContentHandler());
         router.addHandler(getPatchContentHandler());
@@ -65,7 +65,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
     }
 
     private RequestHandler getBasicAuthHandler() {
-        NewBasicAuthHandler requestHandler = new NewBasicAuthHandler();
+        BasicAuthHandler requestHandler = new BasicAuthHandler();
         requestHandler.addAuthCredentials("admin", "hunter2");
         requestHandler.addHandledMethodType(HttpRequestMethod.GET);
         requestHandler.addHandledPath("/logs");
@@ -100,7 +100,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
         return requestHandler;
     }
 
-    public RequestHandler getParametersHander() {
+    public RequestHandler getParametersHandler() {
         return new ParametersHandler();
     }
 }
