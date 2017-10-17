@@ -24,15 +24,7 @@ public class HttpRequest {
         setup();
     }
 
-    public HttpRequest(LoggerFactory loggerFactory) {
-        this(null, loggerFactory);
-    }
-
     public void setup() {}
-
-    public void setMethod(HttpRequestMethod method) {
-        this.method = method;
-    }
 
     public HttpRequestMethod getMethod() {
         return method;

@@ -19,7 +19,11 @@ public class SimpleHttpServer {
     private final RouterBuilder routerBuilder;
     private final FileAccessor fileAccessor;
 
-    public SimpleHttpServer(ArgumentParser argumentParser, ServerSocketFactory serverSocketFactory, RouterBuilder routerBuilder, FileAccessor fileAccessor, LoggerFactory loggerFactory) {
+    public SimpleHttpServer(ArgumentParser argumentParser,
+                            ServerSocketFactory serverSocketFactory,
+                            RouterBuilder routerBuilder,
+                            FileAccessor fileAccessor,
+                            LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
         this.serverSocketFactory = serverSocketFactory;
         this.routerBuilder = routerBuilder;

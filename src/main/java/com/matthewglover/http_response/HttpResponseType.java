@@ -1,68 +1,25 @@
 package com.matthewglover.http_response;
 
 public enum HttpResponseType {
-    OK {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 200 OK";
-        }
-    },
+    OK(200, "OK"),
+    NO_CONTENT(204, "No Content"),
+    PARTIAL_CONTENT(206, "Partial Content"),
+    REDIRECT(302, "Found"),
+    BAD_REQUEST(400, "Bad Request"),
+    UNAUTHORIZED_ACCESS(401, "Unauthorized Access"),
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+    NOT_FOUND(404, "Not Found"),
+    IM_A_TEAPOT(418, "I'm a Teapot");
 
-    BAD_REQUEST {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 400 Bad Request";
-        }
-    },
+    private final int code;
+    private final String description;
 
-    NOT_FOUND {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 404 Not Found";
-        }
-    },
+    HttpResponseType(int code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
-    IM_A_TEAPOT {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 418 I'm a Teapot";
-        }
-    },
-
-    UNAUTHORIZED_ACCESS {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 401 Unauthorized Access";
-        }
-    },
-
-    METHOD_NOT_ALLOWED {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 405 Method Not Allowed";
-        }
-    },
-
-    REDIRECT {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 302 Found";
-        }
-    },
-
-    PARTIAL_CONTENT {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 206 Partial Content";
-        }
-    },
-
-    NO_CONTENT {
-        @Override
-        public String toHeader() {
-            return "HTTP/1.1 204 No Content";
-        }
-    };
-
-    public abstract String toHeader();
+    public String toHeader() {
+        return String.format("HTTP/1.1 %d %s", this.code, this.description);
+    }
 }

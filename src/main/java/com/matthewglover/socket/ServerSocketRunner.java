@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class ServerSocketRunner {
+
     private final ExecutorService threadPool = Executors.newFixedThreadPool(20);
     private final LoggerFactory loggerFactory;
     private final Logger logger;

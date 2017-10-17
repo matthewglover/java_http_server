@@ -22,7 +22,7 @@ public class FileResponse extends OkGeneratedResponse {
         try {
             setHeader("Content-Type", fileAccessor.probeContentType(filePath));
         } catch(Exception exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 

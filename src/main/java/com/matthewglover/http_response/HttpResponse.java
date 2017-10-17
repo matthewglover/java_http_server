@@ -43,7 +43,7 @@ public abstract class HttpResponse {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 

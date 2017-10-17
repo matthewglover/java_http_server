@@ -31,7 +31,7 @@ public class PartialResponse extends HttpResponse {
         try {
             setHeader("Content-Type", fileAccessor.probeContentType(filePath));
         } catch(Exception exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 
@@ -44,7 +44,7 @@ public class PartialResponse extends HttpResponse {
             setContent(stringBuilder.toString());
             setContentLengthHeader();
         } catch (Exception exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 
