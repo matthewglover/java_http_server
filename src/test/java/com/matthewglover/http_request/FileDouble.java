@@ -13,21 +13,6 @@ public class FileDouble extends File {
         super(pathname);
     }
 
-    public void setFileList(String[] fileNameList) {
-        fileList = new File[fileNameList.length];
-        for (int i = 0; i < fileNameList.length; i++) {
-            FileDouble fileDouble = new FileDouble("/path/to/file");
-            fileDouble.setFileName(fileNameList[i]);
-            fileDouble.setIsFile(true);
-            fileList[i] = fileDouble;
-        }
-    }
-
-    @Override
-    public File[] listFiles() {
-        return fileList;
-    }
-
     @Override
     public String getName() {
         return fileName;
@@ -41,6 +26,25 @@ public class FileDouble extends File {
     @Override
     public boolean isFile() {
         return isFile;
+    }
+
+    @Override
+    public File[] listFiles() {
+        return fileList;
+    }
+
+    public void setFileList(String[] fileNameList) {
+        fileList = new File[fileNameList.length];
+        for (int i = 0; i < fileNameList.length; i++) {
+            fileList[i] = buildFileDouble(fileNameList[i]);
+        }
+    }
+
+    private FileDouble buildFileDouble(String fileName) {
+        FileDouble fileDouble = new FileDouble("/path/to/file");
+        fileDouble.setFileName(fileName);
+        fileDouble.setIsFile(true);
+        return fileDouble;
     }
 
     public void setFileName(String fileName) {

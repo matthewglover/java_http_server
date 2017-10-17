@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public abstract class HttpRequest {
+public class HttpRequest {
 
     public final Logger logger;
     private PathDetails pathDetails;
@@ -17,13 +17,18 @@ public abstract class HttpRequest {
     private String content;
     private String raw;
 
-    public HttpRequest(LoggerFactory loggerFactory) {
-        logger = loggerFactory.getLogger(HeadRequest.class.getName());
+    public HttpRequest(HttpRequestMethod httpRequestMethod, LoggerFactory loggerFactory) {
+        method = httpRequestMethod;
+        logger = loggerFactory.getLogger(HttpRequest.class.getName());
         setVersion("HTTP/1.1");
         setup();
     }
 
-    public abstract void setup();
+    public HttpRequest(LoggerFactory loggerFactory) {
+        this(null, loggerFactory);
+    }
+
+    public void setup() {}
 
     public void setMethod(HttpRequestMethod method) {
         this.method = method;

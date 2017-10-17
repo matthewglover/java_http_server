@@ -47,14 +47,8 @@ public class HttpRequestBuilderTest {
                     "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
                     "Accept-Encoding: gzip,deflate\r\n\r\n";
 
-    private final LoggerDouble loggerDouble = new LoggerDouble("com.matthewglover", "");
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
     private final SocketDouble socketDouble = new SocketDouble();
-
-    @Before
-    public void setUp() throws Exception {
-        loggerFactoryDouble.setLogger(loggerDouble);
-    }
 
     @Test
     public void buildsGetRequestFromStream() throws IOException {

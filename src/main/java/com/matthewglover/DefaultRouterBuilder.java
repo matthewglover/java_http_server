@@ -86,12 +86,6 @@ public class DefaultRouterBuilder implements RouterBuilder {
     private RequestHandler getSimpleOkHandler() {
         RequestHandler requestHandler = new SimpleOkHandler();
         requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledMethodType(HttpRequestMethod.PUT);
-        requestHandler.addHandledMethodType(HttpRequestMethod.HEAD);
-        requestHandler.addHandledPath("/logs");
-        requestHandler.addHandledPath("/log");
-        requestHandler.addHandledPath("/these");
-        requestHandler.addHandledPath("/requests");
         requestHandler.addHandledPath("/tea");
         return requestHandler;
     }

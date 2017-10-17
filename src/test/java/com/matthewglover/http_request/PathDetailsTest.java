@@ -48,7 +48,7 @@ public class PathDetailsTest {
     }
 
     @Test
-    public void nonExistantQueryParamReturnsNull() {
+    public void nonExistentQueryParamReturnsNull() {
         assertEquals(null, basicPathDetails.getQueryParam("variable_1"));
     }
 }
