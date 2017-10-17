@@ -5,7 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.OkFileResponse;
+import com.matthewglover.http_response.OkFileGeneratedResponse;
 import com.matthewglover.util.FileAccessor;
 import com.matthewglover.util.FileWriter;
 
@@ -41,8 +41,8 @@ public class PatchContentHandler extends RequestHandler {
     }
 
     private HttpResponse handleGetRequest(HttpRequest request) {
-        OkFileResponse fileResponse =
-                (OkFileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
+        OkFileGeneratedResponse fileResponse =
+                (OkFileGeneratedResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
 
         fileResponse.setFile(getFilePath(request), fileAccessor);
         return fileResponse;

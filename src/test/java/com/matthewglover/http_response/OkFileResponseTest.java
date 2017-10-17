@@ -9,13 +9,13 @@ import static org.junit.Assert.*;
 
 public class OkFileResponseTest {
 
-    private final OkFileResponse fileResponse = (OkFileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
+    private final OkFileGeneratedResponse fileResponse = (OkFileGeneratedResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
 
     @Test
     public void createsOkResponse() {
         fileResponse.setFile("path/to/file", fileAccessorDouble);
-        assertTrue(fileResponse instanceof OkFileResponse);
+        assertTrue(fileResponse instanceof OkFileGeneratedResponse);
     }
 
     @Test

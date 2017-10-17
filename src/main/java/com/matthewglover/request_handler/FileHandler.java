@@ -5,7 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.OkFileResponse;
+import com.matthewglover.http_response.OkFileGeneratedResponse;
 import com.matthewglover.util.FileAccessor;
 
 import java.io.File;
@@ -49,8 +49,8 @@ public class FileHandler extends RequestHandler {
     }
 
     private HttpResponse getFileOkResponse(HttpRequest httpRequest) {
-        OkFileResponse fileResponse =
-                (OkFileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
+        OkFileGeneratedResponse fileResponse =
+                (OkFileGeneratedResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
 
         fileResponse.setFile(getFilePath(httpRequest), fileAccessor);
         return fileResponse;

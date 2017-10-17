@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class OkFileResponse extends OkResponse {
+public class OkFileGeneratedResponse extends OkGeneratedResponse {
 
     private String filePath;
     private FileAccessor fileAccessor;
