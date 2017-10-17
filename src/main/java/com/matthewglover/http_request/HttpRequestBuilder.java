@@ -25,29 +25,15 @@ public class HttpRequestBuilder {
     }
 
     public HttpRequest build() throws IOException {
-        buildRequest();
-        if (hasContent()) buildContent();
+        buildRequestDetails();
+        if (hasContent()) setContent();
         buildRaw();
         return request;
     }
 
-    private void buildRaw() {
-        String rawRequest = firstLine + CRLF;
-
-        for (String headerLine : getHeaderLines()) {
-            rawRequest += headerLine + CRLF;
-        }
-
-        rawRequest += CRLF;
-
-        if (hasContent()) rawRequest += content;
-
-        request.setRaw(rawRequest);
-    }
-
-    private void buildRequest() throws IOException {
+    private void buildRequestDetails() throws IOException {
         getRawRequestDetails();
-        buildBasicRequest();
+        processFirstLine();
         processHeaderLines();
     }
 
@@ -58,31 +44,20 @@ public class HttpRequestBuilder {
         }
     }
 
-    private void buildBasicRequest() throws IOException {
-        processFirstLine();
-        request = HttpRequestFactory.get(getMethod(), loggerFactory);
-        request.setPath(getPath());
-        request.setVersion(getVersion());
-    }
-
     private void processFirstLine() throws IOException {
         firstLine = lines.get(0);
+        String[] requestParts = getRequestParts(firstLine);
+        request = HttpRequestFactory.get(getMethod(requestParts[0]), loggerFactory);
+        request.setPath(requestParts[1]);
+        request.setVersion(requestParts[2]);
     }
 
-    public HttpRequestMethod getMethod() {
-        return HttpRequestMethod.parse(getRequestElements()[0]);
-    }
-
-    public String getPath() {
-        return getRequestElements()[1];
-    }
-
-    public String getVersion() {
-        return getRequestElements()[2];
-    }
-
-    private String[] getRequestElements() {
+    private String[] getRequestParts(String firstLine) {
         return firstLine.split("\\s+");
+    }
+
+    private HttpRequestMethod getMethod(String methodName) {
+        return HttpRequestMethod.parse(methodName);
     }
 
     private void processHeaderLines() throws IOException {
@@ -113,7 +88,7 @@ public class HttpRequestBuilder {
         return Integer.parseInt(request.getHeader("Content-Length"));
     }
 
-    private void buildContent() throws IOException {
+    private void setContent() throws IOException {
         processContent();
         request.setContent(content);
     }
@@ -128,5 +103,19 @@ public class HttpRequestBuilder {
         }
 
         content = stringBuilder.toString();
+    }
+
+    private void buildRaw() {
+        String rawRequest = firstLine + CRLF;
+
+        for (String headerLine : getHeaderLines()) {
+            rawRequest += headerLine + CRLF;
+        }
+
+        rawRequest += CRLF;
+
+        if (hasContent()) rawRequest += content;
+
+        request.setRaw(rawRequest);
     }
 }
