@@ -1,7 +1,6 @@
 package com.matthewglover.http_response;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public abstract class HttpResponse {
         responseElements.add(responseType.toHeader());
         responseElements.add(headersToString());
         if (!content.isEmpty()) responseElements.add(content);
-        return String.join(CRLF, responseElements) + CRLF;
+        return String.join(CRLF, responseElements);
     }
 
     public String headersToString() {

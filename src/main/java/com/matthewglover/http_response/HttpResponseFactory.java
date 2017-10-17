@@ -3,6 +3,7 @@ package com.matthewglover.http_response;
 public class HttpResponseFactory {
     public static HttpResponse get(HttpResponseTemplate responseTemplate) {
         switch (responseTemplate) {
+            case NO_CONTENT: return new NoContentResponse();
             case PARTIAL_CONTENT: return new PartialResponse();
             case REDIRECT: return new RedirectResponse();
             case METHOD_NOT_ALLOWED: return new MethodNotAllowedResponse();

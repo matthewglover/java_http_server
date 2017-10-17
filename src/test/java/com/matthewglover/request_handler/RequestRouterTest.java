@@ -7,6 +7,7 @@ import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -179,6 +180,34 @@ public class RequestRouterTest {
         simpleGet.setPath("/form");
         HttpResponse response = router.handleRequest(simpleGet);
         assertEquals("data=fatcat", response.getContent());
+    }
+
+    @Test
+    public void getRequestToPatchedContentReturns200() throws Exception {
+        String patchedContent = "Default content\n";
+        fileAccessorDouble.setFileInputStreamData(patchedContent);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        simpleGet.setPath("/patch-content.txt");
+        HttpResponse response = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.OK, response.getResponseType());
+
+        SocketDouble socketDouble = new SocketDouble();
+        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertThat(socketDouble.getOutput(), CoreMatchers.containsString(patchedContent));
+    }
+
+    @Test
+    @Ignore
+    public void patchRequestToPatchedContentReturns204() throws Exception {
+        String patchedContent = "Default content\n";
+        fileAccessorDouble.setFileInputStreamData(patchedContent);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        HttpRequest patchRequest = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
+        patchRequest.setPath("/patch-content.txt");
+        HttpResponse response = router.handleRequest(patchRequest);
+        assertEquals(HttpResponseType.NO_CONTENT, response.getResponseType());
     }
 
     private void fileRequestReturns405(HttpRequest request) {

@@ -106,8 +106,7 @@ public class HttpRequestBuilder {
 
     private boolean hasContent() {
         return request.getHeader("Content-Length") != null &&
-                getContentSize() > 0 &&
-                request.getMethod() != HttpRequestMethod.PATCH;
+                getContentSize() > 0;
     }
 
     private int getContentSize() {

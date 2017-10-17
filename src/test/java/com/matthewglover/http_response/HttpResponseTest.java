@@ -21,7 +21,7 @@ public class HttpResponseTest {
         String output = HttpResponseType.OK.toHeader() + "\r\n" +
                 "Response-Type: text/html" + "\r\n" +
                 "Content-Length: " + content.getBytes("UTF-8").length + "\r\n\r\n" +
-                content + "\r\n";
+                content;
 
         assertEquals(output, httpResponse.toString());
     }
@@ -29,7 +29,7 @@ public class HttpResponseTest {
     @Test
     public void responseOnlyRequiresResponseType() {
         HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
-        String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\nContent-Length: 0\r\n\r\n";
+        String output = HttpResponseType.BAD_REQUEST.toHeader() + "\r\nContent-Length: 0\r\n";
         assertEquals(output, httpResponse.toString());
     }
 

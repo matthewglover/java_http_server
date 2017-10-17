@@ -55,6 +55,13 @@ public enum HttpResponseType {
         public String toHeader() {
             return "HTTP/1.1 206 Partial Content";
         }
+    },
+
+    NO_CONTENT {
+        @Override
+        public String toHeader() {
+            return "HTTP/1.1 204 No Content";
+        }
     };
 
     public abstract String toHeader();
