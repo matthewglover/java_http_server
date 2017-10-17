@@ -65,11 +65,7 @@ public class DefaultRouterBuilder implements RouterBuilder {
     }
 
     private RequestHandler getBasicAuthHandler() {
-        BasicAuthHandler requestHandler = new BasicAuthHandler();
-        requestHandler.addAuthCredentials("admin", "hunter2");
-        requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledPath("/logs");
-        return requestHandler;
+        return new BasicAuthHandler();
     }
 
     public RequestHandler getOptionsAllowAllHandler() {

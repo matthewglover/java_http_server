@@ -1,6 +1,7 @@
 package com.matthewglover.request_handler;
 
 import com.matthewglover.http_request.HttpRequest;
+import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
@@ -9,26 +10,52 @@ import java.util.Base64;
 
 public class BasicAuthHandler extends RequestHandler {
 
-    private String username;
-    private String password;
+    private final String username = "admin";
+    private final String password = "hunter2";
+    private String content = "";
 
     @Override
     public void setup() {
+        addHandledMethodType(HttpRequestMethod.GET);
+        addHandledMethodType(HttpRequestMethod.PUT);
+        addHandledMethodType(HttpRequestMethod.HEAD);
+        addHandledPath("/logs");
+        addHandledPath("/log");
+        addHandledPath("/these");
+        addHandledPath("/requests");
     }
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        return HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
+        if (isLogsAccessRequest(request)) return handleLogsAccessRequest(request);
+        return handleLoggableRequest(request);
     }
 
-    @Override
-    public boolean handles(HttpRequest request) {
-        return super.handles(request) && isRequestUnauthorized(request);
+    private HttpResponse handleLoggableRequest(HttpRequest request) {
+        content += request.requestLineToString() + "\r\n";
+        return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 
-    public void addAuthCredentials(String username, String password) {
-        this.username = username;
-        this.password = password;
+    private HttpResponse handleLogsAccessRequest(HttpRequest request) {
+        if (isRequestUnauthorized(request)) return handleUnauthorizedRequest(request);
+        else return getLogsResponse(request);
+    }
+
+    private HttpResponse handleUnauthorizedRequest(HttpRequest request) {
+        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
+        response.setHeader("WWW-Authenticate", "Basic realm=\"Logs\"");
+        return response;
+    }
+
+    private HttpResponse getLogsResponse(HttpRequest request) {
+        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        response.setContent(content);
+        response.setContentLengthHeader();
+        return response;
+    }
+
+    private boolean isLogsAccessRequest(HttpRequest request) {
+        return request.getPath().equals("/logs");
     }
 
     private boolean isRequestUnauthorized(HttpRequest request) {
@@ -41,7 +68,7 @@ public class BasicAuthHandler extends RequestHandler {
     }
 
     private boolean isMalformedHeader(String authHeader) {
-        return !authHeader.matches("^Basic\\s+\\w+$");
+        return !authHeader.matches("^\\s*Basic\\s+.+$");
     }
 
     private boolean isInvalidCredentials(String authHeader) {

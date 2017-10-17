@@ -7,7 +7,6 @@ import com.matthewglover.socket.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -53,17 +52,22 @@ public class RequestRouterTest {
     public void unauthorisedGetToLogsReturns401() {
         simpleGet.setPath("/logs");
         HttpResponse actualResponse = router.handleRequest(simpleGet);
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
-        assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
+        assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, actualResponse.getResponseType());
     }
 
     @Test
     public void authorisedGetToLogsReturns200WithRequestLineAsBody() {
-        simpleGet.setPath("/logs");
+        HttpRequest logRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        logRequest.setPath("/log");
+        HttpResponse response = router.handleRequest(logRequest);
+        assertEquals(HttpResponseType.OK, response.getResponseType());
+
         String validCredentials = Base64.getEncoder().withoutPadding().encodeToString(("admin:hunter2").getBytes());
-        simpleGet.setHeader("Authorization", "Basic " + validCredentials);
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
-        assertEquals(simpleGet.requestLineToString(), actualResponse.getContent());
+        HttpRequest logAccessRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        logAccessRequest.setPath("/logs");
+        logAccessRequest.setHeader("Authorization", "Basic " + validCredentials);
+        HttpResponse logsResponse = router.handleRequest(logAccessRequest);
+        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.requestLineToString()));
     }
 
     @Test
