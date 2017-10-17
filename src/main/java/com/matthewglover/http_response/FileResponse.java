@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class OkFileResponse extends OkResponse {
+public class FileResponse extends OkGeneratedResponse {
 
     private String filePath;
     private FileAccessor fileAccessor;
@@ -22,7 +22,7 @@ public class OkFileResponse extends OkResponse {
         try {
             setHeader("Content-Type", fileAccessor.probeContentType(filePath));
         } catch(Exception exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 

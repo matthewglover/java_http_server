@@ -7,6 +7,7 @@ import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class BadRequestHandler extends RequestHandler {
+
     @Override
     public void setup() {
     }

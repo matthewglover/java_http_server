@@ -8,42 +8,37 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class CookieHandler extends RequestHandler {
 
-    private final String chocolateCookiePath = "/cookie";
+    private final String setCookiePath = "/cookie";
     private final String eatCookiePath = "/eat_cookie";
+    private final String setCookieContent = "Eat";
+    private final String eatCookieContent = "mmmm chocolate";
 
     @Override
     public void setup() {
         addHandledMethodType(HttpRequestMethod.GET);
-        addHandledPath(chocolateCookiePath);
+        addHandledPath(setCookiePath);
         addHandledPath(eatCookiePath);
     }
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        if (isCookieRequest(request)) {
-            return buildSetCookieResponse(request, getOkResponse());
-        } else {
-            return setResponseContent(getOkResponse(), "mmmm chocolate");
-        }
+        return isSetCookieRequest(request) ? handleSetCookieResponse(request) : handleEatCookeResponse();
     }
 
-    private HttpResponse getOkResponse() {
-        return HttpResponseFactory.get(HttpResponseTemplate.OK);
+    private boolean isSetCookieRequest(HttpRequest request) {
+        return request.getBasePath().equals(setCookiePath);
     }
 
-    private boolean isCookieRequest(HttpRequest request) {
-        return request.getBasePath().equals("/cookie");
-    }
-
-    private HttpResponse buildSetCookieResponse(HttpRequest request, HttpResponse response) {
+    private HttpResponse handleSetCookieResponse(HttpRequest request) {
+        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
         response.setHeader("Set-Cookie", request.getQueryParam("type"));
-        setResponseContent(response, "Eat");
+        response.setContent(setCookieContent);
         return response;
     }
 
-    private HttpResponse setResponseContent(HttpResponse response, String content) {
-        response.setContent(content);
-        response.setContentLengthHeader();
+    private HttpResponse handleEatCookeResponse() {
+        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
+        response.setContent(eatCookieContent);
         return response;
     }
 }

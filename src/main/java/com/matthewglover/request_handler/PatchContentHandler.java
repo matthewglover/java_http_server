@@ -5,7 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
-import com.matthewglover.http_response.OkFileResponse;
+import com.matthewglover.http_response.FileResponse;
 import com.matthewglover.util.FileAccessor;
 import com.matthewglover.util.FileWriter;
 
@@ -30,22 +30,35 @@ public class PatchContentHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        if (request.getMethod() == HttpRequestMethod.PATCH) return handlePatchRequest(request);
-        else return handleGetRequest(request);
+        return isPatchRequest(request) ? handlePatchRequest(request) : handleGetRequest(request);
+    }
+
+    private boolean isPatchRequest(HttpRequest request) {
+        return request.getMethod() == HttpRequestMethod.PATCH;
     }
 
     private HttpResponse handlePatchRequest(HttpRequest request) {
-        FileWriter fileWriter = new FileWriter(getFilePath(request), fileAccessor);
-        if (request.hasContent()) fileWriter.write(request.getContent());
+        if (request.hasContent()) patchFile(request);
         return HttpResponseFactory.get(HttpResponseTemplate.NO_CONTENT);
     }
 
-    private HttpResponse handleGetRequest(HttpRequest request) {
-        OkFileResponse fileResponse =
-                (OkFileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
+    private void patchFile(HttpRequest request) {
+        FileWriter fileWriter = getFileWriter(request);
+        fileWriter.write(request.getContent());
+    }
 
+    private FileWriter getFileWriter(HttpRequest request) {
+        return new FileWriter(getFilePath(request), fileAccessor);
+    }
+
+    private HttpResponse handleGetRequest(HttpRequest request) {
+        FileResponse fileResponse = getFileResponse();
         fileResponse.setFile(getFilePath(request), fileAccessor);
         return fileResponse;
+    }
+
+    private FileResponse getFileResponse() {
+        return (FileResponse) HttpResponseFactory.get(HttpResponseTemplate.OK_FILE);
     }
 
     private String getFilePath(HttpRequest request) {

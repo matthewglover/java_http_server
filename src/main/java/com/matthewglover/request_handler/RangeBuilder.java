@@ -11,10 +11,18 @@ public class RangeBuilder {
     }
 
     private void buildRangeData(String rangeString) {
-        String[] keyValuePair = rangeString.split("=");
-        String[] bounds = keyValuePair[1].split("-");
+        String[] keyValuePair = getKeyValuePair(rangeString);
+        String[] bounds = getBounds(keyValuePair[1]);
         buildStart(bounds);
         buildEnd(bounds);
+    }
+
+    private String[] getKeyValuePair(String rangeString) {
+        return rangeString.split("=");
+    }
+
+    private String[] getBounds(String s) {
+        return s.split("-");
     }
 
     private void buildStart(String[] bounds) {

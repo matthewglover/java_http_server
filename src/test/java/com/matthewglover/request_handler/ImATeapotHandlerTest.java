@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class ImATeapotHandlerTest {
 
-    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final RequestHandler requestHandler = new ImATeapotHandler();
 
     @Before
@@ -25,14 +25,14 @@ public class ImATeapotHandlerTest {
 
     @Test
     public void handlesGetRequestToCoffee() {
-        simpleGet.setPath("/coffee");
-        assertTrue(requestHandler.handles(simpleGet));
+        request.setPath("/coffee");
+        assertTrue(requestHandler.handles(request));
     }
 
     @Test
     public void doesntHandleReqeustsToOtherPaths() {
-        simpleGet.setPath("/another_path");
-        assertFalse(requestHandler.handles(simpleGet));
+        request.setPath("/another_path");
+        assertFalse(requestHandler.handles(request));
     }
 
     @Test
@@ -44,8 +44,8 @@ public class ImATeapotHandlerTest {
 
     @Test
     public void returnsImATeapotResponse() {
-        simpleGet.setPath("/coffee");
-        HttpResponse actualResponse = requestHandler.getResponse(simpleGet);
+        request.setPath("/coffee");
+        HttpResponse actualResponse = requestHandler.getResponse(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }

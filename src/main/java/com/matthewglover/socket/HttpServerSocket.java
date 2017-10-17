@@ -6,33 +6,29 @@ import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
 public class HttpServerSocket {
 
     private final Logger logger;
-    private final ServerSocket serverSocket;
     private final LoggerFactory loggerFactory;
     private final RequestRouter requestRouter;
-    private ServerSocketAdapter serverSocketAdapter;
+    private final ServerSocketAdapter socketAdapter;
 
-    public HttpServerSocket(
-            ServerSocket serverSocket,
-            RequestRouter requestRouter,
-            LoggerFactory loggerFactory) {
-        this.serverSocket = serverSocket;
+    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
+        socketAdapter = new ServerSocketAdapter(serverSocket);
         logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
     public void connect() {
         try {
-            serverSocketAdapter = new ServerSocketAdapter(serverSocket);
-            serverSocketAdapter.accept();
+            socketAdapter.accept();
         } catch (Exception exception) {
-            logger.warning(exception.getMessage());
+            handleFatalError(exception);
         }
     }
 
@@ -40,17 +36,33 @@ public class HttpServerSocket {
         try {
             listenAndRespond();
         } catch (Exception exception) {
-            logger.warning(exception.getMessage());
+            handleFatalError(exception);
         }
     }
 
     private void listenAndRespond() throws Exception {
-        HttpRequestBuilder httpRequestBuilder =
-                new HttpRequestBuilder(serverSocketAdapter.getInputStream(), loggerFactory);
-        HttpRequest httpRequest = httpRequestBuilder.build();
-        logger.info(httpRequest.getRaw());
-        HttpResponse httpResponse = requestRouter.handleRequest(httpRequest);
-        httpResponse.sendResponseOverSocket(serverSocketAdapter.getOutputStream());
-        serverSocketAdapter.close();
+        HttpRequest httpRequest = getRequest();
+        sendResponse(getResponse(httpRequest));
+        closeConnection();
+    }
+
+    private HttpRequest getRequest() throws IOException {
+        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).build();
+    }
+
+    private HttpResponse getResponse(HttpRequest httpRequest) {
+        return requestRouter.handleRequest(httpRequest);
+    }
+
+    private void sendResponse(HttpResponse httpResponse) throws Exception {
+        httpResponse.sendResponseOverSocket(socketAdapter.getOutputStream());
+    }
+
+    private void closeConnection() throws IOException {
+        socketAdapter.close();
+    }
+
+    private void handleFatalError(Exception exception) {
+        logger.warning(exception.getMessage());
     }
 }

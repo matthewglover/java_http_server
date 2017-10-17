@@ -11,19 +11,19 @@ import static org.junit.Assert.*;
 
 public class RedirectHandlerTest {
 
-    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final RequestHandler requestHandler = new RedirectHandler();
 
     @Test
     public void handlesGetRequestToCoffee() {
-        simpleGet.setPath("/redirect");
-        assertTrue(requestHandler.handles(simpleGet));
+        request.setPath("/redirect");
+        assertTrue(requestHandler.handles(request));
     }
 
     @Test
     public void doesntHandleReqeustsToOtherPaths() {
-        simpleGet.setPath("/another_path");
-        assertFalse(requestHandler.handles(simpleGet));
+        request.setPath("/another_path");
+        assertFalse(requestHandler.handles(request));
     }
 
     @Test
@@ -35,8 +35,8 @@ public class RedirectHandlerTest {
 
     @Test
     public void returnsRedirectResponse() {
-        simpleGet.setPath("/redirect");
-        HttpResponse actualResponse = requestHandler.getResponse(simpleGet);
+        request.setPath("/redirect");
+        HttpResponse actualResponse = requestHandler.getResponse(request);
         assertEquals(HttpResponseType.REDIRECT, actualResponse.getResponseType());
         assertEquals("/", actualResponse.getHeader("Location"));
     }

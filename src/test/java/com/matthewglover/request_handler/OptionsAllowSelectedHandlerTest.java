@@ -15,9 +15,9 @@ public class OptionsAllowSelectedHandlerTest {
 
     @Test
     public void selectivelyAllowMethodsForMethodOptions2() {
-        HttpRequest optionsRequest = HttpTestRequestFactory.get(HttpRequestMethod.OPTIONS);
-        optionsRequest.setPath("/method_options2");
-        HttpResponse actualResponse = new OptionsAllowSelectedHandler().getResponse(optionsRequest);
+        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.OPTIONS);
+        request.setPath("/method_options2");
+        HttpResponse actualResponse = new OptionsAllowSelectedHandler().getResponse(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OPTIONS_ALLOW_SELECTED);
         expectedResponse.setHeader("Allow", "GET,OPTIONS");
         assertTrue(new ResponseComparer(actualResponse, expectedResponse).areSame());

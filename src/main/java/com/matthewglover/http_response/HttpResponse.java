@@ -32,6 +32,7 @@ public abstract class HttpResponse {
 
     public void setContent(String content) {
         this.content = content;
+        setContentLengthHeader();
     }
 
     public String getContent() {
@@ -42,7 +43,7 @@ public abstract class HttpResponse {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
-            throw new RuntimeException(exception.getMessage());
+            throw new RuntimeException(exception);
         }
     }
 

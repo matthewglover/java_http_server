@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class OkResponseTest {
+public class OkGeneratedResponseTest {
 
     private final HttpResponse okResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
 
     @Test
     public void createsOkResponse() {
-        assertTrue(okResponse instanceof OkResponse);
+        assertTrue(okResponse instanceof OkGeneratedResponse);
     }
 
     @Test

@@ -6,20 +6,19 @@ import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseFactory;
 import com.matthewglover.http_response.HttpResponseTemplate;
 
-import java.util.Base64;
-
 public class BasicAuthHandler extends RequestHandler {
 
     private final String username = "admin";
     private final String password = "hunter2";
-    private String content = "";
+    private final String logsAccessPath = "/logs";
+    private String temporalContent = "";
 
     @Override
     public void setup() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledMethodType(HttpRequestMethod.PUT);
         addHandledMethodType(HttpRequestMethod.HEAD);
-        addHandledPath("/logs");
+        addHandledPath(logsAccessPath);
         addHandledPath("/log");
         addHandledPath("/these");
         addHandledPath("/requests");
@@ -27,65 +26,41 @@ public class BasicAuthHandler extends RequestHandler {
 
     @Override
     public HttpResponse getResponse(HttpRequest request) {
-        if (isLogsAccessRequest(request)) return handleLogsAccessRequest(request);
-        return handleLoggableRequest(request);
+        return isLoggableRequest(request) ?  handleLoggableRequest(request) : handleLogsAccessRequest(request);
+    }
+
+    private boolean isLoggableRequest(HttpRequest request) {
+        return !request.getPath().equals(logsAccessPath);
     }
 
     private HttpResponse handleLoggableRequest(HttpRequest request) {
-        content += request.requestLineToString() + "\r\n";
+        updateTemporalContent(request.requestLineToString());
         return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 
+    private void updateTemporalContent(String requestLine) {
+        temporalContent += requestLine + "\r\n";
+    }
+
     private HttpResponse handleLogsAccessRequest(HttpRequest request) {
-        if (isRequestUnauthorized(request)) return handleUnauthorizedRequest(request);
-        else return getLogsResponse(request);
+        return isAuthorizedRequest(request) ? buildLogAccessResponse() : handleUnauthorizedRequest();
     }
 
-    private HttpResponse handleUnauthorizedRequest(HttpRequest request) {
-        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
-        response.setHeader("WWW-Authenticate", "Basic realm=\"Logs\"");
-        return response;
+    private boolean isAuthorizedRequest(HttpRequest request) {
+        BasicAuthValidator validator = new BasicAuthValidator(username, password);
+        return validator.validate(request);
     }
 
-    private HttpResponse getLogsResponse(HttpRequest request) {
+    private HttpResponse buildLogAccessResponse() {
         HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        response.setContent(content);
+        response.setContent(temporalContent);
         response.setContentLengthHeader();
         return response;
     }
 
-    private boolean isLogsAccessRequest(HttpRequest request) {
-        return request.getPath().equals("/logs");
-    }
-
-    private boolean isRequestUnauthorized(HttpRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        return isInValidHeader(authHeader) || isInvalidCredentials(authHeader);
-    }
-
-    private boolean isInValidHeader(String authHeader) {
-        return authHeader == null || isMalformedHeader(authHeader);
-    }
-
-    private boolean isMalformedHeader(String authHeader) {
-        return !authHeader.matches("^\\s*Basic\\s+.+$");
-    }
-
-    private boolean isInvalidCredentials(String authHeader) {
-        String[] credentials = getCredentials(authHeader);
-        return isInValidToken(credentials[0], username) || isInValidToken(credentials[1], password);
-    }
-
-    private String[] getCredentials(String authHeader) {
-        String encodedString = authHeader.split("\\s+")[1];
-        return decodeString(encodedString).split(":");
-    }
-
-    private String decodeString(String encodedString) {
-        return new String(Base64.getDecoder().decode(encodedString));
-    }
-
-    private boolean isInValidToken(String token, String referenceValue) {
-        return !token.equals(referenceValue);
+    private HttpResponse handleUnauthorizedRequest() {
+        HttpResponse response = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
+        response.setHeader("WWW-Authenticate", "Basic realm=\"Logs\"");
+        return response;
     }
 }

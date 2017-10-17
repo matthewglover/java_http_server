@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class RequestRouterTest {
 
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private RequestRouter router;
 
     @Before
@@ -27,31 +27,31 @@ public class RequestRouterTest {
 
     @Test
     public void getToUnhandledPathReturns404() {
-        simpleGet.setPath("/unhandled_path");
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        request.setPath("/unhandled_path");
+        HttpResponse actualResponse = router.handleRequest(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }
 
     @Test
     public void getToCoffeeReturns418() {
-        simpleGet.setPath("/coffee");
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        request.setPath("/coffee");
+        HttpResponse actualResponse = router.handleRequest(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }
 
     @Test
     public void getToTeaReturns200() {
-        simpleGet.setPath("/tea");
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        request.setPath("/tea");
+        HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
     }
 
     @Test
     public void unauthorisedGetToLogsReturns401() {
-        simpleGet.setPath("/logs");
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        request.setPath("/logs");
+        HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, actualResponse.getResponseType());
     }
 
@@ -88,8 +88,8 @@ public class RequestRouterTest {
 
     @Test
     public void getRequestWithCookieUrlReturns200WithEat() {
-        simpleGet.setPath("/cookie?type=chocolate");
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        request.setPath("/cookie?type=chocolate");
+        HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
         assertEquals("Eat", actualResponse.getContent());
     }
@@ -100,10 +100,10 @@ public class RequestRouterTest {
         fileAccessorDouble.setFileInputStreamData(testData);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        simpleGet.setPath("/file1");
+        request.setPath("/file1");
 
         SocketDouble socketDouble = new SocketDouble();
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        HttpResponse actualResponse = router.handleRequest(request);
 
         actualResponse.sendResponseOverSocket(socketDouble.getOutputStream());
         assertThat(socketDouble.getOutput(), CoreMatchers.containsString(testData));
@@ -135,9 +135,9 @@ public class RequestRouterTest {
         fileDouble.setIsDirectory(true);
         fileDouble.setFileList(fileNames);
 
-        simpleGet.setPath("/");
+        request.setPath("/");
 
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
+        HttpResponse actualResponse = router.handleRequest(request);
 
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file1\">file1</a>"));
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
@@ -145,9 +145,9 @@ public class RequestRouterTest {
     }
     @Test
     public void getRequestToParametersReturns200WithParamsAsBodyContent() {
-        simpleGet.setPath("/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2" +
+        request.setPath("/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2" +
                 "C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff");
-        HttpResponse response = router.handleRequest(simpleGet);
+        HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, response.getResponseType());
         assertThat(response.getContent(),
                 CoreMatchers.containsString("variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?"));
@@ -155,8 +155,8 @@ public class RequestRouterTest {
 
     @Test
     public void getRequestToRedirectReturns302WithRootLocation() {
-        simpleGet.setPath("/redirect");
-        HttpResponse response = router.handleRequest(simpleGet);
+        request.setPath("/redirect");
+        HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.REDIRECT, response.getResponseType());
     }
 
@@ -166,9 +166,9 @@ public class RequestRouterTest {
         fileAccessorDouble.setFileInputStreamData(partialContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        simpleGet.setPath("/partial_content.txt");
-        simpleGet.setHeader("Range", "bytes=0-4");
-        HttpResponse response = router.handleRequest(simpleGet);
+        request.setPath("/partial_content.txt");
+        request.setHeader("Range", "bytes=0-4");
+        HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.PARTIAL_CONTENT, response.getResponseType());
 
         assertEquals("This ", response.getContent());
@@ -181,8 +181,8 @@ public class RequestRouterTest {
         simplePost.setContent("data=fatcat");
         router.handleRequest(simplePost);
 
-        simpleGet.setPath("/form");
-        HttpResponse response = router.handleRequest(simpleGet);
+        request.setPath("/form");
+        HttpResponse response = router.handleRequest(request);
         assertEquals("data=fatcat", response.getContent());
     }
 
@@ -192,8 +192,8 @@ public class RequestRouterTest {
         fileAccessorDouble.setFileInputStreamData(patchedContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        simpleGet.setPath("/patch-content.txt");
-        HttpResponse response = router.handleRequest(simpleGet);
+        request.setPath("/patch-content.txt");
+        HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, response.getResponseType());
 
         SocketDouble socketDouble = new SocketDouble();

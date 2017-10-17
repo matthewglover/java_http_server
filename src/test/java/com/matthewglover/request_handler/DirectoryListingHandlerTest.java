@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DirectoryListingHandlerTest {
-    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
     private final RequestHandler requestHandler = new DirectoryListingHandler("path/to/public", fileAccessorDouble);
     private final String[] fileNames = new String[]{ "file1", "file2.txt", "file3.jpg" };
@@ -27,9 +27,9 @@ public class DirectoryListingHandlerTest {
 
     @Test
     public void returnsFileForValidFilePath() throws Exception {
-        simpleGet.setPath("/");
-        assertTrue(requestHandler.handles(simpleGet));
-        HttpResponse response = requestHandler.getResponse(simpleGet);
+        request.setPath("/");
+        assertTrue(requestHandler.handles(request));
+        HttpResponse response = requestHandler.getResponse(request);
         assertThat(response.getContent(), CoreMatchers.containsString("<a href=\"/file1\">file1</a>"));
         assertThat(response.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
         assertThat(response.getContent(), CoreMatchers.containsString("<a href=\"/file3.jpg\">file3.jpg</a>"));

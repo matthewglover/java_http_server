@@ -13,8 +13,8 @@ public class ServerSocketFactoryDouble extends ServerSocketFactory {
     }
 
     @Override
-    public ServerSocket getServerSocket(int port) throws IOException {
-        if (shouldThrow()) throw ioException;
+    public ServerSocket getServerSocket(int port) {
+        if (shouldThrow()) throw new RuntimeException(ioException);
         return serverSocket;
     }
 

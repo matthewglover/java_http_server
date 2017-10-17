@@ -46,8 +46,8 @@ public class PathDetails {
     private String decodeString(String str) {
         try {
             return URLDecoder.decode(str, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (UnsupportedEncodingException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
