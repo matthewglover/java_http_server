@@ -52,17 +52,22 @@ public class RequestRouterTest {
     public void unauthorisedGetToLogsReturns401() {
         simpleGet.setPath("/logs");
         HttpResponse actualResponse = router.handleRequest(simpleGet);
-        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.UNAUTHORIZED_ACCESS);
-        assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
+        assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, actualResponse.getResponseType());
     }
 
     @Test
     public void authorisedGetToLogsReturns200WithRequestLineAsBody() {
-        simpleGet.setPath("/logs");
+        HttpRequest logRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        logRequest.setPath("/log");
+        HttpResponse response = router.handleRequest(logRequest);
+        assertEquals(HttpResponseType.OK, response.getResponseType());
+
         String validCredentials = Base64.getEncoder().withoutPadding().encodeToString(("admin:hunter2").getBytes());
-        simpleGet.setHeader("Authorization", "Basic " + validCredentials);
-        HttpResponse actualResponse = router.handleRequest(simpleGet);
-        assertEquals(simpleGet.requestLineToString(), actualResponse.getContent());
+        HttpRequest logAccessRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
+        logAccessRequest.setPath("/logs");
+        logAccessRequest.setHeader("Authorization", "Basic " + validCredentials);
+        HttpResponse logsResponse = router.handleRequest(logAccessRequest);
+        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.requestLineToString()));
     }
 
     @Test
@@ -179,6 +184,33 @@ public class RequestRouterTest {
         simpleGet.setPath("/form");
         HttpResponse response = router.handleRequest(simpleGet);
         assertEquals("data=fatcat", response.getContent());
+    }
+
+    @Test
+    public void getRequestToPatchedContentReturns200() throws Exception {
+        String patchedContent = "Default content\n";
+        fileAccessorDouble.setFileInputStreamData(patchedContent);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        simpleGet.setPath("/patch-content.txt");
+        HttpResponse response = router.handleRequest(simpleGet);
+        assertEquals(HttpResponseType.OK, response.getResponseType());
+
+        SocketDouble socketDouble = new SocketDouble();
+        response.sendResponseOverSocket(socketDouble.getOutputStream());
+        assertThat(socketDouble.getOutput(), CoreMatchers.containsString(patchedContent));
+    }
+
+    @Test
+    public void patchRequestToPatchedContentReturns204() throws Exception {
+        String patchedContent = "Default content\n";
+        fileAccessorDouble.setFileInputStreamData(patchedContent);
+        fileAccessorDouble.getFile().setIsFile(true);
+
+        HttpRequest patchRequest = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
+        patchRequest.setPath("/patch-content.txt");
+        HttpResponse response = router.handleRequest(patchRequest);
+        assertEquals(HttpResponseType.NO_CONTENT, response.getResponseType());
     }
 
     private void fileRequestReturns405(HttpRequest request) {

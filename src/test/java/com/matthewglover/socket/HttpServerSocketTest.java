@@ -4,15 +4,11 @@ import com.matthewglover.DefaultRouterBuilder;
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestFactory;
 import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_response.HttpResponse;
-import com.matthewglover.http_response.HttpResponseFactory;
-import com.matthewglover.http_response.HttpResponseTemplate;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -56,27 +52,5 @@ public class HttpServerSocketTest {
         serverSocket.setTestException(testException);
         httpServerSocket.connect();
         assertEquals(socketAcceptExceptionMessage, logger.popFromMessageType(LoggerDouble.WARNING));
-    }
-
-    @Test
-    @Ignore
-    public void logsHttpRequests() {
-        serverSocket.setInputStream(httpRequest.toString());
-        httpServerSocket.connect();
-        httpServerSocket.run();
-        assertEquals(httpRequest.toString(), logger.popFromMessageType(LoggerDouble.INFO));
-    }
-
-    @Test
-    @Ignore
-    public void givenSimpleGetRequestReturns200() throws IOException {
-        serverSocket.setInputStream(httpRequest.toString());
-        HttpResponse httpResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
-        httpResponse.setContent(httpRequest.requestLineToString());
-        httpResponse.setContentLengthHeader();
-
-        httpServerSocket.connect();
-        httpServerSocket.run();
-        assertEquals(httpResponse.toString(), serverSocket.getOutput().toString());
     }
 }

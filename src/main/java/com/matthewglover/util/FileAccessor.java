@@ -12,6 +12,10 @@ public class FileAccessor {
         return new FileInputStream(filePath);
     }
 
+    public OutputStream getFileOutputStreamFromFile(String filePath) throws FileNotFoundException {
+        return new FileOutputStream(filePath);
+    }
+
     public String probeContentType(String filePath) throws IOException {
         File file = new File(filePath);
         String mimeType = Files.probeContentType(file.toPath());
