@@ -1,6 +1,5 @@
 package com.matthewglover;
 
-import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.request_handler.*;
 import com.matthewglover.util.FileAccessor;
 
@@ -24,7 +23,6 @@ public class DefaultRouterBuilder implements RouterBuilder {
         router.addHandler(getOptionsAllowSelectedHandler());
         router.addHandler(getCookieHandler());
         router.addHandler(getImATeapotHandler());
-        router.addHandler(getSimpleOkHandler());
         router.addHandler(getFormDataHandler());
         router.addHandler(getParametersHandler());
         router.addHandler(getRedirectHandler());
@@ -76,13 +74,6 @@ public class DefaultRouterBuilder implements RouterBuilder {
 
     private RequestHandler getImATeapotHandler() {
         return new ImATeapotHandler();
-    }
-
-    private RequestHandler getSimpleOkHandler() {
-        RequestHandler requestHandler = new SimpleOkHandler();
-        requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledPath("/tea");
-        return requestHandler;
     }
 
     public RequestHandler getParametersHandler() {

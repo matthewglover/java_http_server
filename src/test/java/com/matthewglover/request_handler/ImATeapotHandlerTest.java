@@ -20,12 +20,17 @@ public class ImATeapotHandlerTest {
     @Before
     public void setUp() throws Exception {
         requestHandler.addHandledMethodType(HttpRequestMethod.GET);
-        requestHandler.addHandledPath("/coffee");
     }
 
     @Test
     public void handlesGetRequestToCoffee() {
         request.setPath("/coffee");
+        assertTrue(requestHandler.handles(request));
+    }
+
+    @Test
+    public void handlesGetRequestToTea() {
+        request.setPath("/tea");
         assertTrue(requestHandler.handles(request));
     }
 
@@ -43,10 +48,18 @@ public class ImATeapotHandlerTest {
     }
 
     @Test
-    public void returnsImATeapotResponse() {
+    public void requestToCoffeReturnsImATeapot() {
         request.setPath("/coffee");
         HttpResponse actualResponse = requestHandler.getResponse(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
+        assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
+    }
+
+    @Test
+    public void requestToTeaReturnsImATeapot() {
+        request.setPath("/tea");
+        HttpResponse actualResponse = requestHandler.getResponse(request);
+        HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.OK);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
     }
 }
