@@ -8,18 +8,14 @@ import java.util.Arrays;
 public class DefaultRouterBuilder implements RouterBuilder {
 
     private final RequestRouter router = new RequestRouter();
-    private String rootDirectoryPath;
-    private FileAccessor fileAccessor;
 
     @Override
-    public RequestRouter build(String filePath, FileAccessor fileAccessor) {
-        this.rootDirectoryPath = filePath;
-        this.fileAccessor = fileAccessor;
-        buildHandlers();
+    public RequestRouter build(String rootDirectoryPath, FileAccessor fileAccessor) {
+        addHandlers(rootDirectoryPath, fileAccessor);
         return router;
     }
 
-    private void buildHandlers() {
+    private void addHandlers(String rootDirectoryPath, FileAccessor fileAccessor) {
         router.addHandlers(Arrays.asList(
             new BasicAuthHandler(),
                 new OptionsAllowAllHandler(),
