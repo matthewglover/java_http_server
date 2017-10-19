@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/matthewglover/java_http_server.svg?branch=master)](https://travis-ci.org/matthewglover/java_http_server)
+
 # HttpServer
 
 ## What
