@@ -79,3 +79,6 @@ hs_err_pid*
 .gradle/
 build/
 bin/
+
+# App specific
+cob_spec/HttpServer.jar

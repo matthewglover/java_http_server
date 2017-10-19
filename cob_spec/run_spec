@@ -1,2 +1,5 @@
 #!/bin/bash
+(cd ../ && ./gradlew build)
+cp ../build/libs/HttpServer-1.0-SNAPSHOT.jar ./HttpServer.jar
+mvn package
 java -jar fitnesse.jar -p 9090
