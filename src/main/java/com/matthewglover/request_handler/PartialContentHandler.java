@@ -56,7 +56,7 @@ public class PartialContentHandler extends RequestHandler {
     }
 
 
-    public int getFileLength(HttpRequest request) {
+    private int getFileLength(HttpRequest request) {
         return (int) fileAccessor.getFileFromPath(getFilePath(request)).length() - 1;
     }
 }

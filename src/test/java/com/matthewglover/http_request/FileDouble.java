@@ -47,7 +47,7 @@ public class FileDouble extends File {
         return fileDouble;
     }
 
-    public void setFileName(String fileName) {
+    private void setFileName(String fileName) {
         this.fileName = fileName;
     }
 

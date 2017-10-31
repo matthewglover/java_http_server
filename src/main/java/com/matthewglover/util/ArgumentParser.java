@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArgumentParser {
-    private static String InsufficientArguments = "Insufficient arguments. Expected: -p <port number> -d <path to files>";
-    private static String InvalidPortNumber = "Invalid port number. <port number> must be an integer";
+    private static final String InsufficientArguments = "Insufficient arguments. Expected: -p <port number> -d <path to files>";
+    private static final String InvalidPortNumber = "Invalid port number. <port number> must be an integer";
     private static final String PortNumber = "-p";
     private static final String DirectoryPath = "-d";
-    private final String[] args;
 
     private int port;
     private String filePath;
-    protected List<String> errors = new ArrayList<>();
+    final List<String> errors = new ArrayList<>();
 
     public ArgumentParser(String[] args) {
-        this.args = args;
-    }
-
-    public void parse() {
         if (args.length < 4) {
             errors.add(InsufficientArguments);
         } else {

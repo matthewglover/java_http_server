@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Formatter;
 
-public class ShaSum {
+class ShaSum {
     public String generate(InputStream stream) {
         try {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(stream);

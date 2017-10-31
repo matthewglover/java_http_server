@@ -11,18 +11,18 @@ public abstract class RequestHandler {
     private final ArrayList<HttpRequestMethod> handledMethodTypes = new ArrayList<>();
     private final ArrayList<String> handledPaths = new ArrayList<>();
 
-    public RequestHandler() {
+    RequestHandler() {
         setup();
     }
 
-    public abstract void setup();
+    protected abstract void setup();
     public abstract HttpResponse getResponse(HttpRequest request);
 
     public void addHandledMethodType(HttpRequestMethod method) {
         handledMethodTypes.add(method);
     }
 
-    public boolean isHandledRequestType(HttpRequest request) {
+    boolean isHandledRequestType(HttpRequest request) {
         return handledMethodTypes.contains(request.getMethod());
     }
 
@@ -30,7 +30,7 @@ public abstract class RequestHandler {
         handledPaths.add(path);
     }
 
-    public boolean isHandledPath(HttpRequest request) {
+    boolean isHandledPath(HttpRequest request) {
         return handledPaths.contains(request.getBasePath());
     }
 

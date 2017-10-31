@@ -9,20 +9,20 @@ import java.util.Map;
 
 public abstract class HttpResponse {
 
-    public static final String CRLF = "\r\n";
+    static final String CRLF = "\r\n";
 
     private HttpResponseType responseType;
     private String content = "";
     private final Map<String, String> headers = new HashMap<>();
 
-    public HttpResponse() {
+    HttpResponse() {
         setContentLengthHeader();
         setup();
     }
 
-    public abstract void setup();
+    protected abstract void setup();
 
-    public void setResponseType(HttpResponseType responseType) {
+    void setResponseType(HttpResponseType responseType) {
         this.responseType = responseType;
     }
 
@@ -39,7 +39,7 @@ public abstract class HttpResponse {
         return content;
     }
 
-    public long getContentLength() {
+    long getContentLength() {
         try {
             return content.getBytes("UTF-8").length;
         } catch (UnsupportedEncodingException exception) {
@@ -63,7 +63,7 @@ public abstract class HttpResponse {
         setHeader("Content-Length", getContentLength() + "");
     }
 
-    public String getStatusLine() {
+    String getStatusLine() {
         return responseType.toHeader() + CRLF;
     }
 
@@ -76,7 +76,7 @@ public abstract class HttpResponse {
         return String.join(CRLF, responseElements);
     }
 
-    public String headersToString() {
+    String headersToString() {
         String headersString = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
             headersString += header.getKey() + ": " + header.getValue() + CRLF;

@@ -1,9 +1,7 @@
 package com.matthewglover.http_request;
 
 import com.matthewglover.socket.SocketDouble;
-import com.matthewglover.util.LoggerDouble;
 import com.matthewglover.util.LoggerFactoryDouble;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -54,7 +52,7 @@ public class HttpRequestBuilderTest {
     public void buildsGetRequestFromStream() throws IOException {
         socketDouble.setInputString(getRequest);
         HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
-        HttpRequest request = builder.build();
+        HttpRequest request = builder.getRequest();
         assertEquals(HttpRequestMethod.GET, request.getMethod());
         assertEquals("/form", request.getPath());
         assertEquals("HTTP/1.0", request.getVersion());
@@ -78,7 +76,7 @@ public class HttpRequestBuilderTest {
     public void buildsPutRequestWithNoContentFromStream() throws IOException {
         socketDouble.setInputString(putRequestNoContent);
         HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
-        HttpRequest request = builder.build();
+        HttpRequest request = builder.getRequest();
         assertEquals(HttpRequestMethod.PUT, request.getMethod());
         assertEquals("/form", request.getPath());
         assertEquals("HTTP/1.0", request.getVersion());
@@ -109,13 +107,13 @@ public class HttpRequestBuilderTest {
     private void isValidRequestString(String request) throws IOException {
         socketDouble.setInputString(request);
         HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
-        HttpRequest httpRequest = builder.build();
+        HttpRequest httpRequest = builder.getRequest();
         assertEquals(request, httpRequest.getRaw());
     }
 
     private void isValidFormRequestOfType(HttpRequestMethod requestMethod) throws IOException {
         HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
-        HttpRequest request = builder.build();
+        HttpRequest request = builder.getRequest();
         assertEquals(requestMethod, request.getMethod());
         assertEquals("/form", request.getPath());
         assertEquals("HTTP/1.0", request.getVersion());

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class HttpServerSocket {
+class HttpServerSocket {
 
     private final Logger logger;
     private final LoggerFactory loggerFactory;
@@ -47,7 +47,7 @@ public class HttpServerSocket {
     }
 
     private HttpRequest getRequest() throws IOException {
-        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).build();
+        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).getRequest();
     }
 
     private HttpResponse getResponse(HttpRequest httpRequest) {

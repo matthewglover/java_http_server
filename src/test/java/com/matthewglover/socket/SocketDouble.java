@@ -6,7 +6,7 @@ import java.net.Socket;
 public class SocketDouble extends Socket {
     private static final String ENCODING = "UTF-8";
 
-    private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private ByteArrayInputStream inputStream;
 
     public void setInputString(String data) {

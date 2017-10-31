@@ -4,7 +4,7 @@ import com.matthewglover.http_request.HttpRequest;
 
 import java.util.Base64;
 
-public class BasicAuthValidator {
+class BasicAuthValidator {
 
     private final String username;
     private final String password;

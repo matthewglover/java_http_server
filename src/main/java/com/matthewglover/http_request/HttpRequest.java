@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 
 public class HttpRequest {
 
-    public final Logger logger;
+    private final Logger logger;
     private PathDetails pathDetails;
-    private HttpRequestMethod method;
-    private Map<String, String> headers = new HashMap<>();
+    private final HttpRequestMethod method;
+    private final Map<String, String> headers = new HashMap<>();
     private String path;
     private String version;
     private String content;
@@ -21,10 +21,7 @@ public class HttpRequest {
         method = httpRequestMethod;
         logger = loggerFactory.getLogger(HttpRequest.class.getName());
         setVersion("HTTP/1.1");
-        setup();
     }
-
-    public void setup() {}
 
     public HttpRequestMethod getMethod() {
         return method;
@@ -41,7 +38,6 @@ public class HttpRequest {
 
     private void buildPathDetails() {
         this.pathDetails = new PathDetails(path);
-        pathDetails.parse();
     }
 
     public String getVersion() {

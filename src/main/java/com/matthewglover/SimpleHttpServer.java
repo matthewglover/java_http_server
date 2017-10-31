@@ -10,7 +10,7 @@ import com.matthewglover.socket.ServerSocketFactory;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class SimpleHttpServer {
+class SimpleHttpServer {
 
     private final ArgumentParser argumentParser;
     private final Logger logger;
@@ -33,25 +33,15 @@ public class SimpleHttpServer {
     }
 
     public void run() {
-        argumentParser.parse();
         if (argumentParser.hasErrors()) {
             logArgumentErrors();
         } else {
-            runServerSocketRunner();
+            new ServerSocketRunner(getRouter(), getServerSocket(), loggerFactory);
         }
     }
 
     private void logArgumentErrors() {
         argumentParser.getErrors().forEach(logger::warning);
-    }
-
-    private void runServerSocketRunner() {
-        ServerSocketRunner runner = getServerSocketRunner();
-        runner.run();
-    }
-
-    private ServerSocketRunner getServerSocketRunner() {
-         return new ServerSocketRunner(getRouter(), getServerSocket(), loggerFactory);
     }
 
     private RequestRouter getRouter() {

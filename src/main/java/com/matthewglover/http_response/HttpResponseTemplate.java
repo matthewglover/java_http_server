@@ -12,5 +12,5 @@ public enum HttpResponseTemplate {
     METHOD_NOT_ALLOWED,
     REDIRECT,
     PARTIAL_CONTENT,
-    NO_CONTENT;
+    NO_CONTENT
 }

@@ -18,7 +18,7 @@ public class RequestRouter {
         }
     }
 
-    public void addHandler(RequestHandler handler) {
+    private void addHandler(RequestHandler handler) {
         handlers.add(handler);
     }
 
