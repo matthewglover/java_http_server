@@ -19,15 +19,15 @@ public class HttpRequestBuilder {
     private HttpRequest request;
     private String content;
 
-    public HttpRequestBuilder(InputStream inputStream, LoggerFactory loggerFactory) {
+    public HttpRequestBuilder(InputStream inputStream, LoggerFactory loggerFactory) throws IOException {
         this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         this.loggerFactory = loggerFactory;
-    }
-
-    public HttpRequest build() throws IOException {
         buildRequestDetails();
         if (hasContent()) setContent();
         buildRaw();
+    }
+
+    public HttpRequest getRequest() {
         return request;
     }
 

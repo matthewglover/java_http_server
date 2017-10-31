@@ -22,14 +22,14 @@ public class SimpleHttpServerTest {
     @Test
     public void logsInvalidArgumentErrors() {
         loggerFactory.setLogger(logger);
+        String invalidArgumentsMessage = "Test Error Message";
+        argumentParser.addError(invalidArgumentsMessage);
         SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
                 argumentParser,
                 serverSocketFactory,
                 new DefaultRouterBuilder(),
                 fileAccessor,
                 loggerFactory);
-        String invalidArgumentsMessage = "Test Error Message";
-        argumentParser.addError(invalidArgumentsMessage);
         simpleHttpServer.run();
         assertEquals(invalidArgumentsMessage, logger.popFromMessageType(LoggerDouble.WARNING));
     }

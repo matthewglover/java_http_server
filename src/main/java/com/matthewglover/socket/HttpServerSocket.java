@@ -47,7 +47,7 @@ class HttpServerSocket {
     }
 
     private HttpRequest getRequest() throws IOException {
-        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).build();
+        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).getRequest();
     }
 
     private HttpResponse getResponse(HttpRequest httpRequest) {

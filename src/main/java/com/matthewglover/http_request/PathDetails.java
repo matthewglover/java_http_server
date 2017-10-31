@@ -5,14 +5,16 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 
 class PathDetails {
-    private final String rawPath;
     private String basePath;
     private String queryString;
     private final HashMap<String, String> queryParams = new HashMap<>();
     private String rawQueryString;
 
     public PathDetails(String rawPath) {
-        this.rawPath = rawPath;
+        String[] pathElements = rawPath.split("\\?");
+        buildBasePath(pathElements);
+        buildQueryString(pathElements);
+        if (isQueryString()) parseQueryParams();
     }
 
     public String getBasePath() {
@@ -25,13 +27,6 @@ class PathDetails {
 
     public String getQueryParam(String param) {
         return queryParams.get(param);
-    }
-
-    public void parse() {
-        String[] pathElements = rawPath.split("\\?");
-        buildBasePath(pathElements);
-        buildQueryString(pathElements);
-        if (isQueryString()) parseQueryParams();
     }
 
     private void buildBasePath(String[] pathElements) {

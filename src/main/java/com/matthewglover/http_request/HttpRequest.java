@@ -38,7 +38,6 @@ public class HttpRequest {
 
     private void buildPathDetails() {
         this.pathDetails = new PathDetails(path);
-        pathDetails.parse();
     }
 
     public String getVersion() {

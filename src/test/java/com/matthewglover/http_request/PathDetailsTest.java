@@ -1,6 +1,5 @@
 package com.matthewglover.http_request;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -14,12 +13,6 @@ public class PathDetailsTest {
 
     private final PathDetails basicPathDetails = new PathDetails(basicPath);
     private final PathDetails complexPathDetails = new PathDetails(complexPath);
-
-    @Before
-    public void setUp() throws Exception {
-        basicPathDetails.parse();
-        complexPathDetails.parse();
-    }
 
     @Test
     public void extractsBasePathFromRaw() {

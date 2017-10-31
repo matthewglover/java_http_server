@@ -8,17 +8,12 @@ public class ArgumentParser {
     private static final String InvalidPortNumber = "Invalid port number. <port number> must be an integer";
     private static final String PortNumber = "-p";
     private static final String DirectoryPath = "-d";
-    private final String[] args;
 
     private int port;
     private String filePath;
     final List<String> errors = new ArrayList<>();
 
     public ArgumentParser(String[] args) {
-        this.args = args;
-    }
-
-    public void parse() {
         if (args.length < 4) {
             errors.add(InsufficientArguments);
         } else {

@@ -12,7 +12,6 @@ public class ArgumentParserTest {
     public void portIsAnIntegerAndPathIsAString() {
         String[] args = {"-p", "5000", "-d", "path/to/files/"};
         ArgumentParser argumentParser = new ArgumentParser(args);
-        argumentParser.parse();
         assertEquals(5000, argumentParser.getPort());
         assertEquals("path/to/files/", argumentParser.getFilePath());
     }
@@ -21,7 +20,6 @@ public class ArgumentParserTest {
     public void argumentsCanBeInAnyOrder() {
         String[] args = {"-d", "path/to/files/", "-p", "5000"};
         ArgumentParser argumentParser = new ArgumentParser(args);
-        argumentParser.parse();
         assertEquals("path/to/files/", argumentParser.getFilePath());
         assertEquals(5000, argumentParser.getPort());
     }
@@ -30,7 +28,6 @@ public class ArgumentParserTest {
     public void reportsErrorWhenInsufficientArguments() {
         String[] args ={};
         ArgumentParser argumentParser = new ArgumentParser(args);
-        argumentParser.parse();
         List<String> errors = Arrays.asList("Insufficient arguments. Expected: -p <port number> -d <path to files>");
         assertTrue(argumentParser.hasErrors());
         assertEquals(errors, argumentParser.getErrors());
@@ -40,7 +37,6 @@ public class ArgumentParserTest {
     public void reportsInvalidPortIfNotInteger() {
         String[] args = {"-d", "path/to/files/", "-p", "invalid_port5000"};
         ArgumentParser argumentParser = new ArgumentParser(args);
-        argumentParser.parse();
         List<String> errors = Arrays.asList("Invalid port number. <port number> must be an integer");
         assertTrue(argumentParser.hasErrors());
         assertEquals(errors, argumentParser.getErrors());

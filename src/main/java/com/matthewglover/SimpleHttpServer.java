@@ -33,25 +33,15 @@ class SimpleHttpServer {
     }
 
     public void run() {
-        argumentParser.parse();
         if (argumentParser.hasErrors()) {
             logArgumentErrors();
         } else {
-            runServerSocketRunner();
+            new ServerSocketRunner(getRouter(), getServerSocket(), loggerFactory);
         }
     }
 
     private void logArgumentErrors() {
         argumentParser.getErrors().forEach(logger::warning);
-    }
-
-    private void runServerSocketRunner() {
-        ServerSocketRunner runner = getServerSocketRunner();
-        runner.run();
-    }
-
-    private ServerSocketRunner getServerSocketRunner() {
-         return new ServerSocketRunner(getRouter(), getServerSocket(), loggerFactory);
     }
 
     private RequestRouter getRouter() {

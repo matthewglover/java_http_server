@@ -11,32 +11,18 @@ import java.util.logging.Logger;
 public class ServerSocketRunner {
 
     private final ExecutorService threadPool = Executors.newFixedThreadPool(20);
-    private final LoggerFactory loggerFactory;
-    private final Logger logger;
-    private final ServerSocket serverSocket;
-    private final RequestRouter router;
 
-    public ServerSocketRunner(
-            RequestRouter router, ServerSocket serverSocket, LoggerFactory loggerFactory) {
-        this.loggerFactory = loggerFactory;
-        this.logger = loggerFactory.getLogger(ServerSocketRunner.class.getName());
-        this.serverSocket = serverSocket;
-        this.router = router;
-    }
+    public ServerSocketRunner(RequestRouter router, ServerSocket serverSocket, LoggerFactory loggerFactory) {
+        Logger logger = loggerFactory.getLogger(ServerSocketRunner.class.getName());
 
-    public void run() {
         try {
             while (true) {
-                HttpServerSocket httpServerSocket = buildHttpServerSocket();
+                HttpServerSocket httpServerSocket = new HttpServerSocket(serverSocket, router, loggerFactory);
                 httpServerSocket.connect();
                 threadPool.execute(httpServerSocket::run);
             }
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
-    }
-
-    private HttpServerSocket buildHttpServerSocket() {
-        return new HttpServerSocket(serverSocket, router, loggerFactory);
     }
 }
