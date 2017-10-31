@@ -1,6 +1,6 @@
 package com.matthewglover.request_handler;
 
-public class RangeBuilder {
+class RangeBuilder {
     private final int rangeMax;
     private int start;
     private int end;

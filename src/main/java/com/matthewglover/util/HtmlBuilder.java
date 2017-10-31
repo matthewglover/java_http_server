@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class HtmlBuilder {
 
+    @SuppressWarnings("unchecked")
     private final ArrayList<String> bodyElements = new ArrayList();
 
     private final String pageHeader = "<html>" +

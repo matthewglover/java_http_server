@@ -4,11 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-public class PathDetails {
+class PathDetails {
     private final String rawPath;
     private String basePath;
     private String queryString;
-    private HashMap<String, String> queryParams = new HashMap<>();
+    private final HashMap<String, String> queryParams = new HashMap<>();
     private String rawQueryString;
 
     public PathDetails(String rawPath) {

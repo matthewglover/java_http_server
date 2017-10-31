@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class HttpServerSocket {
+class HttpServerSocket {
 
     private final Logger logger;
     private final LoggerFactory loggerFactory;

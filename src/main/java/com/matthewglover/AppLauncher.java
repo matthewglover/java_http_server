@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
-public class AppLauncher {
+class AppLauncher {
     public static void main(String[] args) throws IOException {
         SimpleHttpServer simpleHttpServer = getSimpleHttpServer(args);
         simpleHttpServer.run();
@@ -24,7 +24,7 @@ public class AppLauncher {
                     getLoggerFactory());
     }
 
-    public static LoggerFactory getLoggerFactory() throws IOException {
+    private static LoggerFactory getLoggerFactory() throws IOException {
         FileHandler fileHandler = new FileHandler("simple_http_server.log");
         fileHandler.setFormatter(new SimpleFormatter());
 

@@ -10,7 +10,7 @@ import com.matthewglover.socket.ServerSocketFactory;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class SimpleHttpServer {
+class SimpleHttpServer {
 
     private final ArgumentParser argumentParser;
     private final Logger logger;

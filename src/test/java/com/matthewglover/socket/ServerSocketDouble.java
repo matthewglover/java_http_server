@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerSocketDouble extends ServerSocket {
+class ServerSocketDouble extends ServerSocket {
 
     private IOException ioException;
     private final SocketDouble socketDouble = new SocketDouble();

@@ -6,7 +6,7 @@ public class LoggerFactoryDouble extends LoggerFactory {
     private Logger logger;
 
     public LoggerFactoryDouble() {
-        setLogger(new LoggerDouble(null, null));
+        setLogger(new LoggerDouble(null));
     }
 
     public void setLogger(Logger logger) {

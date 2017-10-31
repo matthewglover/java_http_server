@@ -19,7 +19,7 @@ public class HttpServerSocketTest {
 
     private final String rootDirectoryPath = "/path/to/public";
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final LoggerDouble logger = new LoggerDouble(null, null);
+    private final LoggerDouble logger = new LoggerDouble(null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class SimpleHttpServerTest {
 
     private final ArgumentParserDouble argumentParser = new ArgumentParserDouble(null);
-    private final LoggerDouble logger = new LoggerDouble(null, null);
+    private final LoggerDouble logger = new LoggerDouble(null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketFactoryDouble serverSocketFactory = new ServerSocketFactoryDouble();
     private final FileAccessor fileAccessor = new FileAccessorDouble();

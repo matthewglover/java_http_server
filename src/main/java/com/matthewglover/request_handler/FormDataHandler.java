@@ -63,7 +63,7 @@ public class FormDataHandler extends RequestHandler {
         return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 
-    private String clearTemporalState() {
-        return temporalState = null;
+    private void clearTemporalState() {
+        temporalState = null;
     }
 }

@@ -44,7 +44,7 @@ public class HttpRequestBuilder {
         }
     }
 
-    private void processFirstLine() throws IOException {
+    private void processFirstLine() {
         firstLine = lines.get(0);
         String[] requestParts = getRequestParts(firstLine);
         request = HttpRequestFactory.get(getMethod(requestParts[0]), loggerFactory);
@@ -60,7 +60,7 @@ public class HttpRequestBuilder {
         return HttpRequestMethod.parse(methodName);
     }
 
-    private void processHeaderLines() throws IOException {
+    private void processHeaderLines() {
         for (String headerLine : getHeaderLines()) {
             buildHeader(headerLine);
         }
