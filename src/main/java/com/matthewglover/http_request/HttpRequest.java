@@ -21,10 +21,7 @@ public class HttpRequest {
         method = httpRequestMethod;
         logger = loggerFactory.getLogger(HttpRequest.class.getName());
         setVersion("HTTP/1.1");
-        setup();
     }
-
-    public void setup() {}
 
     public HttpRequestMethod getMethod() {
         return method;
@@ -36,12 +33,7 @@ public class HttpRequest {
 
     public void setPath(String path) {
         this.path = path;
-        buildPathDetails();
-    }
-
-    private void buildPathDetails() {
-        this.pathDetails = new PathDetails(path);
-        pathDetails.parse();
+        this.pathDetails = PathDetailsParser.parse(path);
     }
 
     public String getVersion() {
