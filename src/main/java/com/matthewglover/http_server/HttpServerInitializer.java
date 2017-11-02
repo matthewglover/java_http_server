@@ -2,9 +2,7 @@ package com.matthewglover.http_server;
 
 import com.matthewglover.util.AppLogger;
 import com.matthewglover.util.ArgumentParser;
-import com.matthewglover.util.FileAccessor;
 
-import java.net.ServerSocket;
 import java.util.logging.Logger;
 
 public class HttpServerInitializer {
@@ -19,18 +17,8 @@ public class HttpServerInitializer {
         if (argumentParser.hasErrors()) {
             argumentParser.getErrors().forEach(logger::severe);
         } else {
-            initializeRunner();
+            HttpServerRunner runner = new HttpServerRunner(argumentParser);
+            runner.run();
         }
     }
-
-    private void initializeRunner() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(argumentParser.getPort());
-            FileAccessor fileAccessor = new FileAccessor();
-            new HttpServerRunner(serverSocket, fileAccessor);
-        } catch (Exception exception) {
-            logger.severe(exception.getMessage());
-        }
-    }
-
 }

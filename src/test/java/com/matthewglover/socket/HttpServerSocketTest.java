@@ -1,54 +1,51 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.request_handler.RequestRouter;
-import com.matthewglover.util.FileAccessorDouble;
-import com.matthewglover.util.LoggerDouble;
-import com.matthewglover.util.LoggerFactoryDouble;
-import org.junit.Before;
-import org.junit.Ignore;
+import com.matthewglover.util.*;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.SimpleFormatter;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 public class HttpServerSocketTest {
 
     private final String rootDirectoryPath = "/path/to/public";
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final LoggerDouble logger = new LoggerDouble(null, null);
-    private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
-    private final ServerSocketDouble serverSocket = new ServerSocketDouble();
     private final RequestRouter requestRouter = new RequestRouter(rootDirectoryPath, fileAccessorDouble);
-    private HttpServerSocket httpServerSocket;
-
+    ServerSocketAdapterDouble serverSocketAdapterDouble = new ServerSocketAdapterDouble();
+    HttpServerSocket httpServerSocket = new HttpServerSocket(serverSocketAdapterDouble, requestRouter);
 
     public HttpServerSocketTest() throws IOException {
     }
 
-    @Before
-    public void setUp() throws Exception {
-        loggerFactory.setLogger(logger);
-        httpServerSocket = new HttpServerSocket(serverSocket, requestRouter);
-    }
-
     @Test
-    @Ignore
-    public void logsSocketCreationExceptions() throws IOException {
-        String socketCreationExceptionMessage = "Socket accept exception";
-        IOException testException = new IOException(socketCreationExceptionMessage);
-        serverSocket.setTestException(testException);
+    public void connectCallsAcceptOnSocket() {
         httpServerSocket.connect();
-        assertEquals(socketCreationExceptionMessage, logger.popFromMessageType(LoggerDouble.WARNING));
+        assertTrue(serverSocketAdapterDouble.isSocketConnected());
     }
 
     @Test
-    @Ignore
-    public void logsSocketAcceptExceptions() throws IOException {
-        String socketAcceptExceptionMessage = "Socket accept exception";
+    public void connectLogsSocketAcceptErrors() {
+        httpServerSocket.connect();
+        assertTrue(serverSocketAdapterDouble.isSocketConnected());
+    }
+
+    @Test
+    public void logsExceptionsOnSocketCreated() throws IOException {
+        AppLogger appLogger = AppLogger.getInstance();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        TestStreamHandler testStreamHandler = new TestStreamHandler(outputStream, new SimpleFormatter());
+        appLogger.setHandler(testStreamHandler);
+        String socketAcceptExceptionMessage = "Socket connect exception";
         IOException testException = new IOException(socketAcceptExceptionMessage);
-        serverSocket.setTestException(testException);
+        serverSocketAdapterDouble.setTestException(testException);
+
         httpServerSocket.connect();
-        assertEquals(socketAcceptExceptionMessage, logger.popFromMessageType(LoggerDouble.WARNING));
+
+        assertThat(outputStream.toString(), containsString("Socket connect exception"));
     }
 }

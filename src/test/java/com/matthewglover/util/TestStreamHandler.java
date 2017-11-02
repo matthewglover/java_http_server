@@ -19,6 +19,6 @@ public class TestStreamHandler extends StreamHandler {
 
     @Override
     public void close() throws SecurityException {
-        flush();
+//        flush();
     }
 }

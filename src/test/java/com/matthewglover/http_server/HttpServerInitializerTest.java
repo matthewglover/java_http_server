@@ -16,7 +16,7 @@ public class HttpServerInitializerTest {
 
     @Test
     public void logsErrorWhenInvalidAppArguments() {
-        ArgumentParserDouble argumentParserDouble = new ArgumentParserDouble(null);
+        ArgumentParserDouble argumentParserDouble = new ArgumentParserDouble();
         argumentParserDouble.addError("Test Error");
 
         AppLogger appLogger = AppLogger.getInstance();
