@@ -1,16 +1,13 @@
 package com.matthewglover.http_request;
 
 import com.matthewglover.socket.SocketDouble;
-import com.matthewglover.util.LoggerDouble;
-import com.matthewglover.util.LoggerFactoryDouble;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class HttpRequestBuilderTest {
+public class HttpTestRequestBuilderTest {
 
     private final String getRequest =
             "GET /form HTTP/1.0\r\n" +
@@ -47,13 +44,12 @@ public class HttpRequestBuilderTest {
                     "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n" +
                     "Accept-Encoding: gzip,deflate\r\n\r\n";
 
-    private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
     private final SocketDouble socketDouble = new SocketDouble();
 
     @Test
     public void buildsGetRequestFromStream() throws IOException {
         socketDouble.setInputString(getRequest);
-        HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
+        HttpRequestParser builder = new HttpRequestParser(socketDouble.getInputStream());
         HttpRequest request = builder.build();
         assertEquals(HttpRequestMethod.GET, request.getMethod());
         assertEquals("/form", request.getPath());
@@ -77,7 +73,7 @@ public class HttpRequestBuilderTest {
     @Test
     public void buildsPutRequestWithNoContentFromStream() throws IOException {
         socketDouble.setInputString(putRequestNoContent);
-        HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
+        HttpRequestParser builder = new HttpRequestParser(socketDouble.getInputStream());
         HttpRequest request = builder.build();
         assertEquals(HttpRequestMethod.PUT, request.getMethod());
         assertEquals("/form", request.getPath());
@@ -86,35 +82,8 @@ public class HttpRequestBuilderTest {
         assertFalse(request.hasContent());
     }
 
-    @Test
-    public void returnsRequestAsString() throws IOException {
-        isValidRequestString(getRequest);
-    }
-
-    @Test
-    public void returnsGetRequestAsString() throws IOException {
-        isValidRequestString(getRequest);
-    }
-
-    @Test
-    public void returnsPostRequestAsString() throws IOException {
-        isValidRequestString(postRequest);
-    }
-
-    @Test
-    public void returnsPutRequestAsString() throws IOException {
-        isValidRequestString(putRequest);
-    }
-
-    private void isValidRequestString(String request) throws IOException {
-        socketDouble.setInputString(request);
-        HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
-        HttpRequest httpRequest = builder.build();
-        assertEquals(request, httpRequest.getRaw());
-    }
-
     private void isValidFormRequestOfType(HttpRequestMethod requestMethod) throws IOException {
-        HttpRequestBuilder builder = new HttpRequestBuilder(socketDouble.getInputStream(), loggerFactoryDouble);
+        HttpRequestParser builder = new HttpRequestParser(socketDouble.getInputStream());
         HttpRequest request = builder.build();
         assertEquals(requestMethod, request.getMethod());
         assertEquals("/form", request.getPath());

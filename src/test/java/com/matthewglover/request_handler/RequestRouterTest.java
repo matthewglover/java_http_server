@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 public class RequestRouterTest {
 
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
-    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private RequestRouter router;
 
     @Before
@@ -27,7 +26,10 @@ public class RequestRouterTest {
 
     @Test
     public void getToUnhandledPathReturns404() {
-        request.setPath("/unhandled_path");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/unhandled_path")
+                .build();
         HttpResponse actualResponse = router.handleRequest(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.NOT_FOUND);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
@@ -35,7 +37,10 @@ public class RequestRouterTest {
 
     @Test
     public void getToCoffeeReturns418() {
-        request.setPath("/coffee");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/coffee")
+                .build();
         HttpResponse actualResponse = router.handleRequest(request);
         HttpResponse expectedResponse = HttpResponseFactory.get(HttpResponseTemplate.IM_A_TEAPOT);
         assertTrue(new ResponseComparer(expectedResponse, actualResponse).areSame());
@@ -43,52 +48,75 @@ public class RequestRouterTest {
 
     @Test
     public void getToTeaReturns200() {
-        request.setPath("/tea");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/tea")
+                .build();
         HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
     }
 
     @Test
     public void unauthorisedGetToLogsReturns401() {
-        request.setPath("/logs");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/logs")
+                .build();
         HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, actualResponse.getResponseType());
     }
 
     @Test
     public void authorisedGetToLogsReturns200WithRequestLineAsBody() {
-        HttpRequest logRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        logRequest.setPath("/log");
+        String validCredentials = Base64.getEncoder().withoutPadding().encodeToString(("admin:hunter2").getBytes());
+
+        HttpRequest logRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/log")
+                .build();
+
+        HttpRequest logAccessRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/logs")
+                .setHeader("Authorization", "Basic " + validCredentials)
+                .build();
+
         HttpResponse response = router.handleRequest(logRequest);
         assertEquals(HttpResponseType.OK, response.getResponseType());
 
-        String validCredentials = Base64.getEncoder().withoutPadding().encodeToString(("admin:hunter2").getBytes());
-        HttpRequest logAccessRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        logAccessRequest.setPath("/logs");
-        logAccessRequest.setHeader("Authorization", "Basic " + validCredentials);
         HttpResponse logsResponse = router.handleRequest(logAccessRequest);
-        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.requestLineToString()));
+        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.getRequestLine()));
     }
 
     @Test
     public void postRequestToFormReturns200() {
-        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        postRequest.setPath("/form");
+        HttpRequest postRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.POST)
+                .setPath("/form")
+                .build();
+
         HttpResponse actualResponse = router.handleRequest(postRequest);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
     }
 
     @Test
     public void putRequestToFormReturns200() {
-        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
-        putRequest.setPath("/form");
+        HttpRequest putRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.PUT)
+                .setPath("/form")
+                .build();
+
         HttpResponse actualResponse = router.handleRequest(putRequest);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
     }
 
     @Test
     public void getRequestWithCookieUrlReturns200WithEat() {
-        request.setPath("/cookie?type=chocolate");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/cookie?type=chocolate")
+                .build();
+
         HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, actualResponse.getResponseType());
         assertEquals("Eat", actualResponse.getContent());
@@ -96,11 +124,14 @@ public class RequestRouterTest {
 
     @Test
     public void getRequestToFileReturns200WithFile() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/file1")
+                .build();
+
         String testData = "Test file contents";
         fileAccessorDouble.setFileInputStreamData(testData);
         fileAccessorDouble.getFile().setIsFile(true);
-
-        request.setPath("/file1");
 
         SocketDouble socketDouble = new SocketDouble();
         HttpResponse actualResponse = router.handleRequest(request);
@@ -111,31 +142,46 @@ public class RequestRouterTest {
 
     @Test
     public void postRequestToFileReturns405() throws Exception {
-        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
+        HttpRequest postRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.POST)
+                .setPath("/file1")
+                .build();
+
         fileRequestReturns405(postRequest);
     }
 
     @Test
     public void putRequestToFileReturns405() throws Exception {
-        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
+        HttpRequest putRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.PUT)
+                .setPath("/file1")
+                .build();
+
         fileRequestReturns405(putRequest);
     }
 
     @Test
     public void invalidRequestToFileReturns405() throws Exception {
-        HttpRequest invalidRequest = HttpTestRequestFactory.get(HttpRequestMethod.INVALID_METHOD);
+        HttpRequest invalidRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.INVALID_METHOD)
+                .setPath("/file1")
+                .build();
+
         fileRequestReturns405(invalidRequest);
     }
 
 
     @Test
     public void getRequestToRootReturns200WithDirectoryListing() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/")
+                .build();
+
         String[] fileNames = new String[]{ "file1", "file2.txt", "file3.jpg" };
         FileDouble fileDouble = fileAccessorDouble.getFile();
         fileDouble.setIsDirectory(true);
         fileDouble.setFileList(fileNames);
-
-        request.setPath("/");
 
         HttpResponse actualResponse = router.handleRequest(request);
 
@@ -143,10 +189,15 @@ public class RequestRouterTest {
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file2.txt\">file2.txt</a>"));
         assertThat(actualResponse.getContent(), CoreMatchers.containsString("<a href=\"/file3.jpg\">file3.jpg</a>"));
     }
+
     @Test
     public void getRequestToParametersReturns200WithParamsAsBodyContent() {
-        request.setPath("/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2" +
-                "C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2" +
+                "C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff")
+                .build();
+
         HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, response.getResponseType());
         assertThat(response.getContent(),
@@ -155,19 +206,27 @@ public class RequestRouterTest {
 
     @Test
     public void getRequestToRedirectReturns302WithRootLocation() {
-        request.setPath("/redirect");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/redirect")
+                .build();
+
         HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.REDIRECT, response.getResponseType());
     }
 
     @Test
     public void partialContentRequestWithRange0to4Returns206WithCorrectContent() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/partial_content.txt")
+                .setHeader("Range", "bytes=0-4")
+                .build();
+
         String partialContent = "This is a file that contains text to read part of in order to fulfill a 206.\n";
         fileAccessorDouble.setFileInputStreamData(partialContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        request.setPath("/partial_content.txt");
-        request.setHeader("Range", "bytes=0-4");
         HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.PARTIAL_CONTENT, response.getResponseType());
 
@@ -176,23 +235,33 @@ public class RequestRouterTest {
 
     @Test
     public void getRequestToFormReturnsData() {
-        HttpRequest simplePost = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        simplePost.setPath("/form");
-        simplePost.setContent("data=fatcat");
-        router.handleRequest(simplePost);
+        HttpRequest postRequest = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.POST)
+                .setPath("/form")
+                .setContent("data=fatcat")
+                .build();
 
-        request.setPath("/form");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/form")
+                .build();
+
+        router.handleRequest(postRequest);
         HttpResponse response = router.handleRequest(request);
         assertEquals("data=fatcat", response.getContent());
     }
 
     @Test
     public void getRequestToPatchedContentReturns200() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/patch-content.txt")
+                .build();
+
         String patchedContent = "Default content\n";
         fileAccessorDouble.setFileInputStreamData(patchedContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        request.setPath("/patch-content.txt");
         HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.OK, response.getResponseType());
 
@@ -203,18 +272,20 @@ public class RequestRouterTest {
 
     @Test
     public void patchRequestToPatchedContentReturns204() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.PATCH)
+                .setPath("/patch-content.txt")
+                .build();
+
         String patchedContent = "Default content\n";
         fileAccessorDouble.setFileInputStreamData(patchedContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        HttpRequest patchRequest = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
-        patchRequest.setPath("/patch-content.txt");
-        HttpResponse response = router.handleRequest(patchRequest);
+        HttpResponse response = router.handleRequest(request);
         assertEquals(HttpResponseType.NO_CONTENT, response.getResponseType());
     }
 
     private void fileRequestReturns405(HttpRequest request) {
-        request.setPath("/file1");
         fileAccessorDouble.getFile().setIsFile(true);
         HttpResponse actualResponse = router.handleRequest(request);
         assertEquals(HttpResponseType.METHOD_NOT_ALLOWED, actualResponse.getResponseType());

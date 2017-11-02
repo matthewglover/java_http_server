@@ -2,7 +2,7 @@ package com.matthewglover.request_handler;
 
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_request.HttpTestRequestFactory;
+import com.matthewglover.http_request.HttpTestRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseType;
 import com.matthewglover.socket.SocketDouble;
@@ -22,8 +22,10 @@ public class PatchContentHandlerTest {
         fileAccessorDouble.setFileInputStreamData(patchedContent);
         fileAccessorDouble.getFile().setIsFile(true);
 
-        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        request.setPath("/patch-content.txt");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/patch_content.txt")
+                .build();
 
         RequestHandler handler = new PatchContentHandler("root/to/public", fileAccessorDouble);
         HttpResponse response = handler.getResponse(request);
@@ -36,9 +38,11 @@ public class PatchContentHandlerTest {
 
     @Test
     public void patchRequestToPatchedContentReturns204AndPatchesContent() throws Exception {
-        HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.PATCH);
-        request.setPath("/patch-content.txt");
-        request.setContent("patched content");
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.PATCH)
+                .setPath("/patch_content.txt")
+                .setContent("patched content")
+                .build();
 
         RequestHandler handler = new PatchContentHandler("root/to/public", fileAccessorDouble);
         HttpResponse response = handler.getResponse(request);

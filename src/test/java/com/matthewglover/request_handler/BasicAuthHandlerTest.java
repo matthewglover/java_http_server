@@ -2,7 +2,7 @@ package com.matthewglover.request_handler;
 
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_request.HttpTestRequestFactory;
+import com.matthewglover.http_request.HttpTestRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseType;
 import org.hamcrest.CoreMatchers;
@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 
 public class BasicAuthHandlerTest {
 
-    private final HttpRequest simpleGet = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final String username = "admin";
     private final String password = "hunter2";
     private final String validCredentials = Base64.getEncoder().withoutPadding().encodeToString((username + ":" + password).getBytes());
@@ -23,42 +22,60 @@ public class BasicAuthHandlerTest {
 
     @Test
     public void getToLogsReturns200ResponseIfAuthorized() {
-        simpleGet.setPath("/logs");
-        simpleGet.setHeader("Authorization", "Basic " + validCredentials);
-        HttpResponse response = requestHandler.getResponse(simpleGet);
-        assertTrue(requestHandler.handles(simpleGet));
+        HttpRequest request =
+                new HttpTestRequestBuilder()
+                        .setMethod(HttpRequestMethod.GET)
+                        .setPath("/logs")
+                        .setHeader("Authorization", "Basic " + validCredentials)
+                        .build();
+        HttpResponse response = requestHandler.getResponse(request);
+        assertTrue(requestHandler.handles(request));
         assertEquals(HttpResponseType.OK, response.getResponseType());
     }
 
     @Test
     public void getToLogsReturns401ResponseIfNotAuthorised() {
-        simpleGet.setPath("/logs");
-        HttpResponse response = requestHandler.getResponse(simpleGet);
-        assertTrue(requestHandler.handles(simpleGet));
+        HttpRequest request =
+                new HttpTestRequestBuilder()
+                        .setMethod(HttpRequestMethod.GET)
+                        .setPath("/logs")
+                        .build();
+        HttpResponse response = requestHandler.getResponse(request);
+        assertTrue(requestHandler.handles(request));
         assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, response.getResponseType());
     }
 
     @Test
     public void getToLogsReturns401ResponseIfInvalidCredentials() {
-        simpleGet.setPath("/logs");
-        simpleGet.setHeader("Authorization", "Basic " + invalidCredentials);
-        HttpResponse response = requestHandler.getResponse(simpleGet);
-        assertTrue(requestHandler.handles(simpleGet));
+        HttpRequest request =
+                new HttpTestRequestBuilder()
+                        .setMethod(HttpRequestMethod.GET)
+                        .setPath("/logs")
+                        .setHeader("Authorization", "Basic " + invalidCredentials)
+                        .build();
+        HttpResponse response = requestHandler.getResponse(request);
+        assertTrue(requestHandler.handles(request));
         assertEquals(HttpResponseType.UNAUTHORIZED_ACCESS, response.getResponseType());
     }
 
     @Test
     public void getToLogAddsToLogOutputAndReturns200() {
-        HttpRequest logRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        logRequest.setPath("/log");
+        HttpRequest logRequest =
+                new HttpTestRequestBuilder()
+                        .setMethod(HttpRequestMethod.GET)
+                        .setPath("/log")
+                        .build();
         HttpResponse response = requestHandler.getResponse(logRequest);
         assertTrue(requestHandler.handles(logRequest));
         assertEquals(HttpResponseType.OK, response.getResponseType());
 
-        HttpRequest logAccessRequest = HttpTestRequestFactory.get(HttpRequestMethod.GET);
-        logAccessRequest.setPath("/logs");
-        logAccessRequest.setHeader("Authorization", "Basic " + validCredentials);
+        HttpRequest logAccessRequest =
+                new HttpTestRequestBuilder()
+                        .setMethod(HttpRequestMethod.GET)
+                        .setPath("/logs")
+                        .setHeader("Authorization", "Basic " + validCredentials)
+                        .build();
         HttpResponse logsResponse = requestHandler.getResponse(logAccessRequest);
-        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.requestLineToString()));
+        assertThat(logsResponse.getContent(), CoreMatchers.containsString(logRequest.getRequestLine()));
     }
 }

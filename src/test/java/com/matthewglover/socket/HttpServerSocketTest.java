@@ -1,9 +1,6 @@
 package com.matthewglover.socket;
 
 import com.matthewglover.DefaultRouterBuilder;
-import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestFactory;
-import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.FileAccessorDouble;
 import com.matthewglover.util.LoggerDouble;
@@ -22,16 +19,15 @@ public class HttpServerSocketTest {
     private final LoggerDouble logger = new LoggerDouble(null, null);
     private final LoggerFactoryDouble loggerFactory = new LoggerFactoryDouble();
     private final ServerSocketDouble serverSocket = new ServerSocketDouble();
-    private final HttpRequest httpRequest = HttpRequestFactory.get(HttpRequestMethod.GET, loggerFactory);
     private final RequestRouter requestRouter = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
     private HttpServerSocket httpServerSocket;
+
 
     public HttpServerSocketTest() throws IOException {
     }
 
     @Before
     public void setUp() throws Exception {
-        httpRequest.setPath("/log");
         loggerFactory.setLogger(logger);
         httpServerSocket = new HttpServerSocket(serverSocket, requestRouter, loggerFactory);
     }

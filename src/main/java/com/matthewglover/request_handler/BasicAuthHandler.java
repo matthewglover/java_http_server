@@ -34,7 +34,7 @@ public class BasicAuthHandler extends RequestHandler {
     }
 
     private HttpResponse handleLoggableRequest(HttpRequest request) {
-        updateTemporalContent(request.requestLineToString());
+        updateTemporalContent(request.getRequestLine());
         return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 
