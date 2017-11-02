@@ -82,3 +82,5 @@ bin/
 
 # App specific
 cob_spec/HttpServer.jar
+
+*.txt*
