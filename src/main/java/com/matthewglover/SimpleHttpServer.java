@@ -16,17 +16,14 @@ public class SimpleHttpServer {
     private final Logger logger;
     private final ServerSocketFactory serverSocketFactory;
     private final LoggerFactory loggerFactory;
-    private final RouterBuilder routerBuilder;
     private final FileAccessor fileAccessor;
 
     public SimpleHttpServer(ArgumentParser argumentParser,
                             ServerSocketFactory serverSocketFactory,
-                            RouterBuilder routerBuilder,
                             FileAccessor fileAccessor,
                             LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
         this.serverSocketFactory = serverSocketFactory;
-        this.routerBuilder = routerBuilder;
         this.fileAccessor = fileAccessor;
         this.loggerFactory = loggerFactory;
         this.logger = loggerFactory.getLogger(SimpleHttpServer.class.getName());
@@ -55,7 +52,7 @@ public class SimpleHttpServer {
     }
 
     private RequestRouter getRouter() {
-        return routerBuilder.build(argumentParser.getFilePath(), fileAccessor);
+        return new RequestRouter(argumentParser.getFilePath(), fileAccessor);
     }
 
     private ServerSocket getServerSocket() {

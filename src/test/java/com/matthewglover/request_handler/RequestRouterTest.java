@@ -1,6 +1,5 @@
 package com.matthewglover.request_handler;
 
-import com.matthewglover.DefaultRouterBuilder;
 import com.matthewglover.http_request.*;
 import com.matthewglover.http_response.*;
 import com.matthewglover.socket.SocketDouble;
@@ -21,7 +20,7 @@ public class RequestRouterTest {
     @Before
     public void setUp() throws Exception {
         String rootDirectoryPath = "/path/to/public";
-        router = new DefaultRouterBuilder().build(rootDirectoryPath, fileAccessorDouble);
+        router = new RequestRouter(rootDirectoryPath, fileAccessorDouble);
     }
 
     @Test

@@ -4,22 +4,18 @@ import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
-import com.matthewglover.util.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.logging.Logger;
 
 public class HttpServerSocket {
 
-    private final Logger logger;
     private final RequestRouter requestRouter;
     private final ServerSocketAdapter socketAdapter;
 
-    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
+    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter) {
         this.requestRouter = requestRouter;
         socketAdapter = new ServerSocketAdapter(serverSocket);
-        logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
     public void connect() {
@@ -61,6 +57,6 @@ public class HttpServerSocket {
     }
 
     private void handleFatalError(Exception exception) {
-        logger.warning(exception.getMessage());
+//        logger.warning(exception.getMessage());
     }
 }

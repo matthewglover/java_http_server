@@ -25,7 +25,6 @@ public class SimpleHttpServerTest {
         SimpleHttpServer simpleHttpServer = new SimpleHttpServer(
                 argumentParser,
                 serverSocketFactory,
-                new DefaultRouterBuilder(),
                 fileAccessor,
                 loggerFactory);
         String invalidArgumentsMessage = "Test Error Message";

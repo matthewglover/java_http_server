@@ -19,7 +19,6 @@ public class AppLauncher {
         return new SimpleHttpServer(
                     new ArgumentParser(args),
                     new ServerSocketFactory(),
-                    new DefaultRouterBuilder(),
                     new FileAccessor(),
                     getLoggerFactory());
     }
