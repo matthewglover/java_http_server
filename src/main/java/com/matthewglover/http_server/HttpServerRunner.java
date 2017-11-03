@@ -27,7 +27,7 @@ public class HttpServerRunner {
 
             while (true) {
                 HttpServerThreadExecutor serverExecutor =
-                        new HttpServerThreadExecutor(new HttpServerSocket(serverSocket, router, loggerFactory), threadPool);
+                        new HttpServerThreadExecutor(new HttpServer(serverSocket, router, loggerFactory), threadPool);
                 serverExecutor.execute();
             }
         } catch (IOException exception) {

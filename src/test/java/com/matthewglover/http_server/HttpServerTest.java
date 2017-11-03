@@ -9,21 +9,21 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
-public class HttpServerSocketTest {
+public class HttpServerTest {
 
     private final String rootDirectoryPath = "/path/to/public";
     private final FileAccessorDouble fileAccessorDouble = new FileAccessorDouble();
     private final RequestRouter requestRouter = new RequestRouter(rootDirectoryPath, fileAccessorDouble);
     private final ServerSocketDouble serverSocketDouble = new ServerSocketDouble();
     private final LoggerFactoryDouble loggerFactoryDouble = new LoggerFactoryDouble();
-    private final HttpServerSocket httpServerSocket = new HttpServerSocket(serverSocketDouble, requestRouter, loggerFactoryDouble);
+    private final HttpServer httpServer = new HttpServer(serverSocketDouble, requestRouter, loggerFactoryDouble);
 
-    public HttpServerSocketTest() throws IOException {
+    public HttpServerTest() throws IOException {
     }
 
     @Test
     public void connectCallsAcceptOnSocket() {
-        httpServerSocket.connect();
+        httpServer.connect();
         assertTrue(serverSocketDouble.isSocketConnected());
     }
 
@@ -33,7 +33,7 @@ public class HttpServerSocketTest {
         IOException testException = new IOException(socketAcceptExceptionMessage);
         serverSocketDouble.setTestException(testException);
 
-        httpServerSocket.connect();
+        httpServer.connect();
 
         assertThat(loggerFactoryDouble.getLoggerDouble().popFromMessageType("SEVERE"), containsString("Socket connect exception"));
     }
@@ -44,7 +44,7 @@ public class HttpServerSocketTest {
         IOException testException = new IOException(socketAcceptExceptionMessage);
         serverSocketDouble.setTestException(testException);
 
-        httpServerSocket.connect();
+        httpServer.connect();
 
         assertThat(loggerFactoryDouble.getLoggerDouble().popFromMessageType("SEVERE"), containsString("Socket connect exception"));
     }
@@ -55,9 +55,19 @@ public class HttpServerSocketTest {
         IOException testException = new IOException(socketAcceptExceptionMessage);
         serverSocketDouble.setConnectedSocketTestException(testException);
 
-        httpServerSocket.connect();
-        httpServerSocket.run();
+        httpServer.connect();
+        httpServer.run();
 
         assertThat(loggerFactoryDouble.getLoggerDouble().popFromMessageType("SEVERE"), containsString("Socket read/write exception"));
+    }
+
+    @Test
+    public void takesRequestAndResponds() {
+        SocketDouble socketDouble = serverSocketDouble.getSocket();
+        socketDouble.setInputString("GET /tea HTTP/1.0\r\n" +
+                "Host: localhost:5000\r\n\r\n");
+        httpServer.connect();
+        httpServer.run();
+        assertThat(socketDouble.getOutput(), containsString("HTTP/1.1 200 OK"));
     }
 }

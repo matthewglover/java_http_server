@@ -5,11 +5,11 @@ import com.matthewglover.util.LoggerFactory;
 
 import java.net.ServerSocket;
 
-public class HttpServerSocketDouble extends HttpServerSocket {
+public class HttpServerDouble extends HttpServer {
     public int connectCallCount = 0;
     public int runCallCount = 0;
 
-    public HttpServerSocketDouble(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
+    public HttpServerDouble(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
         super(serverSocket, requestRouter, loggerFactory);
     }
 

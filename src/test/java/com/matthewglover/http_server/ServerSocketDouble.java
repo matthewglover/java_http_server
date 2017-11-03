@@ -43,4 +43,8 @@ public class ServerSocketDouble extends ServerSocket {
     public void setConnectedSocketTestException(IOException testException) {
         socketDouble.setTestException(testException);
     }
+
+    public SocketDouble getSocket() {
+        return socketDouble;
+    }
 }

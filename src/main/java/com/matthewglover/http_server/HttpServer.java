@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class HttpServerSocket {
+public class HttpServer {
 
     private final RequestRouter requestRouter;
     private final ServerSocketAdapter socketAdapter;
     private final LoggerFactory loggerFactory;
 
-    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
+    public HttpServer(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
         socketAdapter = new ServerSocketAdapter(serverSocket);
@@ -61,7 +61,7 @@ public class HttpServerSocket {
     }
 
     private void handleFatalError(Exception exception) {
-        Logger logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
+        Logger logger = loggerFactory.getLogger(HttpServer.class.getName());
         logger.severe(exception.getMessage());
     }
 }

@@ -13,7 +13,7 @@ public class HttpServerThreadExecutorTest {
     @Test
     public void name() {
         ExecutorService executorService = new SynchronousExecutorService();
-        HttpServerSocketDouble httpServerSocketDouble = new HttpServerSocketDouble(null, null, null);
+        HttpServerDouble httpServerSocketDouble = new HttpServerDouble(null, null, null);
 
         HttpServerThreadExecutor httpServerThreadExecutor = new HttpServerThreadExecutor(httpServerSocketDouble, executorService);
 
