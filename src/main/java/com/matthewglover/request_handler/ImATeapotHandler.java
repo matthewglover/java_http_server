@@ -11,8 +11,7 @@ public class ImATeapotHandler extends RequestHandler {
     private final String teaRequestPath = "/tea";
     private final String coffeeRequestPath = "/coffee";
 
-    @Override
-    public void setup() {
+    public ImATeapotHandler() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath(coffeeRequestPath);
         addHandledPath(teaRequestPath);

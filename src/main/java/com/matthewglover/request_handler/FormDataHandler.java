@@ -12,8 +12,7 @@ public class FormDataHandler extends RequestHandler {
 
     private String temporalState;
 
-    @Override
-    public void setup() {
+    public FormDataHandler() {
         addHandledMethodType(HttpRequestMethod.POST);
         addHandledMethodType(HttpRequestMethod.PUT);
         addHandledMethodType(GET);

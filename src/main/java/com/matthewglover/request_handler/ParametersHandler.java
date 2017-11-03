@@ -8,8 +8,7 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class ParametersHandler extends RequestHandler {
 
-    @Override
-    public void setup() {
+    public ParametersHandler() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath("/parameters");
     }

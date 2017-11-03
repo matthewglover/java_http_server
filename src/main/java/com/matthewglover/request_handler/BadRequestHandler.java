@@ -9,10 +9,6 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 public class BadRequestHandler extends RequestHandler {
 
     @Override
-    public void setup() {
-    }
-
-    @Override
     public HttpResponse getResponse(HttpRequest request) {
         return HttpResponseFactory.get(HttpResponseTemplate.BAD_REQUEST);
     }

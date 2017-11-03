@@ -17,10 +17,6 @@ public class PartialContentHandler extends RequestHandler {
         super();
         this.rootDirectoryPath = rootDirectoryPath;
         this.fileAccessor = fileAccessor;
-    }
-
-    @Override
-    public void setup() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath("/partial_content.txt");
     }

@@ -19,10 +19,6 @@ public class PatchContentHandler extends RequestHandler {
         super();
         this.rootDirectoryPath = rootDirectoryPath;
         this.fileAccessor = fileAccessor;
-    }
-
-    @Override
-    public void setup() {
         addHandledMethodType(HttpRequestMethod.PATCH);
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath("/patch-content.txt");
