@@ -4,6 +4,7 @@ import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.socket.HttpServerSocket;
 import com.matthewglover.util.ArgumentParser;
 import com.matthewglover.util.FileAccessor;
+import com.matthewglover.util.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,9 +13,11 @@ import java.util.concurrent.Executors;
 
 public class HttpServerRunner {
     private final ArgumentParser argumentParser;
+    private final LoggerFactory loggerFactory;
 
-    public HttpServerRunner(ArgumentParser argumentParser) {
+    public HttpServerRunner(ArgumentParser argumentParser, LoggerFactory loggerFactory) {
         this.argumentParser = argumentParser;
+        this.loggerFactory = loggerFactory;
     }
 
     public void run() {
@@ -25,7 +28,7 @@ public class HttpServerRunner {
 
             while (true) {
                 HttpServerThreadExecutor serverExecutor =
-                        new HttpServerThreadExecutor(new HttpServerSocket(serverSocket, router), threadPool);
+                        new HttpServerThreadExecutor(new HttpServerSocket(serverSocket, router, loggerFactory), threadPool);
                 serverExecutor.execute();
             }
         } catch (IOException exception) {

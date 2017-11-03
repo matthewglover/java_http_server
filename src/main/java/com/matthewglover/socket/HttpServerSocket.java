@@ -4,7 +4,7 @@ import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
-import com.matthewglover.util.AppLogger;
+import com.matthewglover.util.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,15 +14,12 @@ public class HttpServerSocket {
 
     private final RequestRouter requestRouter;
     private final ServerSocketAdapter socketAdapter;
+    private final LoggerFactory loggerFactory;
 
-    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter) {
+    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.requestRouter = requestRouter;
+        this.loggerFactory = loggerFactory;
         socketAdapter = new ServerSocketAdapter(serverSocket);
-    }
-
-    public HttpServerSocket(ServerSocketAdapter socketAdapter, RequestRouter requestRouter) {
-        this.requestRouter = requestRouter;
-        this.socketAdapter = socketAdapter;
     }
 
     public void connect() {
@@ -64,8 +61,7 @@ public class HttpServerSocket {
     }
 
     private void handleFatalError(Exception exception) {
-        AppLogger appLogger = AppLogger.getInstance();
-        Logger logger = appLogger.getLogger(HttpServerSocket.class.getName());
+        Logger logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
         logger.severe(exception.getMessage());
     }
 }

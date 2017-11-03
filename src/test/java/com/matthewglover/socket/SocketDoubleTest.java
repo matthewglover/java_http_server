@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class SocketDoubleTest {
     @Test
-    public void recordsDataWrittenToOutput() {
+    public void recordsDataWrittenToOutput() throws IOException {
         String testOutput = "Test output";
         SocketDouble socketDouble = new SocketDouble();
         PrintStream printStream = new PrintStream(socketDouble.getOutputStream());
