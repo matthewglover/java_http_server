@@ -1,6 +1,5 @@
 package com.matthewglover.http_server;
 
-import com.matthewglover.socket.HttpServerSocketDouble;
 import org.junit.Test;
 
 import java.util.Collection;

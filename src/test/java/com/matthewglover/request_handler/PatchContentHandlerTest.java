@@ -5,7 +5,7 @@ import com.matthewglover.http_request.HttpRequestMethod;
 import com.matthewglover.http_request.HttpTestRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseType;
-import com.matthewglover.socket.SocketDouble;
+import com.matthewglover.http_server.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;

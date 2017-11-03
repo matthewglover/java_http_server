@@ -1,7 +1,5 @@
 package com.matthewglover.http_server;
 
-import com.matthewglover.socket.HttpServerSocket;
-
 import java.util.concurrent.ExecutorService;
 
 public class HttpServerThreadExecutor {

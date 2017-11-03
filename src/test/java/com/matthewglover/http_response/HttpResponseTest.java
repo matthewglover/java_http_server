@@ -1,6 +1,6 @@
 package com.matthewglover.http_response;
 
-import com.matthewglover.socket.SocketDouble;
+import com.matthewglover.http_server.SocketDouble;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;

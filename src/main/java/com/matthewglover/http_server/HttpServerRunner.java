@@ -1,7 +1,6 @@
 package com.matthewglover.http_server;
 
 import com.matthewglover.request_handler.RequestRouter;
-import com.matthewglover.socket.HttpServerSocket;
 import com.matthewglover.util.ArgumentParser;
 import com.matthewglover.util.FileAccessor;
 import com.matthewglover.util.LoggerFactory;

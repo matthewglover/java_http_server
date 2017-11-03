@@ -1,4 +1,4 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

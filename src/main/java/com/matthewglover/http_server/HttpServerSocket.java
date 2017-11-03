@@ -1,4 +1,4 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestParser;
