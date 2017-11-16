@@ -13,8 +13,7 @@ public class BasicAuthHandler extends RequestHandler {
     private final String logsAccessPath = "/logs";
     private String temporalContent = "";
 
-    @Override
-    public void setup() {
+    public BasicAuthHandler() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledMethodType(HttpRequestMethod.PUT);
         addHandledMethodType(HttpRequestMethod.HEAD);
@@ -34,7 +33,7 @@ public class BasicAuthHandler extends RequestHandler {
     }
 
     private HttpResponse handleLoggableRequest(HttpRequest request) {
-        updateTemporalContent(request.requestLineToString());
+        updateTemporalContent(request.getRequestLine());
         return HttpResponseFactory.get(HttpResponseTemplate.OK);
     }
 

@@ -1,4 +1,4 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import org.junit.Test;
 

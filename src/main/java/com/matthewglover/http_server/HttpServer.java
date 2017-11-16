@@ -1,7 +1,7 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import com.matthewglover.http_request.HttpRequest;
-import com.matthewglover.http_request.HttpRequestBuilder;
+import com.matthewglover.http_request.HttpRequestParser;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.request_handler.RequestRouter;
 import com.matthewglover.util.LoggerFactory;
@@ -10,18 +10,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
-public class HttpServerSocket {
+public class HttpServer {
 
-    private final Logger logger;
-    private final LoggerFactory loggerFactory;
     private final RequestRouter requestRouter;
     private final ServerSocketAdapter socketAdapter;
+    private final LoggerFactory loggerFactory;
 
-    public HttpServerSocket(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
+    public HttpServer(ServerSocket serverSocket, RequestRouter requestRouter, LoggerFactory loggerFactory) {
         this.requestRouter = requestRouter;
         this.loggerFactory = loggerFactory;
         socketAdapter = new ServerSocketAdapter(serverSocket);
-        logger = loggerFactory.getLogger(HttpServerSocket.class.getName());
     }
 
     public void connect() {
@@ -47,7 +45,7 @@ public class HttpServerSocket {
     }
 
     private HttpRequest getRequest() throws IOException {
-        return new HttpRequestBuilder(socketAdapter.getInputStream(), loggerFactory).build();
+        return new HttpRequestParser(socketAdapter.getInputStream()).build();
     }
 
     private HttpResponse getResponse(HttpRequest httpRequest) {
@@ -63,6 +61,7 @@ public class HttpServerSocket {
     }
 
     private void handleFatalError(Exception exception) {
-        logger.warning(exception.getMessage());
+        Logger logger = loggerFactory.getLogger(HttpServer.class.getName());
+        logger.severe(exception.getMessage());
     }
 }

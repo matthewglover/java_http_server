@@ -1,6 +1,6 @@
 package com.matthewglover.http_response;
 
-import com.matthewglover.socket.SocketDouble;
+import com.matthewglover.http_server.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,6 +8,7 @@ public class ServerSocketDouble extends ServerSocket {
 
     private IOException ioException;
     private final SocketDouble socketDouble = new SocketDouble();
+    private boolean socketConnected;
 
     public ServerSocketDouble() throws IOException {
     }
@@ -15,6 +16,7 @@ public class ServerSocketDouble extends ServerSocket {
     @Override
     public Socket accept() throws IOException {
         if (shouldThrow()) throw ioException;
+        socketConnected = true;
         return socketDouble;
     }
 
@@ -32,5 +34,17 @@ public class ServerSocketDouble extends ServerSocket {
 
     public void setInputStream(String inputStream) {
         socketDouble.setInputString(inputStream);
+    }
+
+    public boolean isSocketConnected() {
+        return socketConnected;
+    }
+
+    public void setConnectedSocketTestException(IOException testException) {
+        socketDouble.setTestException(testException);
+    }
+
+    public SocketDouble getSocket() {
+        return socketDouble;
     }
 }

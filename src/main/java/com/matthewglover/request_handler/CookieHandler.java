@@ -13,8 +13,7 @@ public class CookieHandler extends RequestHandler {
     private final String setCookieContent = "Eat";
     private final String eatCookieContent = "mmmm chocolate";
 
-    @Override
-    public void setup() {
+    public CookieHandler() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath(setCookiePath);
         addHandledPath(eatCookiePath);

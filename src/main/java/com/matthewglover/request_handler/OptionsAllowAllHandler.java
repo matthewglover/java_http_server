@@ -8,8 +8,7 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class OptionsAllowAllHandler extends RequestHandler {
 
-    @Override
-    public void setup() {
+    public OptionsAllowAllHandler() {
         addHandledMethodType(HttpRequestMethod.OPTIONS);
         addHandledPath("/method_options");
     }

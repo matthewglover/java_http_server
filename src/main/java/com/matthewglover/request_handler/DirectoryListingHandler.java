@@ -19,10 +19,6 @@ public class DirectoryListingHandler extends RequestHandler {
         super();
         this.rootDirectoryPath = rootDirectoryPath;
         this.fileAccessor = fileAccessor;
-    }
-
-    @Override
-    public void setup() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledMethodType(HttpRequestMethod.HEAD);
     }

@@ -8,8 +8,7 @@ import com.matthewglover.http_response.HttpResponseTemplate;
 
 public class RedirectHandler extends RequestHandler {
 
-    @Override
-    public void setup() {
+    public RedirectHandler() {
         addHandledMethodType(HttpRequestMethod.GET);
         addHandledPath("/redirect");
     }

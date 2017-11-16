@@ -1,11 +1,8 @@
 package com.matthewglover.util;
 
 public class ArgumentParserDouble extends ArgumentParser {
-    public ArgumentParserDouble(String[] args) {
-        super(args);
-    }
-
-    public void parse() {
+    public ArgumentParserDouble() {
+        super(new String[]{});
     }
 
     public void addError(String error) {

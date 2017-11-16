@@ -2,10 +2,10 @@ package com.matthewglover.request_handler;
 
 import com.matthewglover.http_request.HttpRequest;
 import com.matthewglover.http_request.HttpRequestMethod;
-import com.matthewglover.http_request.HttpTestRequestFactory;
+import com.matthewglover.http_request.HttpTestRequestBuilder;
 import com.matthewglover.http_response.HttpResponse;
 import com.matthewglover.http_response.HttpResponseType;
-import com.matthewglover.socket.SocketDouble;
+import com.matthewglover.http_server.SocketDouble;
 import com.matthewglover.util.FileAccessorDouble;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -14,7 +14,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FileHandlerTest {
-    private final HttpRequest request = HttpTestRequestFactory.get(HttpRequestMethod.GET);
     private final FileAccessorDouble fileAccessor = new FileAccessorDouble();
     private final RequestHandler requestHandler = new FileHandler("path/to/public", fileAccessor);
     private final String testData = "this is some test data";
@@ -27,8 +26,11 @@ public class FileHandlerTest {
 
     @Test
     public void returnsFileForValidFilePath() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/file1")
+                .build();
         fileAccessor.getFile().setIsFile(true);
-        request.setPath("/file1");
         assertTrue(requestHandler.handles(request));
         HttpResponse response = requestHandler.getResponse(request);
         response.sendResponseOverSocket(socket.getOutputStream());
@@ -37,30 +39,39 @@ public class FileHandlerTest {
 
     @Test
     public void doesntHandleInvalidFilePath() throws Exception {
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.GET)
+                .setPath("/invalid_path")
+                .build();
         fileAccessor.getFile().setIsFile(false);
-        request.setPath("/invalid_path");
         assertFalse(requestHandler.handles(request));
     }
 
     @Test
     public void returns405MethodNotAllowedForPost() throws Exception {
-        HttpRequest postRequest = HttpTestRequestFactory.get(HttpRequestMethod.POST);
-        postRequest.setPath("file1");
-        respondsWithMethodNotAllowed(postRequest);
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.POST)
+                .setPath("/file1")
+                .build();
+        respondsWithMethodNotAllowed(request);
     }
 
     @Test
     public void returns405MethodNotAllowedForPut() throws Exception {
-        HttpRequest putRequest = HttpTestRequestFactory.get(HttpRequestMethod.PUT);
-        putRequest.setPath("file1");
-        respondsWithMethodNotAllowed(putRequest);
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.PUT)
+                .setPath("/file1")
+                .build();
+        respondsWithMethodNotAllowed(request);
     }
 
     @Test
     public void returns405MethodNotAllowedForInvalidMethod() throws Exception {
-        HttpRequest invalidMethodRequest = HttpTestRequestFactory.get(HttpRequestMethod.INVALID_METHOD);
-        invalidMethodRequest.setPath("file1");
-        respondsWithMethodNotAllowed(invalidMethodRequest);
+        HttpRequest request = new HttpTestRequestBuilder()
+                .setMethod(HttpRequestMethod.INVALID_METHOD)
+                .setPath("/file1")
+                .build();
+        respondsWithMethodNotAllowed(request);
     }
 
     private void respondsWithMethodNotAllowed(HttpRequest request) {

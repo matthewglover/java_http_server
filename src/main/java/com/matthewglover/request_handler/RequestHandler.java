@@ -11,11 +11,6 @@ public abstract class RequestHandler {
     private final ArrayList<HttpRequestMethod> handledMethodTypes = new ArrayList<>();
     private final ArrayList<String> handledPaths = new ArrayList<>();
 
-    public RequestHandler() {
-        setup();
-    }
-
-    public abstract void setup();
     public abstract HttpResponse getResponse(HttpRequest request);
 
     public void addHandledMethodType(HttpRequestMethod method) {

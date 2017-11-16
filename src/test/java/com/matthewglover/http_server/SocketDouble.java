@@ -1,4 +1,4 @@
-package com.matthewglover.socket;
+package com.matthewglover.http_server;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,6 +8,8 @@ public class SocketDouble extends Socket {
 
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private ByteArrayInputStream inputStream;
+
+    private IOException ioException;
 
     public void setInputString(String data) {
         try {
@@ -22,12 +24,22 @@ public class SocketDouble extends Socket {
     }
 
     @Override
-    public OutputStream getOutputStream() {
+    public OutputStream getOutputStream() throws IOException {
+        if (shouldThrow()) throw ioException;
         return outputStream;
     }
 
     @Override
-    public InputStream getInputStream() {
+    public InputStream getInputStream() throws IOException {
+        if (shouldThrow()) throw ioException;
         return inputStream;
+    }
+
+    public void setTestException(IOException ioException) {
+        this.ioException = ioException;
+    }
+
+    private boolean shouldThrow() {
+        return ioException != null;
     }
 }
