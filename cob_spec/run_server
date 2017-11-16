@@ -1,0 +1,4 @@
+#!/bin/bash
+(cd ../ && ./gradlew build)
+cp ../build/libs/HttpServer-1.0-SNAPSHOT.jar ./HttpServer.jar
+sudo java -jar HttpServer.jar -p 8080 -d `pwd`/public/
